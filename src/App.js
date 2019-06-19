@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import { Auth } from 'aws-amplify'
+import Routes from './Router'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends Component {
+
+  state = {
+    authenticating: true,
+    user: false,
+  }
+
+  async componentDidMount () {
+    try {
+      let user = await Auth.currentAuthenticatedUser()
+      console.log(user)
+      this.setState({ user: !!user })
+    } catch (error) {
+      console.log(error)
+    }
+
+    this.setState({ authenticating: false })
+  }
+
+  updateUserState = async user => {
+    this.setState({ user })
+  }
+
+  render () {
+    return (
+      this.state.authenticating ? (
+        <h1>LOADING</h1>
+      ) : (
+        <Routes
+          authenticated={this.state.user}
+          updateUserState={this.updateUserState}
+        />
+      )
+    )
+  }
 }
 
-export default App;
+
+export default App

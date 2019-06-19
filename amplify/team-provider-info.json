@@ -1,0 +1,19 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "photo-win-amp-dev-dev-20190615194928-authRole",
+            "UnauthRoleArn": "arn:aws:iam::007140722602:role/photo-win-amp-dev-dev-20190615194928-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::007140722602:role/photo-win-amp-dev-dev-20190615194928-authRole",
+            "Region": "eu-central-1",
+            "DeploymentBucketName": "photo-win-amp-dev-dev-20190615194928-deployment",
+            "UnauthRoleName": "photo-win-amp-dev-dev-20190615194928-unauthRole",
+            "StackName": "photo-win-amp-dev-dev-20190615194928",
+            "StackId": "arn:aws:cloudformation:eu-central-1:007140722602:stack/photo-win-amp-dev-dev-20190615194928/4e00a2a0-8f9e-11e9-8213-021298c8e4cc"
+        },
+        "categories": {
+            "auth": {
+                "photowinampdeva1cef837": {}
+            }
+        }
+    }
+}

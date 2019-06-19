@@ -1,0 +1,8 @@
+{
+	"auth": {
+		"photowinampdeva1cef837": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation"
+		}
+	}
+}
