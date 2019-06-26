@@ -1,0 +1,20 @@
+{
+    "permissions": {
+        "auth": {
+            "photowinampdeva1cef837": [
+                "create",
+                "read",
+                "update",
+                "delete"
+            ]
+        },
+        "storage": {
+            "photowinpictures": [
+                "create",
+                "read",
+                "update",
+                "delete"
+            ]
+        }
+    }
+}

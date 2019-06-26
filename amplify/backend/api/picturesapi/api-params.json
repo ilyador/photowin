@@ -1,0 +1,34 @@
+{
+    "paths": [
+        {
+            "name": "/userpictures",
+            "lambdaFunction": "picturesfunction",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "picturesapi",
+    "apiName": "picturesapi",
+    "functionArns": [
+        {
+            "lambdaFunction": "picturesfunction"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "photo-win-amp-dev-dev-20190615194928-authRole",
+        "unAuthRoleName": "photo-win-amp-dev-dev-20190615194928-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "picturesfunction",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
