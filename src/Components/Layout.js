@@ -5,11 +5,7 @@ import withStyles from 'react-jss'
 
 
 const styles = theme => ({
-  page: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%'
-  }
+  page: {}
 })
 
 

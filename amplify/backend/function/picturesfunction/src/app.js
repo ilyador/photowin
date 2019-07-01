@@ -58,7 +58,11 @@ const convertUrlType = (param, type) => {
  * HTTP Get method for list objects *
  ********************************/
 
-app.get(path + hashKeyPath, function (req, res) {
+app.get(path, function (req, res) {
+
+  /*
+  A security check for Cognito user
+
   var condition = {}
   condition[partitionKeyName] = {
     ComparisonOperator: 'EQ'
@@ -76,16 +80,16 @@ app.get(path + hashKeyPath, function (req, res) {
       res.json({ error: 'Wrong column type ' + err })
     }
   }
+  */
 
   let queryParams = {
-    TableName: tableName,
-    KeyConditions: condition
+    TableName: tableName
   }
 
-  dynamodb.query(queryParams, (err, data) => {
-    if (err) {
+  dynamodb.scan(queryParams, (error, data) => {
+    if (error) {
       res.statusCode = 500
-      res.json({ error: 'Could not load items: ' + err })
+      res.json({ error: error })
     } else {
       res.json(data.Items)
     }

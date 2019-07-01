@@ -5,10 +5,12 @@ import {
   Redirect,
   Switch
 } from 'react-router-dom'
+import history from '../Helpers/history'
+
 import Login from './Login'
 import Inner from './Inner'
+import Rate from './Rate'
 import Layout from './Layout'
-import history from './history'
 
 
 const PrivateRoute = ({ component, authenticated, updateUserState, ...rest }) => (
@@ -40,6 +42,7 @@ const Routes = ({ authenticated, updateUserState }) => (
           )
         )}
       />
+      <Route path="/rate" component={Rate} />
       <PrivateRoute
         path={'/inner'}
         authenticated={authenticated}

@@ -84,7 +84,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "photo-win-amp-dev-dev-20190615194928-deployment",
-					"S3Key": "amplify-builds/picturesfunction-1561476154-latest-build.zip"
+					"S3Key": "amplify-builds/picturesfunction-1562012564-latest-build.zip"
 				}
 			}
 		},

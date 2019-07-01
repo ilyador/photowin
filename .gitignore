@@ -30,5 +30,5 @@ amplify/backend/awscloudformation
 build/
 dist/
 node_modules/
-aws-exports.js
+src/Helpers/aws-exports.js
 awsconfiguration.json
