@@ -9,6 +9,10 @@
 		"photowinpictures": {
 			"service": "DynamoDB",
 			"providerPlugin": "awscloudformation"
+		},
+		"photos": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation"
 		}
 	},
 	"function": {

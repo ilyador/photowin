@@ -14,6 +14,8 @@ const awsmobile = {
             "region": "eu-central-1"
         }
     ],
+    "aws_user_files_s3_bucket": "photo-win-amp-dev87002fd51d654f868fdd8383f1480f20-dev",
+    "aws_user_files_s3_bucket_region": "eu-central-1",
     "aws_cloud_logic_custom": [
         {
             "name": "picturesapi",
