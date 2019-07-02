@@ -4,9 +4,11 @@ import App from './Components/App'
 import { ThemeProvider } from 'react-jss'
 import * as serviceWorker from './Helpers/serviceWorker'
 import Amplify from 'aws-amplify'
-import config from './Helpers/aws-exports'
+import config from './aws-exports'
+
 
 Amplify.configure(config)
+
 
 const theme = {
   baseFontSize: 16,

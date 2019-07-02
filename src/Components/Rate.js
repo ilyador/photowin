@@ -7,8 +7,8 @@ class Rate extends Component {
     try {
       const data = await API.get('picturesapi', '/userpictures')
       console.log(data)
-    } catch (e) {
-      console.log(e)
+    } catch (error) {
+      console.log(error)
     }
   }
 

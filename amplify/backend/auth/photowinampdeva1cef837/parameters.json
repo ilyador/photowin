@@ -1,6 +1,6 @@
 {
     "identityPoolName": "photowinampdeva1cef837_identitypool_a1cef837",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "lambdaLogPolicy": "photow_a1cef837_lambda_log_policy",
     "openIdLambdaRoleName": "photow_a1cef837_openid_lambda_role",
     "openIdRolePolicy": "photow_a1cef837_openid_pass_role_policy",
