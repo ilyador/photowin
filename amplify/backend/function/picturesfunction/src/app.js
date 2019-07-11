@@ -101,7 +101,7 @@ app.get(path, function (req, res) {
  *****************************************/
 
 app.get(path + '/object' + hashKeyPath + sortKeyPath, function (req, res) {
-  var params = {}
+  let params = {}
   if (userIdPresent && req.apiGateway) {
     params[partitionKeyName] =
       req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH

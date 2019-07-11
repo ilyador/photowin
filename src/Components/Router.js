@@ -15,19 +15,20 @@ import Rate from './Rate'
 import Layout from './Layout'
 
 
-const PrivateRoute = ({component, authenticated, updateUserState, ...rest }) => (
+const PrivateRoute = ({component, user, updateUserState, ...rest }) => (
   <Route {...rest} render={(props) => (
-    authenticated
+    user
       ? <Layout
           component={component}
           updateUserState={updateUserState}
+          user={user}
           {...props}
       />
       : <Redirect to={'/login'}/>
   )}/>
 )
 
-const Routes = ({ authenticated, updateUserState }) => (
+const Routes = ({ user, updateUserState }) => (
   <Router history={history}>
     <Switch>
       <Route
@@ -37,7 +38,7 @@ const Routes = ({ authenticated, updateUserState }) => (
       <Route
         path={'/login'}
         render={() => (
-          authenticated ? (
+          user ? (
             <Redirect to={'/inner'}/>
           ) : (
             <Login updateUserState={updateUserState}/>
@@ -46,13 +47,13 @@ const Routes = ({ authenticated, updateUserState }) => (
       />
       <PrivateRoute
         path={'/inner'}
-        authenticated={authenticated}
+        user={user}
         updateUserState={updateUserState}
         component={Inner}
       />
       <PrivateRoute
         path={'/upload-pictures'}
-        authenticated={authenticated}
+        user={user}
         updateUserState={updateUserState}
         component={PictureUpload}
       />

@@ -13,8 +13,7 @@ class App extends Component {
   async componentDidMount () {
     try {
       let user = await Auth.currentAuthenticatedUser()
-      console.log(user)
-      this.setState({ user: !!user })
+      this.setState({ user: user.attributes })
     } catch (error) {
       console.log(error)
     }
@@ -32,7 +31,7 @@ class App extends Component {
         <h1>LOADING</h1>
       ) : (
         <Routes
-          authenticated={this.state.user}
+          user={this.state.user}
           updateUserState={this.updateUserState}
         />
       )

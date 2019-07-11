@@ -1,37 +1,43 @@
 import React, { Component } from 'react'
-import { Storage } from 'aws-amplify'
+import { API, Storage } from 'aws-amplify'
+import uuid from 'uuid/v4'
+
 
 class PictureUpload extends Component {
 
-  state = { fileUrl: '', file: '', filename: ''}
+  state = { fileUrl: '', file: '', filename: '' }
 
   handleChange = e => {
-    const file = e.target.files[0]
+    let file = e.target.files[0]
+    let filename = uuid() + file.name.split('.').pop()
+
     this.setState({
       fileUrl: URL.createObjectURL(file),
       file,
-      filename: file.name
+      filename: filename
     })
   }
 
   saveFile = async () => {
     try {
-      let data = await Storage.put(
-        this.state.filename, this.state.file, {level: 'protected'}
+      let s3picture = await Storage.put(
+        this.state.filename, this.state.file, { level: 'protected' }
       )
-      console.log('successfully uploading file!', data)
-      this.setState({ fileUrl: '', file: '', filename: ''})
-    } catch (error) {
-      console.log('error uploading file!', error)
-    }
-  }
 
-  getFile = async () => {
-    try {
-      let data = await Storage.get('victory1.jpg')
-      console.log('Got file successfully', data)
+      let params = {
+        body:
+          {
+            userid: this.props.user.sub,
+            pictureurl: s3picture.key,
+            rating: 0
+          }
+      }
+
+      await API.put('picturesapi', '/userpictures', params)
+
+      this.setState({ fileUrl: '', file: '', filename: '' })
     } catch (error) {
-      console.log(error)
+      console.log('error uploading file: ', error)
     }
   }
 
@@ -39,13 +45,17 @@ class PictureUpload extends Component {
   render () {
     return (
       <div>
-        <input type='file' onChange={this.handleChange} />
-        <img src={this.state.fileUrl} alt="" />
+        <input
+          type='file'
+          accept='.jpg,.jpeg,.png'
+          onChange={this.handleChange}
+        />
+        <img src={this.state.fileUrl} alt=''/>
         <button onClick={this.saveFile}>Save File</button>
-        <button onClick={this.getFile}>Get File</button>
       </div>
     )
   }
 }
+
 
 export default PictureUpload
