@@ -22,7 +22,10 @@ const awsmobile = {
             "endpoint": "https://dvmcvle4je.execute-api.eu-central-1.amazonaws.com/dev",
             "region": "eu-central-1"
         }
-    ]
+    ],
+    "aws_appsync_graphqlEndpoint": "https://emjvc7uo4bdyjipqbzovryhpte.appsync-api.eu-central-1.amazonaws.com/graphql",
+    "aws_appsync_region": "eu-central-1",
+    "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS"
 };
 
 

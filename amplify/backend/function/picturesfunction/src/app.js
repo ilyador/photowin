@@ -1,6 +1,6 @@
 const environment = process.env.ENV
 const region = process.env.REGION
-const authPhotowinampdeva1cef837UserPoolId = process.env.AUTH_PHOTOWINAMPDEVA1CEF837_USERPOOLID
+const authUserPoolId = process.env.AUTH_PHOTOWINAMPDEVA1CEF837_USERPOOLID
 const storagePhotowinpicturesName = process.env.STORAGE_PHOTOWINPICTURES_NAME
 const storagePhotowinpicturesArn = process.env.STORAGE_PHOTOWINPICTURES_ARN
 
@@ -100,12 +100,16 @@ app.get(path, function (req, res) {
  * HTTP Get method for get single object *
  *****************************************/
 
-app.get(path + '/object' + hashKeyPath + sortKeyPath, function (req, res) {
+app.get(path + '/user', function (req, res) {
+  console.log('cognitoIdentityId: ',req.apiGateway.event.requestContext.identity.cognitoIdentityId)
+
   let params = {}
   if (userIdPresent && req.apiGateway) {
+    console.log('userIdPresent && req.apiGateway')
     params[partitionKeyName] =
       req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH
   } else {
+    console.log('req.params:', req.params)
     params[partitionKeyName] = req.params[partitionKeyName]
     try {
       params[partitionKeyName] =
@@ -117,6 +121,7 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, function (req, res) {
   }
   if (hasSortKey) {
     try {
+      console.log('hasSortKey')
       params[sortKeyName] = convertUrlType(req.params[sortKeyName], sortKeyType)
     } catch (err) {
       res.statusCode = 500
@@ -126,16 +131,22 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, function (req, res) {
 
   let getItemParams = {
     TableName: tableName,
-    Key: params
+    KeyConditionExpression: '#userid = :userid',
+    ExpressionAttributeNames: {
+      '#userid': 'userid',
+    },
+    ExpressionAttributeValues: {
+      ':userid': '39e1f6cb-22af-4f8c-adf5-8ea4ce66ff90',
+    },
   }
 
-  dynamodb.get(getItemParams, (err, data) => {
+  dynamodb.query(getItemParams, (err, data) => {
     if (err) {
       res.statusCode = 500
       res.json({ error: 'Could not load items: ' + err.message })
     } else {
-      if (data.Item) {
-        res.json(data.Item)
+      if (data.Items) {
+        res.json(data.Items)
       } else {
         res.json(data)
       }

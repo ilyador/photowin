@@ -1,0 +1,11 @@
+type Set @model {
+  id: ID!
+  user: String!
+  pictures: [Picture]!
+}
+
+type Picture @model {
+  id: ID!
+  url: String!
+  rating: Int!
+}

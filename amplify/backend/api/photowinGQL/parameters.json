@@ -1,0 +1,10 @@
+{
+    "AppSyncApiName": "photowinGQL",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authphotowinampdeva1cef837",
+            "Outputs.UserPoolId"
+        ]
+    }
+}
