@@ -6,9 +6,12 @@ export const createSet = `mutation CreateSet($input: CreateSetInput!) {
     id
     user
     pictures {
-      id
-      url
-      rating
+      items {
+        id
+        url
+        rating
+      }
+      nextToken
     }
   }
 }
@@ -18,9 +21,12 @@ export const updateSet = `mutation UpdateSet($input: UpdateSetInput!) {
     id
     user
     pictures {
-      id
-      url
-      rating
+      items {
+        id
+        url
+        rating
+      }
+      nextToken
     }
   }
 }
@@ -30,9 +36,12 @@ export const deleteSet = `mutation DeleteSet($input: DeleteSetInput!) {
     id
     user
     pictures {
-      id
-      url
-      rating
+      items {
+        id
+        url
+        rating
+      }
+      nextToken
     }
   }
 }

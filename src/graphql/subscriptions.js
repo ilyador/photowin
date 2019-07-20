@@ -6,9 +6,12 @@ export const onCreateSet = `subscription OnCreateSet {
     id
     user
     pictures {
-      id
-      url
-      rating
+      items {
+        id
+        url
+        rating
+      }
+      nextToken
     }
   }
 }
@@ -18,9 +21,12 @@ export const onUpdateSet = `subscription OnUpdateSet {
     id
     user
     pictures {
-      id
-      url
-      rating
+      items {
+        id
+        url
+        rating
+      }
+      nextToken
     }
   }
 }
@@ -30,9 +36,12 @@ export const onDeleteSet = `subscription OnDeleteSet {
     id
     user
     pictures {
-      id
-      url
-      rating
+      items {
+        id
+        url
+        rating
+      }
+      nextToken
     }
   }
 }

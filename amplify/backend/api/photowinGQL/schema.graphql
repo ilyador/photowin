@@ -1,7 +1,7 @@
 type Set @model {
   id: ID!
   user: String!
-  pictures: [Picture]!
+  pictures: [Picture]! @connection
 }
 
 type Picture @model {

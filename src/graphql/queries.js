@@ -6,9 +6,12 @@ export const getSet = `query GetSet($id: ID!) {
     id
     user
     pictures {
-      id
-      url
-      rating
+      items {
+        id
+        url
+        rating
+      }
+      nextToken
     }
   }
 }
@@ -19,9 +22,7 @@ export const listSets = `query ListSets($filter: ModelSetFilterInput, $limit: In
       id
       user
       pictures {
-        id
-        url
-        rating
+        nextToken
       }
     }
     nextToken
