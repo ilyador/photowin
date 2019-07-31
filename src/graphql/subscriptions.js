@@ -10,6 +10,7 @@ export const onCreateSet = `subscription OnCreateSet {
         id
         url
         rating
+        appearedForRanking
       }
       nextToken
     }
@@ -25,6 +26,7 @@ export const onUpdateSet = `subscription OnUpdateSet {
         id
         url
         rating
+        appearedForRanking
       }
       nextToken
     }
@@ -40,6 +42,7 @@ export const onDeleteSet = `subscription OnDeleteSet {
         id
         url
         rating
+        appearedForRanking
       }
       nextToken
     }
@@ -51,6 +54,7 @@ export const onCreatePicture = `subscription OnCreatePicture {
     id
     url
     rating
+    appearedForRanking
   }
 }
 `;
@@ -59,6 +63,7 @@ export const onUpdatePicture = `subscription OnUpdatePicture {
     id
     url
     rating
+    appearedForRanking
   }
 }
 `;
@@ -67,6 +72,7 @@ export const onDeletePicture = `subscription OnDeletePicture {
     id
     url
     rating
+    appearedForRanking
   }
 }
 `;

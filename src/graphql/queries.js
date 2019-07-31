@@ -10,6 +10,7 @@ export const getSet = `query GetSet($id: ID!) {
         id
         url
         rating
+        appearedForRanking
       }
       nextToken
     }
@@ -34,6 +35,7 @@ export const getPicture = `query GetPicture($id: ID!) {
     id
     url
     rating
+    appearedForRanking
   }
 }
 `;
@@ -47,6 +49,7 @@ export const listPictures = `query ListPictures(
       id
       url
       rating
+      appearedForRanking
     }
     nextToken
   }

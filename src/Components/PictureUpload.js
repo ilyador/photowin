@@ -9,7 +9,8 @@ class PictureUpload extends Component {
 
   handleChange = e => {
     let file = e.target.files[0]
-    let filename = uuid() + file.name.split('.').pop()
+    let filext = file.name.split('.').pop()
+    let filename = uuid() + '.' + filext
 
     this.setState({
       fileUrl: URL.createObjectURL(file),

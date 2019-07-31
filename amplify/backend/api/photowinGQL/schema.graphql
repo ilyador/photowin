@@ -1,11 +1,12 @@
 type Set @model {
   id: ID!
   user: String!
-  pictures: [Picture]! @connection
+  pictures: [Picture!]! @connection
 }
 
 type Picture @model {
   id: ID!
   url: String!
   rating: Int!
+  appearedForRanking: Int!
 }
