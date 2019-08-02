@@ -52,6 +52,11 @@ export const onDeleteSet = `subscription OnDeleteSet {
 export const onCreatePicture = `subscription OnCreatePicture {
   onCreatePicture {
     id
+    file {
+      bucket
+      key
+      region
+    }
     url
     rating
     appearedForRanking
@@ -61,6 +66,11 @@ export const onCreatePicture = `subscription OnCreatePicture {
 export const onUpdatePicture = `subscription OnUpdatePicture {
   onUpdatePicture {
     id
+    file {
+      bucket
+      key
+      region
+    }
     url
     rating
     appearedForRanking
@@ -70,6 +80,11 @@ export const onUpdatePicture = `subscription OnUpdatePicture {
 export const onDeletePicture = `subscription OnDeletePicture {
   onDeletePicture {
     id
+    file {
+      bucket
+      key
+      region
+    }
     url
     rating
     appearedForRanking

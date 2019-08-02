@@ -52,6 +52,11 @@ export const deleteSet = `mutation DeleteSet($input: DeleteSetInput!) {
 export const createPicture = `mutation CreatePicture($input: CreatePictureInput!) {
   createPicture(input: $input) {
     id
+    file {
+      bucket
+      key
+      region
+    }
     url
     rating
     appearedForRanking
@@ -61,6 +66,11 @@ export const createPicture = `mutation CreatePicture($input: CreatePictureInput!
 export const updatePicture = `mutation UpdatePicture($input: UpdatePictureInput!) {
   updatePicture(input: $input) {
     id
+    file {
+      bucket
+      key
+      region
+    }
     url
     rating
     appearedForRanking
@@ -70,6 +80,11 @@ export const updatePicture = `mutation UpdatePicture($input: UpdatePictureInput!
 export const deletePicture = `mutation DeletePicture($input: DeletePictureInput!) {
   deletePicture(input: $input) {
     id
+    file {
+      bucket
+      key
+      region
+    }
     url
     rating
     appearedForRanking

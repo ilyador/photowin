@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { API, Storage } from 'aws-amplify'
+import { API, graphqlOperation } from 'aws-amplify'
 import uuid from 'uuid/v4'
+import * as mutations from '../graphql/mutations'
+import awsConfig from '../aws-exports'
 
 
 class PictureUpload extends Component {
@@ -14,31 +16,39 @@ class PictureUpload extends Component {
 
     this.setState({
       fileUrl: URL.createObjectURL(file),
-      file,
       filename: filename
     })
   }
 
   saveFile = async () => {
+    let visibility = 'public'
+
+    let fileObj = {
+      bucket: awsConfig.aws_user_files_s3_bucket,
+      region: awsConfig.aws_user_files_s3_bucket_region,
+      key: visibility + '/' + this.state.filename,
+      mimeType:'image/jpeg',
+      localUri: this.state.fileUrl,
+      visibility: visibility
+    }
+
     try {
-      let s3picture = await Storage.put(
-        this.state.filename, this.state.file, { level: 'protected' }
+      const picture = await API.graphql(
+        graphqlOperation(mutations.createPicture, {
+          input: {
+            url: this.state.filename,
+            file: fileObj
+          }
+        })
       )
 
-      let params = {
-        body:
-          {
-            userid: this.props.user.sub,
-            pictureurl: s3picture.key,
-            rating: 0
-          }
-      }
+      console.log(picture)
 
-      await API.put('picturesapi', '/userpictures', params)
+      // userId = this.props.user.sub
 
-      this.setState({ fileUrl: '', file: '', filename: '' })
+      this.setState({ fileUrl: '', filename: '' })
     } catch (error) {
-      console.log('error uploading file: ', error)
+      console.log('error saving file: ', error)
     }
   }
 
@@ -51,8 +61,10 @@ class PictureUpload extends Component {
           accept='.jpg,.jpeg,.png'
           onChange={this.handleChange}
         />
-        <img src={this.state.fileUrl} alt=''/>
-        <button onClick={this.saveFile}>Save File</button>
+        <img width='100' src={this.state.fileUrl} alt=''/>
+        <button disabled={!this.state.fileUrl} onClick={this.saveFile}>
+          Save File
+        </button>
       </div>
     )
   }

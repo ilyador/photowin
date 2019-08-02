@@ -33,6 +33,11 @@ export const listSets = `query ListSets($filter: ModelSetFilterInput, $limit: In
 export const getPicture = `query GetPicture($id: ID!) {
   getPicture(id: $id) {
     id
+    file {
+      bucket
+      key
+      region
+    }
     url
     rating
     appearedForRanking
@@ -47,6 +52,11 @@ export const listPictures = `query ListPictures(
   listPictures(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      file {
+        bucket
+        key
+        region
+      }
       url
       rating
       appearedForRanking
