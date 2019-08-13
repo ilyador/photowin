@@ -1,42 +1,34 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Auth } from 'aws-amplify'
 import Routes from './Router'
 
 
-class App extends Component {
+function App () {
 
-  state = {
-    authenticating: true,
-    user: false,
-  }
+  const [user, setUser] = useState(null)
+  const [authenticating, setAuthenticating] = useState(true)
 
-  async componentDidMount () {
-    try {
-      let user = await Auth.currentAuthenticatedUser()
-      this.setState({ user: user.attributes })
-    } catch (error) {
-      console.log(error)
-    }
+  useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then(user => setUser(user.attributes))
+      .catch(error => { console.log(error) })
+      .finally(() => {setAuthenticating(false)})
+  }, [])
 
-    this.setState({ authenticating: false })
-  }
-
-  updateUserState = async user => {
+  const updateUserState = async user => {
     this.setState({ user })
   }
 
-  render () {
-    return (
-      this.state.authenticating ? (
-        <h1>LOADING</h1>
-      ) : (
-        <Routes
-          user={this.state.user}
-          updateUserState={this.updateUserState}
-        />
-      )
+  return (
+    authenticating ? (
+      <h1>LOADING</h1>
+    ) : (
+      <Routes
+        user={user}
+        updateUserState={updateUserState}
+      />
     )
-  }
+  )
 }
 
 

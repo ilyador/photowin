@@ -15,14 +15,14 @@ import Rate from './Rate'
 import Layout from './Layout'
 
 
-const PrivateRoute = ({component, user, updateUserState, ...rest }) => (
+const PrivateRoute = ({ component, user, updateUserState, ...rest }) => (
   <Route {...rest} render={(props) => (
     user
       ? <Layout
-          component={component}
-          updateUserState={updateUserState}
-          user={user}
-          {...props}
+        component={component}
+        updateUserState={updateUserState}
+        user={user}
+        {...props}
       />
       : <Redirect to={'/login'}/>
   )}/>
@@ -57,8 +57,8 @@ const Routes = ({ user, updateUserState }) => (
         updateUserState={updateUserState}
         component={PictureUpload}
       />
-      <Route path="/rate" component={Rate} />
-      <Route component={Page404} />
+      <Route path="/rate" component={Rate}/>
+      <Route component={Page404}/>
     </Switch>
   </Router>
 )

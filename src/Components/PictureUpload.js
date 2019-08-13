@@ -1,73 +1,65 @@
-import React, { Component } from 'react'
-import { API, graphqlOperation } from 'aws-amplify'
+import React, { useState } from 'react'
+import { API, graphqlOperation, Storage } from 'aws-amplify'
 import uuid from 'uuid/v4'
-import * as mutations from '../graphql/mutations'
-import awsConfig from '../aws-exports'
+import { createPicture } from '../graphql/mutations'
+import config from '../aws-exports'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 
-class PictureUpload extends Component {
+const {
+  aws_user_files_s3_bucket_region: region,
+  aws_user_files_s3_bucket: bucket
+} = config
 
-  state = { fileUrl: '', file: '', filename: '' }
 
-  handleChange = e => {
-    let file = e.target.files[0]
-    let filext = file.name.split('.').pop()
-    let filename = uuid() + '.' + filext
+function PictureUpload () {
+  const [file, setFile] = useState(null)
+  const [fileUrl, setFileUrl] = useState(null)
+  const [fileName, setFileName] = useState(null)
 
-    this.setState({
-      fileUrl: URL.createObjectURL(file),
-      filename: filename
-    })
+  const handleChange = event => {
+    let _file = event.target.files[0]
+    let _filename = uuid() + '.' + _file.name.split('.').pop()
+
+    setFile(_file)
+    setFileUrl(URL.createObjectURL(_file))
+    setFileName(_filename)
   }
 
-  saveFile = async () => {
-    let visibility = 'public'
-
-    let fileObj = {
-      bucket: awsConfig.aws_user_files_s3_bucket,
-      region: awsConfig.aws_user_files_s3_bucket_region,
-      key: visibility + '/' + this.state.filename,
-      mimeType:'image/jpeg',
-      localUri: this.state.fileUrl,
-      visibility: visibility
+  const saveFile = async () => {
+    const fileData = {
+      file: {
+        bucket,
+        key: fileName,
+        region,
+      }
     }
 
     try {
-      const picture = await API.graphql(
-        graphqlOperation(mutations.createPicture, {
-          input: {
-            url: this.state.filename,
-            file: fileObj
-          }
-        })
-      )
+      await Storage.put(fileName, file, { level: 'protected' })
+      await API.graphql(graphqlOperation(createPicture, { input: fileData }))
 
-      console.log(picture)
-
-      // userId = this.props.user.sub
-
-      this.setState({ fileUrl: '', filename: '' })
+      setFile(null)
+      setFileUrl(null)
+      setFileName(null)
     } catch (error) {
-      console.log('error saving file: ', error)
+      console.log('error uploading file: ', error)
     }
   }
 
 
-  render () {
-    return (
-      <div>
-        <input
-          type='file'
-          accept='.jpg,.jpeg,.png'
-          onChange={this.handleChange}
-        />
-        <img width='100' src={this.state.fileUrl} alt=''/>
-        <button disabled={!this.state.fileUrl} onClick={this.saveFile}>
-          Save File
-        </button>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <input
+        type='file'
+        accept='.jpg,.jpeg,.png'
+        onChange={handleChange}
+      />
+      <img src={fileUrl}/>
+      <button onClick={saveFile}>Save File</button>
+    </div>
+  )
 }
 
 
