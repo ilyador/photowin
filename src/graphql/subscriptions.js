@@ -8,7 +8,6 @@ export const onCreateSet = `subscription OnCreateSet {
     pictures {
       items {
         id
-        url
         rating
         appearedForRanking
       }
@@ -24,7 +23,6 @@ export const onUpdateSet = `subscription OnUpdateSet {
     pictures {
       items {
         id
-        url
         rating
         appearedForRanking
       }
@@ -40,7 +38,6 @@ export const onDeleteSet = `subscription OnDeleteSet {
     pictures {
       items {
         id
-        url
         rating
         appearedForRanking
       }
@@ -57,7 +54,6 @@ export const onCreatePicture = `subscription OnCreatePicture {
       key
       region
     }
-    url
     rating
     appearedForRanking
   }
@@ -71,7 +67,6 @@ export const onUpdatePicture = `subscription OnUpdatePicture {
       key
       region
     }
-    url
     rating
     appearedForRanking
   }
@@ -85,7 +80,6 @@ export const onDeletePicture = `subscription OnDeletePicture {
       key
       region
     }
-    url
     rating
     appearedForRanking
   }

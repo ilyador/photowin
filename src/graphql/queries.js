@@ -8,7 +8,6 @@ export const getSet = `query GetSet($id: ID!) {
     pictures {
       items {
         id
-        url
         rating
         appearedForRanking
       }
@@ -38,7 +37,6 @@ export const getPicture = `query GetPicture($id: ID!) {
       key
       region
     }
-    url
     rating
     appearedForRanking
   }
@@ -57,7 +55,6 @@ export const listPictures = `query ListPictures(
         key
         region
       }
-      url
       rating
       appearedForRanking
     }

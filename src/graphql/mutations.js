@@ -8,7 +8,6 @@ export const createSet = `mutation CreateSet($input: CreateSetInput!) {
     pictures {
       items {
         id
-        url
         rating
         appearedForRanking
       }
@@ -24,7 +23,6 @@ export const updateSet = `mutation UpdateSet($input: UpdateSetInput!) {
     pictures {
       items {
         id
-        url
         rating
         appearedForRanking
       }
@@ -40,7 +38,6 @@ export const deleteSet = `mutation DeleteSet($input: DeleteSetInput!) {
     pictures {
       items {
         id
-        url
         rating
         appearedForRanking
       }
@@ -57,7 +54,6 @@ export const createPicture = `mutation CreatePicture($input: CreatePictureInput!
       key
       region
     }
-    url
     rating
     appearedForRanking
   }
@@ -71,7 +67,6 @@ export const updatePicture = `mutation UpdatePicture($input: UpdatePictureInput!
       key
       region
     }
-    url
     rating
     appearedForRanking
   }
@@ -85,7 +80,6 @@ export const deletePicture = `mutation DeletePicture($input: DeletePictureInput!
       key
       region
     }
-    url
     rating
     appearedForRanking
   }

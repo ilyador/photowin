@@ -7,7 +7,6 @@ type Set @model {
 type Picture @model {
   id: ID!
   file: S3Object!
-  url: String!
   rating: Int
   appearedForRanking: Int
 }
@@ -16,27 +15,4 @@ type S3Object {
   bucket: String!
   key: String!
   region: String!
-}
-
-input CreatePictureInput {
-  id: ID
-  file: S3ObjectInput!
-  url: String!
-  rating: Int
-  appearedForRanking: Int
-}
-
-input S3ObjectInput {
-  bucket: String!
-  region: String!
-  localUri: String
-  visibility: Visibility
-  key: String
-  mimeType: String
-}
-
-enum Visibility {
-  public
-  protected
-  private
 }
