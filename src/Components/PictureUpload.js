@@ -1,63 +1,42 @@
-import React, { useState } from 'react'
-import { API, graphqlOperation, Storage } from 'aws-amplify'
+import React, { useState, useEffect } from 'react'
 import uuid from 'uuid/v4'
-import { createPicture } from '../graphql/mutations'
-import config from '../aws-exports'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 
 
-const {
-  aws_user_files_s3_bucket_region: region,
-  aws_user_files_s3_bucket: bucket
-} = config
-
-
-function PictureUpload () {
-  const [file, setFile] = useState(null)
+function PictureUpload ({ uploadFileData, file }) {
   const [fileUrl, setFileUrl] = useState(null)
-  const [fileName, setFileName] = useState(null)
+
+  useEffect(() => {
+    if (!file) setFileUrl(null)
+  }, [file])
+
 
   const handleChange = event => {
     let _file = event.target.files[0]
-    let _filename = uuid() + '.' + _file.name.split('.').pop()
+    let _fileName = uuid() + '.' + _file.name.split('.').pop()
+    let _fileUrl = URL.createObjectURL(_file)
 
-    setFile(_file)
-    setFileUrl(URL.createObjectURL(_file))
-    setFileName(_filename)
-  }
+    setFileUrl(_fileUrl)
 
-  const saveFile = async () => {
-    const fileData = {
-      file: {
-        bucket,
-        key: fileName,
-        region,
-      }
-    }
-
-    try {
-      await Storage.put(fileName, file, { level: 'protected' })
-      await API.graphql(graphqlOperation(createPicture, { input: fileData }))
-
-      setFile(null)
-      setFileUrl(null)
-      setFileName(null)
-    } catch (error) {
-      console.log('error uploading file: ', error)
-    }
+    uploadFileData({
+      file: _file,
+      fileName: _fileName,
+      fileUrl: _fileUrl
+    })
   }
 
 
   return (
-    <div>
+    <div className="custom-file">
       <input
-        type='file'
+        type="file"
+        className="custom-file-input"
+        id="customFile"
         accept='.jpg,.jpeg,.png'
-        onChange={handleChange}
-      />
+        onChange={handleChange}/>
+      <label className="custom-file-label" htmlFor="customFile">
+        Choose file
+      </label>
       <img src={fileUrl}/>
-      <button onClick={saveFile}>Save File</button>
     </div>
   )
 }

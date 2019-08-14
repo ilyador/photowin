@@ -9,7 +9,7 @@ import history from '../Helpers/history'
 
 import Login from './Login'
 import Inner from './Inner'
-import PictureUpload from './PictureUpload'
+import SetUpload from './SetUpload'
 import Page404 from './Page404'
 import Rate from './Rate'
 import Layout from './Layout'
@@ -55,7 +55,7 @@ const Routes = ({ user, updateUserState }) => (
         path={'/upload-pictures'}
         user={user}
         updateUserState={updateUserState}
-        component={PictureUpload}
+        component={SetUpload}
       />
       <Route path="/rate" component={Rate}/>
       <Route component={Page404}/>
