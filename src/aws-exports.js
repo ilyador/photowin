@@ -16,14 +16,7 @@ const awsmobile = {
     ],
     "aws_user_files_s3_bucket": "photo-win-amp-dev87002fd51d654f868fdd8383f1480f20-dev",
     "aws_user_files_s3_bucket_region": "eu-central-1",
-    "aws_cloud_logic_custom": [
-        {
-            "name": "picturesapi",
-            "endpoint": "https://dvmcvle4je.execute-api.eu-central-1.amazonaws.com/dev",
-            "region": "eu-central-1"
-        }
-    ],
-    "aws_appsync_graphqlEndpoint": "https://emjvc7uo4bdyjipqbzovryhpte.appsync-api.eu-central-1.amazonaws.com/graphql",
+    "aws_appsync_graphqlEndpoint": "https://f2fzhet4y5ftdp3nprrmzyjngm.appsync-api.eu-central-1.amazonaws.com/graphql",
     "aws_appsync_region": "eu-central-1",
     "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS"
 };

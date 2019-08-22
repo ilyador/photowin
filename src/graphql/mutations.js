@@ -1,15 +1,16 @@
-// eslint-disable
+/* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
 export const createSet = `mutation CreateSet($input: CreateSetInput!) {
   createSet(input: $input) {
     id
+    type
     user
+    appearedForRanking
     pictures {
       items {
         id
         rating
-        appearedForRanking
       }
       nextToken
     }
@@ -19,12 +20,13 @@ export const createSet = `mutation CreateSet($input: CreateSetInput!) {
 export const updateSet = `mutation UpdateSet($input: UpdateSetInput!) {
   updateSet(input: $input) {
     id
+    type
     user
+    appearedForRanking
     pictures {
       items {
         id
         rating
-        appearedForRanking
       }
       nextToken
     }
@@ -34,12 +36,13 @@ export const updateSet = `mutation UpdateSet($input: UpdateSetInput!) {
 export const deleteSet = `mutation DeleteSet($input: DeleteSetInput!) {
   deleteSet(input: $input) {
     id
+    type
     user
+    appearedForRanking
     pictures {
       items {
         id
         rating
-        appearedForRanking
       }
       nextToken
     }
@@ -55,7 +58,6 @@ export const createPicture = `mutation CreatePicture($input: CreatePictureInput!
       region
     }
     rating
-    appearedForRanking
   }
 }
 `;
@@ -68,7 +70,6 @@ export const updatePicture = `mutation UpdatePicture($input: UpdatePictureInput!
       region
     }
     rating
-    appearedForRanking
   }
 }
 `;
@@ -81,7 +82,6 @@ export const deletePicture = `mutation DeletePicture($input: DeletePictureInput!
       region
     }
     rating
-    appearedForRanking
   }
 }
 `;

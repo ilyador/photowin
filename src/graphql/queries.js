@@ -1,15 +1,16 @@
-// eslint-disable
+/* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
 export const getSet = `query GetSet($id: ID!) {
   getSet(id: $id) {
     id
+    type
     user
+    appearedForRanking
     pictures {
       items {
         id
         rating
-        appearedForRanking
       }
       nextToken
     }
@@ -20,7 +21,9 @@ export const listSets = `query ListSets($filter: ModelSetFilterInput, $limit: In
   listSets(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      type
       user
+      appearedForRanking
       pictures {
         nextToken
       }
@@ -38,7 +41,6 @@ export const getPicture = `query GetPicture($id: ID!) {
       region
     }
     rating
-    appearedForRanking
   }
 }
 `;
@@ -56,7 +58,35 @@ export const listPictures = `query ListPictures(
         region
       }
       rating
+    }
+    nextToken
+  }
+}
+`;
+export const getByAppeared = `query GetByAppeared(
+  $type: String
+  $appearedForRanking: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelSetFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  getByAppeared(
+    type: $type
+    appearedForRanking: $appearedForRanking
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      type
+      user
       appearedForRanking
+      pictures {
+        nextToken
+      }
     }
     nextToken
   }

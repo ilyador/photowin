@@ -16,7 +16,7 @@ function App () {
   }, [])
 
   const updateUserState = async user => {
-    this.setState({ user })
+    setUser(user)
   }
 
   return (

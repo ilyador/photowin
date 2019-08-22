@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useReducer } from 'react'
-import { API, graphqlOperation, Storage } from 'aws-amplify'
+import { API, graphqlOperation as operation, Storage } from 'aws-amplify'
 import { createPicture, createSet } from '../graphql/mutations'
 import config from '../aws-exports'
 import PictureUpload from './PictureUpload'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import uuid from 'uuid/v4'
 
 
 const {
@@ -25,7 +26,6 @@ function reducer (state, action) {
       newFiles[action.index] = action.data
       return { ...state, files: newFiles }
     case 'CLEAR_FILES':
-      console.log('clear')
       return initialState
     default:
       return state
@@ -64,7 +64,7 @@ function SetUpload ({ user }) {
       }
 
       let storageCall = Storage.put(fileName, file, { level: 'protected' })
-      let gqlCall = API.graphql(graphqlOperation(createPicture, { input }))
+      let gqlCall = API.graphql(operation(createPicture, { input }))
 
       Promise.all([storageCall, gqlCall])
         .then(data => resolve(data))
@@ -74,7 +74,13 @@ function SetUpload ({ user }) {
 
 
   async function createPictureSet () {
-    const pictureSet = await API.graphql(graphqlOperation(createSet, { input: {user: user.sub} }))
+    let input = {
+      id: uuid(),
+      user: user.sub,
+      appearedForRanking: 0
+    }
+
+    const pictureSet = await API.graphql(operation(createSet, { input }))
     const setId = pictureSet.data.createSet.id
 
     let allFileUploadPromises = state.files.map(file =>

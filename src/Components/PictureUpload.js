@@ -12,6 +12,8 @@ function PictureUpload ({ uploadFileData, file }) {
 
   const handleChange = event => {
     let _file = event.target.files[0]
+    if (!_file) return
+
     let _fileName = uuid() + '.' + _file.name.split('.').pop()
     let _fileUrl = URL.createObjectURL(_file)
 
@@ -30,10 +32,9 @@ function PictureUpload ({ uploadFileData, file }) {
       <input
         type="file"
         className="custom-file-input"
-        id="customFile"
         accept='.jpg,.jpeg,.png'
         onChange={handleChange}/>
-      <label className="custom-file-label" htmlFor="customFile">
+      <label className="custom-file-label">
         Choose file
       </label>
       <img src={fileUrl}/>
