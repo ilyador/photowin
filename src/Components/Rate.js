@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import {
   API,
   Storage,
-  graphqlOperation,
   graphqlOperation as operation
 } from 'aws-amplify'
 import { getByAppeared } from '../graphql/queries'
@@ -19,51 +18,57 @@ function Rate () {
   const [pictures, setPictures] = useState([])
 
 
-  useEffect(() => {
-    async function getPictureSet () {
-      let data = await API.graphql(graphqlOperation(getByAppeared, {
-        type: 'Set',
-        sortDirection: 'DESC',
-        limit: 20
-      }))
+  async function getPictureSet () {
+    let data = await API.graphql(operation(getByAppeared, {
+      type: 'Set',
+      sortDirection: 'DESC',
+      limit: 20
+    }))
 
-      let { items } = data.data.getByAppeared
-      let itemToRateIndex = random(items.length)
-      let itemToRate = {
-        id: items[itemToRateIndex].id,
-        appearedForRanking: items[itemToRateIndex].appearedForRanking
-      }
-
-      let pics = items[itemToRateIndex].pictures.items
-      pics.splice(random(3), 1)
-
-      let setWithURLsPromise = pics.map(async (item, index) => {
-        item.pictureURL = await Storage.get(pics[index].file.key)
-        return item
-      })
-
-      let setWithURLs = await Promise.all(setWithURLsPromise)
-
-      setPictures(setWithURLs)
-      setPicturesSetData(itemToRate)
-      setLoading(false)
+    let { items } = data.data.getByAppeared
+    let itemToRateIndex = random(items.length)
+    let itemToRate = {
+      id: items[itemToRateIndex].id,
+      appearedForRanking: items[itemToRateIndex].appearedForRanking
     }
 
+    let pics = items[itemToRateIndex].pictures.items
+    pics.splice(random(3), 1)
+
+    let setWithURLsPromise = pics.map(async (item, index) => {
+      item.pictureURL = await Storage.get(pics[index].file.key)
+      return item
+    })
+
+    let setWithURLs = await Promise.all(setWithURLsPromise)
+
+    setPictures(setWithURLs)
+    setPicturesSetData(itemToRate)
+    setLoading(false)
+  }
+
+
+  useEffect(() => {
     getPictureSet()
   }, [])
 
 
   const vote = (id, rating) => () => {
-    let pictureInput = { id, rating: rating++ }
+    let pictureInput = { id, rating: rating + 1 }
     let setInput = {
       id: picturesSetData.id,
-      appearedForRanking: picturesSetData.appearedForRanking++
+      appearedForRanking: picturesSetData.appearedForRanking + 1
     }
 
     let pictureUpdate = API.graphql(operation(updatePicture, { input: pictureInput }))
     let setUpdate = API.graphql(operation(updateSet, { input: setInput }))
 
-    Promise.all([pictureUpdate, setUpdate]).then(data => {console.log(data)})
+    Promise.all([pictureUpdate, setUpdate]).then(() => {
+      setLoading(true)
+      setPicturesSetData(null)
+      setPictures([])
+      getPictureSet()
+    })
   }
 
 
@@ -74,10 +79,9 @@ function Rate () {
         {!loading && pictures.map((picture, index) => (
           <Col xs={6} key={index}>
             <img
-              className='rating-img'
+              className='rating-img click'
               src={picture.pictureURL}
               onClick={vote(picture.id, picture.rating)}
-              alt='picture to rate'
             />
           </Col>
         ))}

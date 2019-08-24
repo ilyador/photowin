@@ -1,19 +1,6 @@
 import React, { Component } from 'react'
-import withStyles from 'react-jss'
 import { Auth } from 'aws-amplify'
 import { Form, Button } from 'react-bootstrap'
-
-
-const styles = theme => ({
-  login: {
-    padding: [60, 0]
-  },
-
-  form: {
-    margin: [0, 'auto'],
-    maxWidth: 320
-  }
-})
 
 
 class Login extends Component {
@@ -89,7 +76,7 @@ class Login extends Component {
 
     const signUpForm = (
       <Form
-        className={c.form}
+        className='login-form'
         onSubmit={this.handleSignUp}>
         <Form.Group controlId="email">
           <Form.Label>Email address</Form.Label>
@@ -223,7 +210,7 @@ class Login extends Component {
     )
 
     return (
-      <div className={c.login}>
+      <div className='login'>
         {this.state.signUpStep === 0 && signUpForm}
         {this.state.signUpStep === 1 && confirmForm}
         {this.state.signUpStep === 2 && loginForm}
@@ -233,4 +220,4 @@ class Login extends Component {
 }
 
 
-export default withStyles(styles)(Login)
+export default Login

@@ -10,6 +10,7 @@ import history from '../Helpers/history'
 import Login from './Login'
 import Inner from './Inner'
 import SetUpload from './SetUpload'
+import Results from './Results'
 import Page404 from './Page404'
 import Rate from './Rate'
 import Layout from './Layout'
@@ -52,10 +53,16 @@ const Routes = ({ user, updateUserState }) => (
         component={Inner}
       />
       <PrivateRoute
-        path={'/upload-pictures'}
+        path={'/upload'}
         user={user}
         updateUserState={updateUserState}
         component={SetUpload}
+      />
+      <PrivateRoute
+        path={'/results'}
+        user={user}
+        updateUserState={updateUserState}
+        component={Results}
       />
       <Route path="/rate" component={Rate}/>
       <Route component={Page404}/>

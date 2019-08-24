@@ -21,10 +21,14 @@ export const listSets = `query ListSets($filter: ModelSetFilterInput, $limit: In
   listSets(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      type
-      user
       appearedForRanking
       pictures {
+        items {
+          file {
+            key
+          }
+          rating
+        }
         nextToken
       }
     }
