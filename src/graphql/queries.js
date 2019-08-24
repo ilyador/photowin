@@ -81,10 +81,15 @@ export const getByAppeared = `query GetByAppeared(
   ) {
     items {
       id
-      type
-      user
       appearedForRanking
       pictures {
+        items {
+          id
+          rating
+          file {
+            key
+          }
+        }
         nextToken
       }
     }

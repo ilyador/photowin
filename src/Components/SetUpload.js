@@ -6,7 +6,6 @@ import PictureUpload from './PictureUpload'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import uuid from 'uuid/v4'
 
 
 const {
@@ -55,6 +54,7 @@ function SetUpload ({ user }) {
     return new Promise((resolve, reject) => {
 
       const input = {
+        rating: 0,
         file: {
           bucket,
           key: fileName,
@@ -63,7 +63,7 @@ function SetUpload ({ user }) {
         setPicturesId: setId
       }
 
-      let storageCall = Storage.put(fileName, file, { level: 'protected' })
+      let storageCall = Storage.put(fileName, file, { level: 'public' })
       let gqlCall = API.graphql(operation(createPicture, { input }))
 
       Promise.all([storageCall, gqlCall])
@@ -75,7 +75,7 @@ function SetUpload ({ user }) {
 
   async function createPictureSet () {
     let input = {
-      id: uuid(),
+      type: "Set",
       user: user.sub,
       appearedForRanking: 0
     }
