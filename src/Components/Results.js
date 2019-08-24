@@ -9,14 +9,14 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
 
-function Rate () {
+function Results ({ user }) {
   const [loading, setLoading] = useState(true)
   const [pictures, setPictures] = useState([])
 
 
-  async function getPictureSet () {
+  async function getResults () {
     let data = await API.graphql(operation(listSets, {
-      filter:{user: {eq: "39e1f6cb-22af-4f8c-adf5-8ea4ce66ff90"}}
+      filter:{user: {eq: user.sub }}
     }))
 
     let pics = data.data.listSets.items[0].pictures.items
@@ -35,9 +35,7 @@ function Rate () {
   }
 
 
-  useEffect(() => {
-    getPictureSet()
-  }, [])
+  useEffect(() => { getResults() }, [])
 
   return (
     <div>
@@ -58,4 +56,4 @@ function Rate () {
 }
 
 
-export default Rate
+export default Results

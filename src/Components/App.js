@@ -12,7 +12,7 @@ function App () {
     Auth.currentAuthenticatedUser()
       .then(user => setUser(user.attributes))
       .catch(error => { console.log(error) })
-      .finally(() => {setAuthenticating(false)})
+      .finally(() => { setAuthenticating(false) })
   }, [])
 
   const updateUserState = async user => {

@@ -40,7 +40,6 @@ function PictureUpload ({ uploadFileData, file }) {
       <img
         className='rating-img'
         src={fileUrl}
-        alt='picture to upload'
       />
     </div>
   )

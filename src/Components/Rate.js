@@ -12,7 +12,18 @@ import Row from 'react-bootstrap/Row'
 
 const random = max => Math.floor(Math.random() * Math.floor(max))
 
-function Rate () {
+const getGender = user => {
+  const genders = ['male', 'female']
+  if (user) {
+    let gender = genders.indexOf(user.gender)
+    gender = 1 - gender
+    return genders[gender]
+  }
+  else { return genders[random(2)] }
+}
+
+
+function Rate ({ user }) {
   const [loading, setLoading] = useState(true)
   const [picturesSetData, setPicturesSetData] = useState(null)
   const [pictures, setPictures] = useState([])
@@ -20,10 +31,11 @@ function Rate () {
 
   async function getPictureSet () {
     let data = await API.graphql(operation(getByAppeared, {
-      type: 'Set',
+      type: getGender(user),
       sortDirection: 'DESC',
       limit: 20
     }))
+
 
     let { items } = data.data.getByAppeared
     let itemToRateIndex = random(items.length)
@@ -48,9 +60,7 @@ function Rate () {
   }
 
 
-  useEffect(() => {
-    getPictureSet()
-  }, [])
+  useEffect(() => { getPictureSet() }, [])
 
 
   const vote = (id, rating) => () => {

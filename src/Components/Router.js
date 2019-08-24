@@ -64,7 +64,10 @@ const Routes = ({ user, updateUserState }) => (
         updateUserState={updateUserState}
         component={Results}
       />
-      <Route path="/rate" component={Rate}/>
+      <Route
+        path='/rate'
+        component={() => <Rate user={user} />}
+      />
       <Route component={Page404}/>
     </Switch>
   </Router>
