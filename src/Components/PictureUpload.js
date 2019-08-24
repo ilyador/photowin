@@ -30,14 +30,18 @@ function PictureUpload ({ uploadFileData, file }) {
   return (
     <div className="custom-file">
       <input
-        type="file"
-        className="custom-file-input"
+        type='file'
+        className='custom-file-input'
         accept='.jpg,.jpeg,.png'
         onChange={handleChange}/>
-      <label className="custom-file-label">
+      <label className='custom-file-label'>
         Choose file
       </label>
-      <img src={fileUrl}/>
+      <img
+        className='rating-img'
+        src={fileUrl}
+        alt='picture to upload'
+      />
     </div>
   )
 }

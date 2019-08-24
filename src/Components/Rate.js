@@ -11,11 +11,12 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
 
-const random = (max) => Math.floor(Math.random() * Math.floor(max))
+const random = max => Math.floor(Math.random() * Math.floor(max))
 
 function Rate () {
-  const [setData, setSetData] = useState(true)
-  const [pictureSet, setPictureSet] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [picturesSetData, setPicturesSetData] = useState(null)
+  const [pictures, setPictures] = useState([])
 
 
   useEffect(() => {
@@ -33,35 +34,30 @@ function Rate () {
         appearedForRanking: items[itemToRateIndex].appearedForRanking
       }
 
-      setPictureSet(items[itemToRateIndex].pictures.items)
-      setSetData(itemToRate)
+      let pics = items[itemToRateIndex].pictures.items
+      pics.splice(random(3), 1)
+
+      let setWithURLsPromise = pics.map(async (item, index) => {
+        item.pictureURL = await Storage.get(pics[index].file.key)
+        return item
+      })
+
+      let setWithURLs = await Promise.all(setWithURLsPromise)
+
+      setPictures(setWithURLs)
+      setPicturesSetData(itemToRate)
+      setLoading(false)
     }
 
     getPictureSet()
   }, [])
 
 
-  useEffect(() => {
-    async function getPictureURLs () {
-      let setWithURLsPromise = pictureSet.map(async item => {
-        item.pictureURL = await Storage.get(pictureSet[0].file.key)
-        return item
-      })
-
-      let setWithURLs = await Promise.all(setWithURLsPromise)
-      setWithURLs.splice(random(3), 1)
-      setPictureSet(setWithURLs)
-    }
-
-    getPictureURLs()
-  }, [setData])
-
-
   const vote = (id, rating) => () => {
     let pictureInput = { id, rating: rating++ }
     let setInput = {
-      id: setData.id,
-      appearedForRanking: setData.appearedForRanking++
+      id: picturesSetData.id,
+      appearedForRanking: picturesSetData.appearedForRanking++
     }
 
     let pictureUpdate = API.graphql(operation(updatePicture, { input: pictureInput }))
@@ -75,11 +71,13 @@ function Rate () {
     <div>
       <h2>Show pictures for rating</h2>
       <Row>
-        {setData && pictureSet.map((picture, index) => (
-          <Col xs={4} key={index}>
+        {!loading && pictures.map((picture, index) => (
+          <Col xs={6} key={index}>
             <img
+              className='rating-img'
               src={picture.pictureURL}
               onClick={vote(picture.id, picture.rating)}
+              alt='picture to rate'
             />
           </Col>
         ))}
