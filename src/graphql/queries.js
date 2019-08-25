@@ -10,7 +10,9 @@ export const getSet = `query GetSet($id: ID!) {
     pictures {
       items {
         id
-        rating
+        file {
+          key
+        }
       }
       nextToken
     }

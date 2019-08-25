@@ -72,8 +72,9 @@ function SetUpload ({ user }) {
 
   async function createPictureSet () {
     let input = {
-      type: user.gender,
-      user: user.sub,
+      id: user.sub,
+      user: 'TO REMOVE',
+      type:user.gender,
       appearedForRanking: 0
     }
 

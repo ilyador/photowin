@@ -10,9 +10,9 @@ function App () {
 
   useEffect(() => {
     Auth.currentAuthenticatedUser()
-      .then(user => setUser(user.attributes))
+      .then(data =>   { setUser(data.attributes) })
       .catch(error => { console.log(error) })
-      .finally(() => { setAuthenticating(false) })
+      .finally(() =>  { setAuthenticating(false) })
   }, [])
 
   const updateUserState = async user => {

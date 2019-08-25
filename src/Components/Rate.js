@@ -1,4 +1,6 @@
+import Typography from '@material-ui/core/Typography'
 import React, { useEffect, useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 import {
   API,
   Storage,
@@ -6,6 +8,36 @@ import {
 } from 'aws-amplify'
 import { getByAppeared } from '../graphql/queries'
 import { updatePicture, updateSet } from '../graphql/mutations'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import CardMedia from '@material-ui/core/CardMedia'
+import Grid from '@material-ui/core/Grid'
+import Container from '@material-ui/core/Container'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import Fab from '@material-ui/core/Fab'
+
+
+const useStyles = makeStyles(theme => ({
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+  },
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  media: {
+    height: 0,
+    paddingTop: '100%'
+  },
+  actions: {
+    justifyContent: 'center'
+  },
+  like: {
+    marginTop: -34
+  }
+}))
 
 
 const random = max => Math.floor(Math.random() * Math.floor(max))
@@ -26,6 +58,7 @@ function Rate ({ user }) {
   const [picturesSetData, setPicturesSetData] = useState(null)
   const [pictures, setPictures] = useState([])
 
+  const c = useStyles()
 
   async function getPictureSet () {
     let data = await API.graphql(operation(getByAppeared, {
@@ -81,18 +114,35 @@ function Rate ({ user }) {
 
 
   return (
-    <div>
-      <h2>Show pictures for rating</h2>
-      {!loading && pictures.map((picture, index) => (
-        <div key={index}>
-          <img
-            className='rating-img click'
-            src={picture.pictureURL}
-            onClick={vote(picture.id, picture.rating)}
-          />
-        </div>
-      ))}
-    </div>
+    <Container className={c.cardGrid} maxWidth="md">
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <Typography variant="h4">
+            Choose your favorite picture
+          </Typography>
+        </Grid>
+        {!loading && pictures.map((picture, index) => (
+          <Grid item key={index} xs={6}>
+            <Card className={c.card}>
+              <CardMedia
+                className={c.media}
+                image={picture.pictureURL}
+                title="Image title"
+              />
+              <CardActions className={c.actions}>
+                <Fab
+                  color="secondary"
+                  className={c.like}
+                  onClick={vote(picture.id, picture.rating)}
+                >
+                  <FavoriteIcon/>
+                </Fab>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   )
 }
 

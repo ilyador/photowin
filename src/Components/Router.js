@@ -8,8 +8,7 @@ import {
 import history from '../Helpers/history'
 
 import Login from './Login'
-import SetUpload from './SetUpload'
-import Results from './Results'
+import User from './User'
 import Page404 from './Page404'
 import Rate from './Rate'
 import Layout from './Layout'
@@ -33,33 +32,29 @@ const Routes = ({ user, updateUserState }) => (
     <Switch>
       <Route
         exact path={'/'}
-        render={() => <Redirect to={'/upload'}/>}
+        render={() => <Redirect to={'/user'}/>}
       />
       <Route
         path={'/login'}
         render={() => (
           user ? (
-            <Redirect to={'/upload'}/>
+            <Redirect to={'/user'}/>
           ) : (
             <Login updateUserState={updateUserState}/>
           )
         )}
       />
       <PrivateRoute
-        path={'/upload'}
+        path={'/user'}
         user={user}
         updateUserState={updateUserState}
-        component={SetUpload}
+        component={User}
       />
       <PrivateRoute
-        path={'/results'}
+        path={'/rate'}
         user={user}
         updateUserState={updateUserState}
-        component={Results}
-      />
-      <Route
-        path='/rate'
-        component={() => <Rate user={user} />}
+        component={Rate}
       />
       <Route component={Page404}/>
     </Switch>

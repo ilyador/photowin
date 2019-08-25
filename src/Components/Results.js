@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import {
-  API,
-  Storage,
-  graphqlOperation as operation
-} from 'aws-amplify'
-import { listSets } from '../graphql/queries'
+import { Storage } from 'aws-amplify'
 
 
-function Results ({ user }) {
+function Results ({ userSet, clearSet }) {
   const [loading, setLoading] = useState(true)
   const [pictures, setPictures] = useState([])
 
 
-  async function getResults () {
-    let data = await API.graphql(operation(listSets, {
-      filter: { user: { eq: user.sub } }
-    }))
+  useEffect(() => { getResults() }, [])
 
-    let pics = data.data.listSets.items[0].pictures.items
+
+  async function getResults () {
+    const pics = userSet.pictures.items
 
     pics.sort((a, b) => b.rating - a.rating)
 
@@ -33,8 +27,6 @@ function Results ({ user }) {
   }
 
 
-  useEffect(() => { getResults() }, [])
-
   return (
     <div>
       <h2>Show Results</h2>
@@ -47,6 +39,7 @@ function Results ({ user }) {
           <h2>Rated: {picture.rating}</h2>
         </div>
       ))}
+      <button onClick={clearSet}>Retry a new set?</button>
     </div>
   )
 }

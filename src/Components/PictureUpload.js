@@ -38,6 +38,7 @@ function PictureUpload ({ uploadFileData, file }) {
         Choose file
       </label>
       <img
+        width={100}
         className='rating-img'
         src={fileUrl}
       />

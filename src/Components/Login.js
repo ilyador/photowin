@@ -83,7 +83,7 @@ function Login ({ updateUserState }) {
 
     try {
       let user = await Auth.signIn(form.email, form.password)
-      updateUserState(user)
+      updateUserState(user.attributes)
     } catch (error) {
       console.log(error.message)
     }
@@ -95,7 +95,7 @@ function Login ({ updateUserState }) {
     const { email: username, authenticationCode } = form
     try {
       let user = await Auth.confirmSignUp(username, authenticationCode)
-      updateUserState(user)
+      updateUserState(user.attributes)
       console.log('user successfully signed up!')
 
     } catch (error) {
