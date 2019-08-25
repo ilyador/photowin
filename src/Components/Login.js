@@ -8,6 +8,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import Button from '@material-ui/core/Button'
+import Link from '@material-ui/core/Link';
 
 
 const useStyles = makeStyles(theme => ({
@@ -17,6 +18,12 @@ const useStyles = makeStyles(theme => ({
   loginForm: {
     margin: [0, 'auto'],
     maxWidth: 320
+  },
+  formControl: {
+    minWidth: 120,
+  },
+  '.select, .link': {
+    width: '100%'
   }
 }))
 
@@ -35,8 +42,10 @@ function Login ({ updateUserState }) {
   const inputLabel = useRef(null)
 
 
-  const handleChange = name => event => {
-    setForm({ ...form, [name]: event.target.value })
+  const handleChange = event => {
+    const name = event.target.name
+    const value = event.target.value
+    setForm(oldForm => ({ ...oldForm, [name]: value }))
   }
 
 
@@ -58,7 +67,7 @@ function Login ({ updateUserState }) {
         attributes: { given_name, gender, birthdate }
       })
       console.log('Successfully signed up!')
-      setSignUpStep(1)
+      setSignUpStep(2)
     } catch (err) { console.log('error signing up: ', err) }
   }
 
@@ -78,12 +87,16 @@ function Login ({ updateUserState }) {
 
     const { email: username, authenticationCode } = form
     try {
-      await Auth.confirmSignUp(username, authenticationCode)
+      let user = await Auth.confirmSignUp(username, authenticationCode)
+      updateUserState(user)
       console.log('user successfully signed up!')
+
     } catch (error) {
       console.log('error confirming sign up: ', error)
     }
   }
+
+  const gotToSignup = () => {setSignUpStep(1)}
 
 
   const signUpForm = (
@@ -91,7 +104,17 @@ function Login ({ updateUserState }) {
       className={c.loginForm}
       onSubmit={handleSignUp}>
 
+      <Link
+        className={c.link}
+        component="button"
+        variant="body2"
+        onClick={gotToSignup}
+      >
+        Already registered? Login up here.
+      </Link>
+
       <TextField
+        fullWidth
         label="Email address"
         name="email"
         value={form.email}
@@ -100,6 +123,7 @@ function Login ({ updateUserState }) {
         variant="outlined"
       />
       <TextField
+        fullWidth
         label="Your name"
         name="given_name"
         value={form.given_name}
@@ -108,15 +132,21 @@ function Login ({ updateUserState }) {
         variant="outlined"
       />
       <TextField
+        fullWidth
         label="Birthday"
         type="date"
         name="birthdate"
         value={form.birthdate}
         onChange={handleChange}
-        InputLabelProps={{ shrink: true }}
+        margin="normal"
+        variant="outlined"
       />
 
-      <FormControl variant="outlined">
+      <FormControl
+        variant="outlined"
+        margin="normal"
+        className={c.select}
+      >
         <InputLabel ref={inputLabel} htmlFor="gender">
           Select Gender
         </InputLabel>
@@ -125,7 +155,7 @@ function Login ({ updateUserState }) {
           onChange={handleChange}
           input={
             <OutlinedInput
-              labelWidth={100}
+              labelWidth={105}
               name="gender"
               id='gender'
             />
@@ -137,6 +167,7 @@ function Login ({ updateUserState }) {
       </FormControl>
 
       <TextField
+        fullWidth
         label="Choose password"
         type="password"
         name="password"
@@ -146,7 +177,12 @@ function Login ({ updateUserState }) {
         variant="outlined"
       />
 
-      <Button variant="outlined" size="large" color="primary">
+      <Button
+        type="submit"
+        variant="outlined"
+        size="large"
+        color="primary"
+      >
         Sign Up
       </Button>
     </form>
@@ -160,6 +196,7 @@ function Login ({ updateUserState }) {
       onSubmit={handleAuthentication}>
 
       <TextField
+        fullWidth
         label="Email address"
         name="email"
         value={form.email}
@@ -168,6 +205,7 @@ function Login ({ updateUserState }) {
         variant="outlined"
       />
       <TextField
+        fullWidth
         label="Authentication code"
         name="authenticationCode"
         value={form.authenticationCode}
@@ -177,7 +215,12 @@ function Login ({ updateUserState }) {
         helperText="Check your email for one-time authentication code"
       />
 
-      <Button variant="outlined" size="large" color="primary">
+      <Button
+        type="submit"
+        variant="outlined"
+        size="large"
+        color="primary"
+      >
         Submit
       </Button>
     </form>
@@ -191,6 +234,7 @@ function Login ({ updateUserState }) {
       onSubmit={handleSignIn}>
 
       <TextField
+        fullWidth
         label="Email address"
         name="email"
         value={form.email}
@@ -199,6 +243,7 @@ function Login ({ updateUserState }) {
         variant="outlined"
       />
       <TextField
+        fullWidth
         label="Password"
         type="password"
         name="password"
@@ -207,17 +252,33 @@ function Login ({ updateUserState }) {
         margin="normal"
         variant="outlined"
       />
-      <Button variant="outlined" size="large" color="primary">
+
+      <Link
+        className={c.link}
+        component="button"
+        variant="body2"
+        onClick={gotToSignup}
+      >
+        Not registered? Sign up here.
+      </Link>
+
+      <Button
+        type="submit"
+        variant="outlined"
+        size="large"
+        color="primary"
+      >
         Log In
       </Button>
     </form>
   )
 
+
   return (
     <div className={c.login}>
-      {signUpStep === 0 && signUpForm}
-      {signUpStep === 1 && confirmForm}
-      {signUpStep === 2 && loginForm}
+      {signUpStep === 0 && loginForm}
+      {signUpStep === 1 && signUpForm}
+      {signUpStep === 2 && confirmForm}
     </div>
   )
 }
