@@ -11,22 +11,12 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardMedia from '@material-ui/core/CardMedia'
 import Grid from '@material-ui/core/Grid'
-import Container from '@material-ui/core/Container'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import Fab from '@material-ui/core/Fab'
 import Typography from '@material-ui/core/Typography'
 
 
 const useStyles = makeStyles(theme => ({
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
   media: {
     height: 0,
     paddingTop: '100%'
@@ -114,7 +104,7 @@ function Rate ({ user }) {
 
 
   return (
-    <Container className={c.cardGrid} maxWidth="md">
+    <>
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Typography variant="h4">
@@ -123,7 +113,7 @@ function Rate ({ user }) {
         </Grid>
         {!loading && pictures.map((picture, index) => (
           <Grid item key={index} xs={6}>
-            <Card className={c.card}>
+            <Card>
               <CardMedia
                 className={c.media}
                 image={picture.pictureURL}
@@ -142,7 +132,7 @@ function Rate ({ user }) {
           </Grid>
         ))}
       </Grid>
-    </Container>
+    </>
   )
 }
 

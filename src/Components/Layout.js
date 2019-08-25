@@ -6,9 +6,15 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import CameraIcon from '@material-ui/icons/PhotoCamera';
+import CameraIcon from '@material-ui/icons/PhotoCamera'
+import Container from '@material-ui/core/Container'
+
 
 const useStyles = makeStyles(theme => ({
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+  },
   root: {
     flexGrow: 1,
   },
@@ -35,7 +41,7 @@ function Layout ({ updateUserState, component: Component, ...rest }) {
     <div>
       <AppBar position="static">
         <Toolbar>
-          <CameraIcon className={c.icon} />
+          <CameraIcon className={c.icon}/>
           <Typography variant="h6" className={c.title}>
             PhotoWin
           </Typography>
@@ -48,7 +54,9 @@ function Layout ({ updateUserState, component: Component, ...rest }) {
           <Button color="inherit" onClick={handleLogOut}>Logout</Button>
         </Toolbar>
       </AppBar>
-      <Component {...rest} />
+      <Container className={c.cardGrid} maxWidth="md">
+        <Component {...rest} />
+      </Container>
     </div>
   )
 }

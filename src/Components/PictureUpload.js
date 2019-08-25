@@ -1,9 +1,43 @@
 import React, { useState, useEffect } from 'react'
 import uuid from 'uuid/v4'
+import { makeStyles } from '@material-ui/core/styles'
+import Fab from '@material-ui/core/Fab'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import CardMedia from '@material-ui/core/CardMedia'
+import Grid from '@material-ui/core/Grid'
+import AddIcon from '@material-ui/icons/Add'
+
+
+const useStyles = makeStyles(theme => ({
+  button: {
+    margin: theme.spacing(1),
+  },
+  rightIcon: {
+    marginLeft: theme.spacing(1),
+  },
+  fileInput: {
+    display: 'none'
+  },
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  media: {
+    height: 0,
+    paddingTop: '100%'
+  },
+  actions: {
+    justifyContent: 'center'
+  },
+}))
 
 
 function PictureUpload ({ uploadFileData, file }) {
   const [fileUrl, setFileUrl] = useState(null)
+  const c = useStyles()
+  const inputEl = React.useRef(null)
 
   useEffect(() => {
     if (!file) setFileUrl(null)
@@ -27,22 +61,36 @@ function PictureUpload ({ uploadFileData, file }) {
   }
 
 
+  const onButtonClick = () => { inputEl.current.click() }
+
+
+
   return (
-    <div className="custom-file">
-      <input
-        type='file'
-        className='custom-file-input'
-        accept='.jpg,.jpeg,.png'
-        onChange={handleChange}/>
-      <label className='custom-file-label'>
-        Choose file
-      </label>
-      <img
-        width={100}
-        className='rating-img'
-        src={fileUrl}
-      />
-    </div>
+    <Grid item xs={4}>
+      <Card>
+        <CardMedia
+          className={c.media}
+          image={fileUrl}
+          title="Image title"
+        />
+        <CardActions className={c.actions}>
+          <input
+            id='upload-file'
+            className={c.fileInput}
+            type='file'
+            accept='.jpg,.jpeg,.png'
+            onChange={handleChange}
+            ref={inputEl}
+          />
+
+          <label htmlFor="upload-file">
+            <Fab onClick={onButtonClick} color="default">
+              <AddIcon/>
+            </Fab>
+          </label>
+        </CardActions>
+      </Card>
+    </Grid>
   )
 }
 

@@ -1,33 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import { Storage } from 'aws-amplify'
 import { makeStyles } from '@material-ui/core'
+import { Storage } from 'aws-amplify'
+import Fab from '@material-ui/core/Fab'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
-import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 
 
 
 const useStyles = makeStyles(theme => ({
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
   media: {
     height: 0,
     paddingTop: '100%'
   },
+  buttonGridItem: {
+    display: 'flex'
+  },
   button: {
-    margin: [theme.spacing(8), 'auto', 0],
-    display: 'inherit'
+    margin: [theme.spacing(2), 'auto', 0],
+    padding: [0, theme.spacing(6)],
   },
   ratingText: {
     textAlign: 'center'
@@ -66,7 +59,7 @@ function Results ({ userSet, clearSet }) {
 
 
   return (
-    <Container className={c.cardGrid} maxWidth="md">
+    <>
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Typography variant="h4">
@@ -75,7 +68,7 @@ function Results ({ userSet, clearSet }) {
         </Grid>
         {!loading && pictures.map((picture, index) => (
           <Grid item key={index} xs={4}>
-            <Card className={c.card}>
+            <Card>
               <CardMedia
                 className={c.media}
                 image={picture.pictureURL}
@@ -89,17 +82,18 @@ function Results ({ userSet, clearSet }) {
             </Card>
           </Grid>
         ))}
+        <Grid item xs={12} className={c.buttonGridItem}>
+          <Fab
+            variant="extended"
+            color="secondary"
+            className={c.button}
+            onClick={clearSet}
+          >
+            Want to try a new set?
+          </Fab>
+        </Grid>
       </Grid>
-      <Button
-        className={c.button}
-        onClick={clearSet}
-        variant="contained"
-        color="secondary"
-        size="large"
-      >
-        Want to try a new set?
-      </Button>
-    </Container>
+    </>
   )
 }
 

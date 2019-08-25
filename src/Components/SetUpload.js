@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { API, graphqlOperation as operation, Storage } from 'aws-amplify'
 import { createPicture, createSet } from '../graphql/mutations'
+import { makeStyles } from '@material-ui/core'
 import config from '../aws-exports'
 import PictureUpload from './PictureUpload'
 import history from '../Helpers/history'
+import Fab from '@material-ui/core/Fab'
+import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 
 
 const {
@@ -30,10 +36,24 @@ function reducer (state, action) {
 }
 
 
+const useStyles = makeStyles(theme => ({
+  buttonGridItem: {
+    display: 'flex'
+  },
+  button: {
+    margin: [theme.spacing(2), 'auto', 0],
+  },
+  icon: {
+    marginRight: theme.spacing(1),
+  }
+}))
+
 
 function SetUpload ({ user }) {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [uploadReady, setUploadReady] = useState(false)
+  const c = useStyles()
+
 
   useEffect(() => {
     setUploadReady(state.files.every(file => file))
@@ -93,19 +113,34 @@ function SetUpload ({ user }) {
 
 
   return (
-    <div>
-      <button
-        disabled={!uploadReady}
-        onClick={createPictureSet}>
-        Save File
-      </button>
-      {state.files.map((file, index) => (
-        <PictureUpload
-          file={file}
-          uploadFileData={uploadFileData(index)}
-        />
-      ))}
-    </div>
+    <>
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <Typography variant="h4">
+            Upload a new picture set
+          </Typography>
+        </Grid>
+        {state.files.map((file, index) => (
+          <PictureUpload
+            key={index}
+            file={file}
+            uploadFileData={uploadFileData(index)}
+          />
+        ))}
+        <Grid item xs={12} className={c.buttonGridItem}>
+          <Fab
+            variant="extended"
+            color="secondary"
+            className={c.button}
+            disabled={!uploadReady}
+            onClick={createPictureSet}
+          >
+            <CloudUploadIcon className={c.icon}/>
+            Upload Set
+          </Fab>
+        </Grid>
+      </Grid>
+    </>
   )
 }
 
