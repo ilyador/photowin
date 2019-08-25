@@ -6,20 +6,18 @@ import {
 } from 'aws-amplify'
 import { getByAppeared } from '../graphql/queries'
 import { updatePicture, updateSet } from '../graphql/mutations'
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
 
 
 const random = max => Math.floor(Math.random() * Math.floor(max))
 
 const getGender = user => {
   const genders = ['male', 'female']
+
   if (user) {
     let gender = genders.indexOf(user.gender)
     gender = 1 - gender
     return genders[gender]
-  }
-  else { return genders[random(2)] }
+  } else { return genders[random(2)] }
 }
 
 
@@ -85,17 +83,15 @@ function Rate ({ user }) {
   return (
     <div>
       <h2>Show pictures for rating</h2>
-      <Row>
-        {!loading && pictures.map((picture, index) => (
-          <Col xs={6} key={index}>
-            <img
-              className='rating-img click'
-              src={picture.pictureURL}
-              onClick={vote(picture.id, picture.rating)}
-            />
-          </Col>
-        ))}
-      </Row>
+      {!loading && pictures.map((picture, index) => (
+        <div key={index}>
+          <img
+            className='rating-img click'
+            src={picture.pictureURL}
+            onClick={vote(picture.id, picture.rating)}
+          />
+        </div>
+      ))}
     </div>
   )
 }

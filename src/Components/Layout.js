@@ -1,6 +1,5 @@
 import { Auth } from 'aws-amplify'
 import React from 'react'
-import Button from 'react-bootstrap/Button'
 
 
 function Layout({ updateUserState, component: Component, ...rest }) {
@@ -19,7 +18,7 @@ function Layout({ updateUserState, component: Component, ...rest }) {
     <div>
       <header className="App-header">
         <h1 className="App-title">Welcome to Photo Win</h1>
-        <Button onClick={handleLogOut}>Sign Out</Button>
+        <button onClick={handleLogOut}>Sign Out</button>
       </header>
       <Component {...rest} />
     </div>

@@ -1,31 +1,46 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Auth } from 'aws-amplify'
-import { Form, Button } from 'react-bootstrap'
+import { makeStyles } from '@material-ui/core/styles'
+import MenuItem from '@material-ui/core/MenuItem'
+import TextField from '@material-ui/core/TextField'
+import OutlinedInput from '@material-ui/core/OutlinedInput'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
+import Button from '@material-ui/core/Button'
 
 
-class Login extends Component {
+const useStyles = makeStyles(theme => ({
+  login: {
+    padding: [60, 0]
+  },
+  loginForm: {
+    margin: [0, 'auto'],
+    maxWidth: 320
+  }
+}))
 
-  state = {
+
+function Login ({ updateUserState }) {
+  const c = useStyles()
+  const [signUpStep, setSignUpStep] = useState(0)
+  const [form, setForm] = useState({
     email: '',
     password: '',
     given_name: '',
     gender: 'none',
     birthdate: '2000-01-01',
     authenticationCode: '',
-    signUpStep: 2
+  })
+  const inputLabel = useRef(null)
+
+
+  const handleChange = name => event => {
+    setForm({ ...form, [name]: event.target.value })
   }
 
-  validateForm () {
-    return this.state.email.length > 0 && this.state.password.length > 0
-  }
 
-  handleChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value
-    })
-  }
-
-  handleSignUp = async event => {
+  const handleSignUp = async event => {
     event.preventDefault()
 
     const {
@@ -34,7 +49,7 @@ class Login extends Component {
       email: username,
       gender,
       birthdate
-    } = this.state
+    } = form
 
     try {
       await Auth.signUp({
@@ -43,26 +58,25 @@ class Login extends Component {
         attributes: { given_name, gender, birthdate }
       })
       console.log('Successfully signed up!')
-      this.setState({ signUpStep: 1 })
+      setSignUpStep(1)
     } catch (err) { console.log('error signing up: ', err) }
   }
 
-  handleSignIn = async event => {
+  const handleSignIn = async event => {
     event.preventDefault()
 
     try {
-      let user = await Auth.signIn(this.state.email, this.state.password)
-      this.props.updateUserState(user)
-      console.log(user)
+      let user = await Auth.signIn(form.email, form.password)
+      updateUserState(user)
     } catch (error) {
       console.log(error.message)
     }
   }
 
-  handleAuthentication = async event => {
+  const handleAuthentication = async event => {
     event.preventDefault()
 
-    const { email: username, authenticationCode } = this.state
+    const { email: username, authenticationCode } = form
     try {
       await Auth.confirmSignUp(username, authenticationCode)
       console.log('user successfully signed up!')
@@ -71,152 +85,141 @@ class Login extends Component {
     }
   }
 
-  render () {
-    const { classes: c } = this.props
 
-    const signUpForm = (
-      <Form
-        className='login-form'
-        onSubmit={this.handleSignUp}>
-        <Form.Group controlId="email">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            placeholder="Enter email"
-            value={this.state.email}
-            onChange={this.handleChange}
-          />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
-        </Form.Group>
-        <Form.Group controlId="name">
-          <Form.Label>Your name</Form.Label>
-          <Form.Control
-            type="text"
-            name="given_name"
-            placeholder="Enter your name"
-            value={this.state.given_name}
-            onChange={this.handleChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="birthdate">
-          <Form.Label>Your date of birth</Form.Label>
-          <Form.Control
-            type="date"
-            name="date"
-            value={this.state.birthdate}
-            onChange={this.handleChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="gender">
-          <Form.Label>I am a</Form.Label>
-          <Form.Control
-            as='select'
-            name='gender'
-            value={this.state.gender}
-            onChange={this.handleChange}
-          >
-            <option value='none' hidden>Select Gender</option>
-            <option value='male'>Man</option>
-            <option value='female'>Woman</option>
-          </Form.Control>
-        </Form.Group>
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={this.state.password}
-            onChange={this.handleChange}/>
-        </Form.Group>
-        <Button
-          variant="primary"
-          type="submit"
+  const signUpForm = (
+    <form
+      className={c.loginForm}
+      onSubmit={handleSignUp}>
+
+      <TextField
+        label="Email address"
+        name="email"
+        value={form.email}
+        onChange={handleChange}
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        label="Your name"
+        name="given_name"
+        value={form.given_name}
+        onChange={handleChange}
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        label="Birthday"
+        type="date"
+        name="birthdate"
+        value={form.birthdate}
+        onChange={handleChange}
+        InputLabelProps={{ shrink: true }}
+      />
+
+      <FormControl variant="outlined">
+        <InputLabel ref={inputLabel} htmlFor="gender">
+          Select Gender
+        </InputLabel>
+        <Select
+          value={form.gender}
+          onChange={handleChange}
+          input={
+            <OutlinedInput
+              labelWidth={100}
+              name="gender"
+              id='gender'
+            />
+          }
         >
-          Sign Up
-        </Button>
-      </Form>
-    )
+          <MenuItem value={'male'}>Man</MenuItem>
+          <MenuItem value={'female'}>Woman</MenuItem>
+        </Select>
+      </FormControl>
 
-    const confirmForm = (
-      <Form
-        className={c.form}
-        onSubmit={this.handleAuthentication}>
-        <Form.Group controlId="email">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            placeholder="Enter email"
-            value={this.state.email}
-            onChange={this.handleChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="code">
-          <Form.Label>Authentication code</Form.Label>
-          <Form.Control
-            type="text"
-            name="authenticationCode"
-            placeholder="Enter confirmation code"
-            value={this.state.authenticationCode}
-            onChange={this.handleChange}
-          />
-          <Form.Text className="text-muted">
-            Check your email for one-time authentication code
-          </Form.Text>
-        </Form.Group>
-        <Button
-          variant="primary"
-          type="submit"
-        >
-          Submit
-        </Button>
-      </Form>
-    )
+      <TextField
+        label="Choose password"
+        type="password"
+        name="password"
+        value={form.password}
+        onChange={handleChange}
+        margin="normal"
+        variant="outlined"
+      />
 
-    const loginForm = (
-      <Form
-        className={c.form}
-        onSubmit={this.handleSignIn}>
-        <Form.Group controlId="email">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            placeholder="Enter email"
-            value={this.state.email}
-            onChange={this.handleChange}
-          />
-        </Form.Group>
-        <Form.Group controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={this.state.password}
-            onChange={this.handleChange}/>
-        </Form.Group>
-        <Button
-          variant="primary"
-          type="submit"
-        >
-          Log In
-        </Button>
-      </Form>
-    )
+      <Button variant="outlined" size="large" color="primary">
+        Sign Up
+      </Button>
+    </form>
+  )
 
-    return (
-      <div className='login'>
-        {this.state.signUpStep === 0 && signUpForm}
-        {this.state.signUpStep === 1 && confirmForm}
-        {this.state.signUpStep === 2 && loginForm}
-      </div>
-    )
-  }
+
+
+  const confirmForm = (
+    <form
+      className={c.loginForm}
+      onSubmit={handleAuthentication}>
+
+      <TextField
+        label="Email address"
+        name="email"
+        value={form.email}
+        onChange={handleChange}
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        label="Authentication code"
+        name="authenticationCode"
+        value={form.authenticationCode}
+        onChange={handleChange}
+        margin="normal"
+        variant="outlined"
+        helperText="Check your email for one-time authentication code"
+      />
+
+      <Button variant="outlined" size="large" color="primary">
+        Submit
+      </Button>
+    </form>
+  )
+
+
+
+  const loginForm = (
+    <form
+      className={c.loginForm}
+      onSubmit={handleSignIn}>
+
+      <TextField
+        label="Email address"
+        name="email"
+        value={form.email}
+        onChange={handleChange}
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        label="Password"
+        type="password"
+        name="password"
+        value={form.password}
+        onChange={handleChange}
+        margin="normal"
+        variant="outlined"
+      />
+      <Button variant="outlined" size="large" color="primary">
+        Log In
+      </Button>
+    </form>
+  )
+
+  return (
+    <div className={c.login}>
+      {signUpStep === 0 && signUpForm}
+      {signUpStep === 1 && confirmForm}
+      {signUpStep === 2 && loginForm}
+    </div>
+  )
 }
 
 

@@ -3,9 +3,6 @@ import { API, graphqlOperation as operation, Storage } from 'aws-amplify'
 import { createPicture, createSet } from '../graphql/mutations'
 import config from '../aws-exports'
 import PictureUpload from './PictureUpload'
-import Button from 'react-bootstrap/Button'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 
 
 const {
@@ -14,7 +11,7 @@ const {
 } = config
 
 const initialState = {
-  files: [ null, null, null ]
+  files: [null, null, null]
 }
 
 
@@ -94,21 +91,17 @@ function SetUpload ({ user }) {
 
   return (
     <div>
-      <Button
+      <button
         disabled={!uploadReady}
         onClick={createPictureSet}>
         Save File
-      </Button>
-      <Row>
-        {state.files.map((file, index) => (
-          <Col xs={4} key={index}>
-            <PictureUpload
-              file={file}
-              uploadFileData={uploadFileData(index)}
-            />
-          </Col>
-        ))}
-      </Row>
+      </button>
+      {state.files.map((file, index) => (
+        <PictureUpload
+          file={file}
+          uploadFileData={uploadFileData(index)}
+        />
+      ))}
     </div>
   )
 }
