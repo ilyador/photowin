@@ -3,6 +3,7 @@ import { API, graphqlOperation as operation, Storage } from 'aws-amplify'
 import { createPicture, createSet } from '../graphql/mutations'
 import config from '../aws-exports'
 import PictureUpload from './PictureUpload'
+import history from '../Helpers/history'
 
 
 const {
@@ -87,6 +88,7 @@ function SetUpload ({ user }) {
 
     await Promise.all(allFileUploadPromises)
     dispatch({ type: 'CLEAR_FILES' })
+    history.push('/rate')
   }
 
 

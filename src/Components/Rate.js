@@ -1,4 +1,3 @@
-import Typography from '@material-ui/core/Typography'
 import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {
@@ -15,6 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import Container from '@material-ui/core/Container'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import Fab from '@material-ui/core/Fab'
+import Typography from '@material-ui/core/Typography'
 
 
 const useStyles = makeStyles(theme => ({

@@ -13,15 +13,15 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   loginForm: {
-    marginTop: 30
+    marginTop: theme.spacing(4)
   },
   container: {
-    paddingTop: 30
+    paddingTop: theme.spacing(4)
   },
   formControl: {
-    minWidth: 120,
+    minWidth: theme.spacing(16),
   },
   select: {
     width: '100%'
@@ -30,9 +30,9 @@ const useStyles = makeStyles({
     width: '100%'
   },
   button: {
-    marginTop: 30
+    marginTop: theme.spacing(4)
   }
-})
+}))
 
 
 function Login ({ updateUserState }) {
