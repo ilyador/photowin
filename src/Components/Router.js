@@ -8,7 +8,6 @@ import {
 import history from '../Helpers/history'
 
 import Login from './Login'
-import Inner from './Inner'
 import SetUpload from './SetUpload'
 import Results from './Results'
 import Page404 from './Page404'
@@ -34,23 +33,17 @@ const Routes = ({ user, updateUserState }) => (
     <Switch>
       <Route
         exact path={'/'}
-        render={() => <Redirect to={'/inner'}/>}
+        render={() => <Redirect to={'/upload'}/>}
       />
       <Route
         path={'/login'}
         render={() => (
           user ? (
-            <Redirect to={'/inner'}/>
+            <Redirect to={'/upload'}/>
           ) : (
             <Login updateUserState={updateUserState}/>
           )
         )}
-      />
-      <PrivateRoute
-        path={'/inner'}
-        user={user}
-        updateUserState={updateUserState}
-        component={Inner}
       />
       <PrivateRoute
         path={'/upload'}
