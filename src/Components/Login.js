@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   button: {
-    marginTop: theme.spacing(4)
+    margin: [theme.spacing(3), 0, theme.spacing(2)]
   }
 }))
 
@@ -116,15 +116,6 @@ function Login ({ updateUserState }) {
         className={c.loginForm}
         onSubmit={handleSignUp}>
 
-        <Link
-          className={c.link}
-          component="button"
-          variant="body2"
-          onClick={gotToLogin}
-        >
-          Already registered? Login up here.
-        </Link>
-
         <TextField
           required
           fullWidth
@@ -206,6 +197,14 @@ function Login ({ updateUserState }) {
           Sign Up
         </Button>
       </form>
+      <Link
+        className={c.link}
+        component="button"
+        variant="body2"
+        onClick={gotToLogin}
+      >
+        Already registered? Login up here.
+      </Link>
     </>
   )
 
@@ -287,15 +286,6 @@ function Login ({ updateUserState }) {
           variant="outlined"
         />
 
-        <Link
-          className={c.link}
-          component="button"
-          variant="body2"
-          onClick={gotToSignup}
-        >
-          Not registered? Sign up here.
-        </Link>
-
         <Button
           fullWidth
           className={c.button}
@@ -307,6 +297,14 @@ function Login ({ updateUserState }) {
           Log In
         </Button>
       </form>
+      <Link
+        className={c.link}
+        component="button"
+        variant="body2"
+        onClick={gotToSignup}
+      >
+        Not registered? Sign up here.
+      </Link>
     </>
   )
 
