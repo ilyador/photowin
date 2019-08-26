@@ -8,16 +8,16 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import Button from '@material-ui/core/Button'
-import Link from '@material-ui/core/Link';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link'
+import Container from '@material-ui/core/Container'
+import Typography from '@material-ui/core/Typography'
 import SyncIcon from '@material-ui/icons/Sync'
 
 
 const useStyles = makeStyles(theme => ({
   '@keyframes rotating': {
-    from: {transform: 'rotate(0deg)'},
-    to: {transform: 'rotate(360deg)'}
+    from: { transform: 'rotate(0deg)' },
+    to: { transform: 'rotate(360deg)' }
   },
   uploadingIcon: {
     marginRight: theme.spacing(1),
@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     margin: [theme.spacing(3), 0, theme.spacing(2)]
   },
   error: {
-    color: 'red',
+    color: theme.palette.secondary.main,
     textAlign: 'center'
   }
 }))
@@ -52,6 +52,7 @@ function Login ({ updateUserState }) {
   const c = useStyles()
   const [signUpStep, setSignUpStep] = useState(0)
   const [loginError, setLoginError] = useState(null)
+  const [notVerified, setNotVerified] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const [form, setForm] = useState({
     email: '',
@@ -106,12 +107,40 @@ function Login ({ updateUserState }) {
     setLoginError(null)
     setSubmitting(true)
 
-    Auth.signIn(form.email, form.password)
-      .then(user => updateUserState(user.attributes))
-      .catch(error => {
-        setSubmitting(false)
-        setLoginError(error.message)
-      })
+    try {
+      const user = await Auth.signIn(form.email, form.password)
+      updateUserState(user.attributes)
+    } catch (error) {
+      setSubmitting(false)
+      setLoginError(error.message)
+
+      if (error.code === 'UserNotConfirmedException') {
+        setNotVerified(true)
+        Auth.resendSignUp(form.email)
+      }
+    }
+  }
+
+
+  const handleVerification = async event => {
+    event.preventDefault()
+    setLoginError(null)
+    setSubmitting(true)
+
+    const {
+      password,
+      email,
+      authenticationCode: code
+    } = form
+
+    try {
+      await Auth.confirmSignUp(email, code)
+      const user = await Auth.signIn(email, password)
+      updateUserState(user.attributes)
+    } catch (error) {
+      setSubmitting(false)
+      setLoginError(error.message)
+    }
   }
 
 
@@ -134,6 +163,10 @@ function Login ({ updateUserState }) {
 
   const gotToSignup = () => {setSignUpStep(1)}
   const gotToLogin = () => {setSignUpStep(0)}
+  const gotToVerify = () => {
+    setLoginError(null)
+    setSignUpStep(3)
+  }
 
 
   const signUpForm = (
@@ -245,6 +278,49 @@ function Login ({ updateUserState }) {
   )
 
 
+  const resendCodeForm = (
+    <>
+      <Typography variant="h4">
+        Confirm signup
+      </Typography>
+      <form
+        className={c.loginForm}
+        onSubmit={handleVerification}>
+
+        <TextField
+          required
+          fullWidth
+          label="Authentication code"
+          name="authenticationCode"
+          value={form.authenticationCode}
+          onChange={handleChange}
+          margin="normal"
+          variant="outlined"
+          helperText="Check your email for one-time authentication code"
+        />
+        {loginError && (
+          <Typography variant="body1" className={c.error}>
+            {loginError}
+          </Typography>
+        )}
+
+        <Button
+          disabled={submitting}
+          fullWidth
+          className={c.button}
+          type="submit"
+          variant="contained"
+          color="primary"
+          size="large"
+        >
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
+          Submit
+        </Button>
+      </form>
+    </>
+  )
+
+
   const confirmForm = (
     <>
       <Typography variant="h4">
@@ -334,6 +410,15 @@ function Login ({ updateUserState }) {
           </Typography>
         )}
 
+        {notVerified && (<Link
+          className={c.link}
+          component="button"
+          variant="body2"
+          onClick={gotToVerify}
+        >
+          Get new verification code.
+        </Link>)}
+
         <Button
           disabled={submitting}
           fullWidth
@@ -364,6 +449,7 @@ function Login ({ updateUserState }) {
       {signUpStep === 0 && loginForm}
       {signUpStep === 1 && signUpForm}
       {signUpStep === 2 && confirmForm}
+      {signUpStep === 3 && resendCodeForm}
     </Container>
   )
 }
