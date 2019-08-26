@@ -15,9 +15,6 @@ const useStyles = makeStyles(theme => ({
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
-  root: {
-    flexGrow: 1,
-  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -26,6 +23,10 @@ const useStyles = makeStyles(theme => ({
   },
   icon: {
     marginRight: theme.spacing(2),
+  },
+  logoutButton: {
+    marginLeft: theme.spacing(4),
+    fontWeight: 300
   }
 }))
 
@@ -38,7 +39,7 @@ function Layout ({ updateUserState, component: Component, ...rest }) {
   }
 
   return (
-    <div>
+    <>
       <AppBar position="static">
         <Toolbar>
           <CameraIcon className={c.icon}/>
@@ -51,13 +52,19 @@ function Layout ({ updateUserState, component: Component, ...rest }) {
           <Button color='inherit' component={Link} to='/user'>
             My Picture Set
           </Button>
-          <Button color="inherit" onClick={handleLogOut}>Logout</Button>
+          <Button
+            color="inherit"
+            onClick={handleLogOut}
+            className={c.logoutButton}
+          >
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
       <Container className={c.cardGrid} maxWidth="md">
         <Component {...rest} />
       </Container>
-    </div>
+    </>
   )
 }
 

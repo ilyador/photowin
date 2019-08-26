@@ -29,8 +29,12 @@ const useStyles = makeStyles(theme => ({
     paddingTop: '100%'
   },
   actions: {
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: theme.spacing(3)
   },
+  addPicture: {
+    marginTop: -34
+  }
 }))
 
 
@@ -84,7 +88,11 @@ function PictureUpload ({ uploadFileData, file }) {
           />
 
           <label htmlFor="upload-file">
-            <Fab onClick={onButtonClick} color="default">
+            <Fab
+              onClick={onButtonClick}
+              color="default"
+              className={c.addPicture}
+            >
               <AddIcon/>
             </Fab>
           </label>

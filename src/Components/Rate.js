@@ -22,7 +22,8 @@ const useStyles = makeStyles(theme => ({
     paddingTop: '100%'
   },
   actions: {
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: theme.spacing(2)
   },
   like: {
     marginTop: -34
