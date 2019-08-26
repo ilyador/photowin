@@ -1,0 +1,21 @@
+type Set
+@model
+@key(name: "ByAppeared", fields: [ "type", "appearedForRanking" ], queryField: "getByAppeared")
+{
+	id: ID!
+	type: String!
+	appearedForRanking: Int!
+	pictures: [Picture!]! @connection
+}
+
+type Picture @model {
+	id: ID!
+	file: S3Object!
+	rating: Int
+}
+
+type S3Object {
+	bucket: String!
+	key: String!
+	region: String!
+}
