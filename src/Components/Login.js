@@ -31,6 +31,10 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: [theme.spacing(3), 0, theme.spacing(2)]
+  },
+  error: {
+    color: 'red',
+    textAlign: 'center'
   }
 }))
 
@@ -38,6 +42,7 @@ const useStyles = makeStyles(theme => ({
 function Login ({ updateUserState }) {
   const c = useStyles()
   const [signUpStep, setSignUpStep] = useState(0)
+  const [loginError, setLoginError] = useState(null)
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -67,40 +72,36 @@ function Login ({ updateUserState }) {
       birthdate
     } = form
 
-    try {
-      await Auth.signUp({
-        username,
-        password,
-        attributes: { given_name, gender, birthdate }
+    Auth.signUp({
+      username,
+      password,
+      attributes: { given_name, gender, birthdate }
+    })
+      .then(() => {
+        setLoginError(null)
+        setSignUpStep(2)
       })
-      console.log('Successfully signed up!')
-      setSignUpStep(2)
-    } catch (err) { console.log('error signing up: ', err) }
+      .catch(error => setLoginError(error.message))
   }
+
 
   const handleSignIn = async event => {
     event.preventDefault()
 
-    try {
-      let user = await Auth.signIn(form.email, form.password)
-      updateUserState(user.attributes)
-    } catch (error) {
-      console.log(error.message)
-    }
+    Auth.signIn(form.email, form.password)
+      .then(user => updateUserState(user.attributes))
+      .catch(error => setLoginError(error.message))
   }
+
 
   const handleAuthentication = async event => {
     event.preventDefault()
 
     const { email: username, authenticationCode } = form
-    try {
-      let user = await Auth.confirmSignUp(username, authenticationCode)
-      updateUserState(user.attributes)
-      console.log('user successfully signed up!')
 
-    } catch (error) {
-      console.log('error confirming sign up: ', error)
-    }
+    Auth.confirmSignUp(username, authenticationCode)
+      .then(user => updateUserState(user.attributes))
+      .catch(error => setLoginError(error.message))
   }
 
   const gotToSignup = () => {setSignUpStep(1)}
@@ -185,6 +186,11 @@ function Login ({ updateUserState }) {
           margin="normal"
           variant="outlined"
         />
+        {loginError && (
+          <Typography variant="body1" className={c.error}>
+            {loginError}
+          </Typography>
+        )}
 
         <Button
           fullWidth
@@ -239,6 +245,11 @@ function Login ({ updateUserState }) {
           variant="outlined"
           helperText="Check your email for one-time authentication code"
         />
+        {loginError && (
+          <Typography variant="body1" className={c.error}>
+            {loginError}
+          </Typography>
+        )}
 
         <Button
           fullWidth
@@ -285,6 +296,11 @@ function Login ({ updateUserState }) {
           margin="normal"
           variant="outlined"
         />
+        {loginError && (
+          <Typography variant="body1" className={c.error}>
+            {loginError}
+          </Typography>
+        )}
 
         <Button
           fullWidth
