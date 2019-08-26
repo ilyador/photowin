@@ -91,6 +91,7 @@ function Login ({ updateUserState }) {
     })
       .then(() => {
         setLoginError(null)
+        setSubmitting(false)
         setSignUpStep(2)
       })
       .catch(error => {
@@ -118,7 +119,7 @@ function Login ({ updateUserState }) {
     event.preventDefault()
     setLoginError(null)
     setSubmitting(true)
-    
+
     const { email: username, authenticationCode, password } = form
     try {
       await Auth.confirmSignUp(username, authenticationCode)

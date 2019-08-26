@@ -1,7 +1,6 @@
-import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import uuid from 'uuid/v4'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -48,9 +47,7 @@ const useStyles = makeStyles(theme => ({
 function PictureUpload ({ uploadFileData, file }) {
   const [fileUrl, setFileUrl] = useState(null)
   const c = useStyles()
-  const inputEl = React.useRef(null)
-  const theme = useTheme()
-  const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
+  const inputEl = useRef(null)
 
 
   useEffect(() => {
