@@ -11,9 +11,18 @@ import Button from '@material-ui/core/Button'
 import Link from '@material-ui/core/Link';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import SyncIcon from '@material-ui/icons/Sync'
 
 
 const useStyles = makeStyles(theme => ({
+  '@keyframes rotating': {
+    from: {transform: 'rotate(0deg)'},
+    to: {transform: 'rotate(360deg)'}
+  },
+  uploadingIcon: {
+    marginRight: theme.spacing(1),
+    animation: '$rotating 2s linear infinite'
+  },
   loginForm: {
     marginTop: theme.spacing(4)
   },
@@ -43,6 +52,7 @@ function Login ({ updateUserState }) {
   const c = useStyles()
   const [signUpStep, setSignUpStep] = useState(0)
   const [loginError, setLoginError] = useState(null)
+  const [submitting, setSubmitting] = useState(false)
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -63,6 +73,8 @@ function Login ({ updateUserState }) {
 
   const handleSignUp = async event => {
     event.preventDefault()
+    setLoginError(null)
+    setSubmitting(true)
 
     const {
       given_name,
@@ -81,28 +93,39 @@ function Login ({ updateUserState }) {
         setLoginError(null)
         setSignUpStep(2)
       })
-      .catch(error => setLoginError(error.message))
+      .catch(error => {
+        setSubmitting(false)
+        setLoginError(error.message)
+      })
   }
 
 
   const handleSignIn = async event => {
     event.preventDefault()
+    setLoginError(null)
+    setSubmitting(true)
 
     Auth.signIn(form.email, form.password)
       .then(user => updateUserState(user.attributes))
-      .catch(error => setLoginError(error.message))
+      .catch(error => {
+        setSubmitting(false)
+        setLoginError(error.message)
+      })
   }
 
 
   const handleAuthentication = async event => {
     event.preventDefault()
+    setLoginError(null)
+    setSubmitting(true)
+    
     const { email: username, authenticationCode, password } = form
-
     try {
       await Auth.confirmSignUp(username, authenticationCode)
       const user = await Auth.signIn(username, password)
       updateUserState(user.attributes)
     } catch (error) {
+      setSubmitting(false)
       setLoginError(error.message)
     }
   }
@@ -197,6 +220,7 @@ function Login ({ updateUserState }) {
         )}
 
         <Button
+          disabled={submitting}
           fullWidth
           className={c.button}
           type="submit"
@@ -204,6 +228,7 @@ function Login ({ updateUserState }) {
           color="primary"
           size="large"
         >
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
           Sign Up
         </Button>
       </form>
@@ -256,6 +281,7 @@ function Login ({ updateUserState }) {
         )}
 
         <Button
+          disabled={submitting}
           fullWidth
           className={c.button}
           type="submit"
@@ -263,6 +289,7 @@ function Login ({ updateUserState }) {
           color="primary"
           size="large"
         >
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
           Submit
         </Button>
       </form>
@@ -307,6 +334,7 @@ function Login ({ updateUserState }) {
         )}
 
         <Button
+          disabled={submitting}
           fullWidth
           className={c.button}
           type="submit"
@@ -314,6 +342,7 @@ function Login ({ updateUserState }) {
           color="primary"
           size="large"
         >
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
           Log In
         </Button>
       </form>
