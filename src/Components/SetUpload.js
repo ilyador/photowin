@@ -10,6 +10,9 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import SyncIcon from '@material-ui/icons/Sync'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { useTheme } from '@material-ui/core/styles';
+
 
 
 const {
@@ -63,6 +66,8 @@ function SetUpload ({ user }) {
   const [uploadReady, setUploadReady] = useState(false)
   const [uploading, setUploading] = useState(false)
   const c = useStyles()
+  const theme = useTheme()
+  const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
 
 
   useEffect(() => {
@@ -126,7 +131,7 @@ function SetUpload ({ user }) {
 
   return (
     <>
-      <Grid container spacing={4}>
+      <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
           <Typography variant="h4">
             Upload a new picture set

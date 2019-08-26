@@ -8,12 +8,18 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import CameraIcon from '@material-ui/icons/PhotoCamera'
 import Container from '@material-ui/core/Container'
+import IconButton from '@material-ui/core/IconButton'
+import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@material-ui/core/Menu'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import history from '../Helpers/history'
+
 
 
 const useStyles = makeStyles(theme => ({
   cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -31,12 +37,40 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function Layout ({ updateUserState, component: Component, ...rest }) {
+function Layout ({ updateUserState, component: Component, match, ...rest }) {
   const c = useStyles()
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const isMenuOpen = Boolean(anchorEl)
 
   const handleLogOut = async () => {
     await Auth.signOut().then(() => {updateUserState(null)})
   }
+
+  function handleProfileMenuOpen (event) {
+    setAnchorEl(event.currentTarget)
+  }
+
+  function handleMenuClose () {
+    setAnchorEl(null)
+  }
+
+
+  const menuId = 'primary-search-account-menu'
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={() => {history.push('/user')}}>My Pictures</MenuItem>
+      <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
+    </Menu>
+  )
+
 
   return (
     <>
@@ -46,21 +80,23 @@ function Layout ({ updateUserState, component: Component, ...rest }) {
           <Typography variant="h6" className={c.title}>
             PhotoWin
           </Typography>
+          {(match.path !== '/rate') &&
           <Button color='inherit' component={Link} to='/rate'>
             Rate Pictures
           </Button>
-          <Button color='inherit' component={Link} to='/user'>
-            My Picture Set
-          </Button>
-          <Button
-            color="inherit"
-            onClick={handleLogOut}
-            className={c.logoutButton}
-          >
-            Logout
-          </Button>
+          }
+          <div className={c.sectionDesktop}>
+            <IconButton
+              edge="end"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+          </div>
         </Toolbar>
       </AppBar>
+      {renderMenu}
       <Container className={c.cardGrid} maxWidth="md">
         <Component {...rest} />
       </Container>

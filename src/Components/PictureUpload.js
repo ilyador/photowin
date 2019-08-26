@@ -1,6 +1,7 @@
+import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import React, { useState, useEffect } from 'react'
 import uuid from 'uuid/v4'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -26,14 +27,20 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     height: 0,
-    paddingTop: '100%'
+    paddingTop: '120%'
   },
   actions: {
     justifyContent: 'center',
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(1),
+    [theme.breakpoints.up('sm')]: { marginBottom: theme.spacing(3) }
+
   },
   addPicture: {
-    marginTop: -34
+    margin: 0,
+    [theme.breakpoints.up('sm')]: { marginTop: -34 }
+  },
+  label: {
+    margin: 0
   }
 }))
 
@@ -42,6 +49,9 @@ function PictureUpload ({ uploadFileData, file }) {
   const [fileUrl, setFileUrl] = useState(null)
   const c = useStyles()
   const inputEl = React.useRef(null)
+  const theme = useTheme()
+  const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
+
 
   useEffect(() => {
     if (!file) setFileUrl(null)
@@ -87,7 +97,7 @@ function PictureUpload ({ uploadFileData, file }) {
             ref={inputEl}
           />
 
-          <label htmlFor="upload-file">
+          <label className={c.label} htmlFor="upload-file">
             <Fab
               onClick={onButtonClick}
               color="default"

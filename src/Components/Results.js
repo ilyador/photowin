@@ -1,5 +1,6 @@
+import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import React, { useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, useTheme } from '@material-ui/core'
 import { Storage } from 'aws-amplify'
 import Fab from '@material-ui/core/Fab'
 import Card from '@material-ui/core/Card'
@@ -13,7 +14,7 @@ import Typography from '@material-ui/core/Typography'
 const useStyles = makeStyles(theme => ({
   media: {
     height: 0,
-    paddingTop: '100%'
+    paddingTop: '120%'
   },
   buttonGridItem: {
     display: 'flex'
@@ -36,7 +37,8 @@ function Results ({ userSet, clearSet }) {
   const [loading, setLoading] = useState(true)
   const [pictures, setPictures] = useState([])
   const c = useStyles()
-
+  const theme = useTheme()
+  const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
 
   useEffect(() => { getResults() }, [])
 
@@ -60,7 +62,7 @@ function Results ({ userSet, clearSet }) {
 
   return (
     <>
-      <Grid container spacing={4}>
+      <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
           <Typography variant="h4">
             Your set rating
