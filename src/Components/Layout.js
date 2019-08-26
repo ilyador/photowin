@@ -38,35 +38,37 @@ const useStyles = makeStyles(theme => ({
 
 
 function Layout ({ updateUserState, component: Component, match, ...rest }) {
-  const c = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const isMenuOpen = Boolean(anchorEl)
+  const c = useStyles()
 
-  const handleLogOut = async () => {
-    await Auth.signOut().then(() => {updateUserState(null)})
+  const handleLogOut = () => {
+    Auth.signOut().then(() => { updateUserState(null) })
   }
 
-  function handleProfileMenuOpen (event) {
+  const handleMyPictures = () => {
+    history.push('/user')
+  }
+
+  const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget)
   }
 
-  function handleMenuClose () {
+  const handleMenuClose = () => {
     setAnchorEl(null)
   }
 
 
-  const menuId = 'primary-search-account-menu'
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id={menuId}
       keepMounted
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={() => {history.push('/user')}}>My Pictures</MenuItem>
+      <MenuItem onClick={handleMyPictures}>My Pictures</MenuItem>
       <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
     </Menu>
   )
@@ -85,15 +87,13 @@ function Layout ({ updateUserState, component: Component, match, ...rest }) {
             Rate Pictures
           </Button>
           }
-          <div className={c.sectionDesktop}>
-            <IconButton
-              edge="end"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
+          <IconButton
+            edge="end"
+            onClick={handleProfileMenuOpen}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
         </Toolbar>
       </AppBar>
       {renderMenu}

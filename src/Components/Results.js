@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex'
   },
   button: {
-    margin: [theme.spacing(2), 'auto', 0],
+    margin: [theme.spacing(3), 'auto', 0],
     padding: [0, theme.spacing(6)],
   },
   ratingText: {

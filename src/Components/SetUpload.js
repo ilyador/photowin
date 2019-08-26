@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex'
   },
   button: {
-    margin: [theme.spacing(2), 'auto', 0],
+    margin: [theme.spacing(3), 'auto', 0],
   },
   icon: {
     marginRight: theme.spacing(1),
