@@ -5,7 +5,6 @@ export const getSet = `query GetSet($id: ID!) {
   getSet(id: $id) {
     id
     type
-    user
     appearedForRanking
     pictures {
       items {

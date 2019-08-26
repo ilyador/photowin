@@ -5,7 +5,6 @@ export const onCreateSet = `subscription OnCreateSet {
   onCreateSet {
     id
     type
-    user
     appearedForRanking
     pictures {
       items {
@@ -21,7 +20,6 @@ export const onUpdateSet = `subscription OnUpdateSet {
   onUpdateSet {
     id
     type
-    user
     appearedForRanking
     pictures {
       items {
@@ -37,7 +35,6 @@ export const onDeleteSet = `subscription OnDeleteSet {
   onDeleteSet {
     id
     type
-    user
     appearedForRanking
     pictures {
       items {

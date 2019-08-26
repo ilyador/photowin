@@ -6,10 +6,10 @@ import config from '../aws-exports'
 import PictureUpload from './PictureUpload'
 import history from '../Helpers/history'
 import Fab from '@material-ui/core/Fab'
-import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
+import SyncIcon from '@material-ui/icons/Sync'
 
 
 const {
@@ -37,6 +37,14 @@ function reducer (state, action) {
 
 
 const useStyles = makeStyles(theme => ({
+  '@keyframes rotating': {
+    from: {transform: 'rotate(0deg)'},
+    to: {transform: 'rotate(360deg)'}
+  },
+  uploadingIcon: {
+    marginRight: theme.spacing(1),
+    animation: '$rotating 2s linear infinite'
+  },
   buttonGridItem: {
     display: 'flex'
   },
@@ -49,9 +57,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
+
 function SetUpload ({ user }) {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [uploadReady, setUploadReady] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const c = useStyles()
 
 
@@ -92,9 +102,11 @@ function SetUpload ({ user }) {
 
 
   async function createPictureSet () {
+    setUploadReady(false)
+    setUploading(true)
+
     let input = {
       id: user.sub,
-      user: 'TO REMOVE',
       type:user.gender,
       appearedForRanking: 0
     }
@@ -135,7 +147,10 @@ function SetUpload ({ user }) {
             disabled={!uploadReady}
             onClick={createPictureSet}
           >
-            <CloudUploadIcon className={c.icon}/>
+            {uploading ?
+              (<SyncIcon className={c.uploadingIcon}/>) :
+              (<CloudUploadIcon className={c.icon}/>)
+            }
             Upload Set
           </Fab>
         </Grid>
