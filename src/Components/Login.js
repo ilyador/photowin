@@ -96,13 +96,17 @@ function Login ({ updateUserState }) {
 
   const handleAuthentication = async event => {
     event.preventDefault()
+    const { email: username, authenticationCode, password } = form
 
-    const { email: username, authenticationCode } = form
-
-    Auth.confirmSignUp(username, authenticationCode)
-      .then(user => updateUserState(user.attributes))
-      .catch(error => setLoginError(error.message))
+    try {
+      await Auth.confirmSignUp(username, authenticationCode)
+      const user = await Auth.signIn(username, password)
+      updateUserState(user.attributes)
+    } catch (error) {
+      setLoginError(error.message)
+    }
   }
+
 
   const gotToSignup = () => {setSignUpStep(1)}
   const gotToLogin = () => {setSignUpStep(0)}
