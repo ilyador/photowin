@@ -7,12 +7,8 @@ import SyncIcon from '@material-ui/icons/Sync'
 
 
 const useStyles = makeStyles({
-  '@keyframes rotating': {
-    from: { transform: 'rotate(0deg)' },
-    to: { transform: 'rotate(360deg)' }
-  },
   uploadingIcon: {
-    animation: '$rotating 2s linear infinite',
+    animation: 'rotating 2s linear infinite',
     fontSize: 60
   },
   wrapper: {

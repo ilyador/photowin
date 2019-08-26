@@ -40,13 +40,9 @@ function reducer (state, action) {
 
 
 const useStyles = makeStyles(theme => ({
-  '@keyframes rotating': {
-    from: {transform: 'rotate(0deg)'},
-    to: {transform: 'rotate(360deg)'}
-  },
   uploadingIcon: {
     marginRight: theme.spacing(1),
-    animation: '$rotating 2s linear infinite'
+    animation: 'rotating 2s linear infinite'
   },
   buttonGridItem: {
     display: 'flex'
@@ -139,6 +135,7 @@ function SetUpload ({ user }) {
         </Grid>
         {state.files.map((file, index) => (
           <PictureUpload
+            index={index}
             key={index}
             file={file}
             uploadFileData={uploadFileData(index)}

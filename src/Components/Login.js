@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Auth } from 'aws-amplify'
+import { Auth, I18n } from 'aws-amplify'
 import { makeStyles } from '@material-ui/core/styles'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
@@ -15,16 +15,12 @@ import SyncIcon from '@material-ui/icons/Sync'
 
 
 const useStyles = makeStyles(theme => ({
-  '@keyframes rotating': {
-    from: { transform: 'rotate(0deg)' },
-    to: { transform: 'rotate(360deg)' }
-  },
   uploadingIcon: {
     marginRight: theme.spacing(1),
-    animation: '$rotating 2s linear infinite'
+    animation: 'rotating 2s linear infinite'
   },
   loginForm: {
-    marginTop: theme.spacing(4)
+    marginTop: theme.spacing(3)
   },
   container: {
     paddingTop: theme.spacing(4)
@@ -44,6 +40,11 @@ const useStyles = makeStyles(theme => ({
   error: {
     color: theme.palette.secondary.main,
     textAlign: 'center'
+  },
+  ltr: {
+    '& input': {
+      direction: 'ltr'
+    }
   }
 }))
 
@@ -172,7 +173,7 @@ function Login ({ updateUserState }) {
   const signUpForm = (
     <>
       <Typography variant="h3">
-        Sign Up
+        {I18n.get('signup_title')}
       </Typography>
       <form
         className={c.loginForm}
@@ -181,27 +182,29 @@ function Login ({ updateUserState }) {
         <TextField
           required
           fullWidth
-          label="Email address"
+          label={I18n.get('form_email')}
           name="email"
           value={form.email}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
+          className={c.ltr}
         />
         <TextField
           required
           fullWidth
-          label="Your name"
+          label={I18n.get('form_name')}
           name="given_name"
           value={form.given_name}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
+          className={c.ltr}
         />
         <TextField
           required
           fullWidth
-          label="Birthday"
+          label={I18n.get('form_age')}
           type="date"
           name="birthdate"
           value={form.birthdate}
@@ -217,7 +220,7 @@ function Login ({ updateUserState }) {
           className={c.select}
         >
           <InputLabel ref={inputLabel} htmlFor="gender">
-            Select Gender
+            {I18n.get('form_sex')}
           </InputLabel>
           <Select
             required
@@ -231,21 +234,22 @@ function Login ({ updateUserState }) {
               />
             }
           >
-            <MenuItem value={'male'}>Man</MenuItem>
-            <MenuItem value={'female'}>Woman</MenuItem>
+            <MenuItem value={'male'}>{I18n.get('form_male')}</MenuItem>
+            <MenuItem value={'female'}>{I18n.get('form_female')}</MenuItem>
           </Select>
         </FormControl>
 
         <TextField
           required
           fullWidth
-          label="Choose password"
+          label={I18n.get('form_password')}
           type="password"
           name="password"
           value={form.password}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
+          className={c.ltr}
         />
         {loginError && (
           <Typography variant="body1" className={c.error}>
@@ -263,7 +267,7 @@ function Login ({ updateUserState }) {
           size="large"
         >
           {submitting && <SyncIcon className={c.uploadingIcon}/>}
-          Sign Up
+          {I18n.get('signup_title')}
         </Button>
       </form>
       <Link
@@ -272,7 +276,7 @@ function Login ({ updateUserState }) {
         variant="body2"
         onClick={gotToLogin}
       >
-        Already registered? Login up here.
+        {I18n.get('form_already_registered')}
       </Link>
     </>
   )
@@ -281,7 +285,7 @@ function Login ({ updateUserState }) {
   const resendCodeForm = (
     <>
       <Typography variant="h4">
-        Confirm signup
+        {I18n.get('signup_confirm')}
       </Typography>
       <form
         className={c.loginForm}
@@ -290,13 +294,14 @@ function Login ({ updateUserState }) {
         <TextField
           required
           fullWidth
-          label="Authentication code"
+          label={I18n.get('form_code')}
           name="authenticationCode"
           value={form.authenticationCode}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
-          helperText="Check your email for one-time authentication code"
+          className={c.ltr}
+          helperText={I18n.get('form_check_mail_for_code')}
         />
         {loginError && (
           <Typography variant="body1" className={c.error}>
@@ -314,7 +319,7 @@ function Login ({ updateUserState }) {
           size="large"
         >
           {submitting && <SyncIcon className={c.uploadingIcon}/>}
-          Submit
+          {I18n.get('signup_confirm')}
         </Button>
       </form>
     </>
@@ -324,7 +329,7 @@ function Login ({ updateUserState }) {
   const confirmForm = (
     <>
       <Typography variant="h4">
-        Confirm signup
+        {I18n.get('signup_confirm')}
       </Typography>
       <form
         className={c.loginForm}
@@ -333,23 +338,25 @@ function Login ({ updateUserState }) {
         <TextField
           required
           fullWidth
-          label="Email address"
+          label={I18n.get('form_email')}
           name="email"
           value={form.email}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
+          className={c.ltr}
         />
         <TextField
           required
           fullWidth
-          label="Authentication code"
+          label={I18n.get('form_code')}
           name="authenticationCode"
           value={form.authenticationCode}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
-          helperText="Check your email for one-time authentication code"
+          className={c.ltr}
+          helperText={I18n.get('form_check_mail_for_code')}
         />
         {loginError && (
           <Typography variant="body1" className={c.error}>
@@ -367,7 +374,7 @@ function Login ({ updateUserState }) {
           size="large"
         >
           {submitting && <SyncIcon className={c.uploadingIcon}/>}
-          Submit
+          {I18n.get('signup_confirm')}
         </Button>
       </form>
     </>
@@ -377,7 +384,7 @@ function Login ({ updateUserState }) {
   const loginForm = (
     <>
       <Typography variant="h3">
-        Login
+        {I18n.get('login_title')}
       </Typography>
       <form
         className={c.loginForm}
@@ -386,23 +393,25 @@ function Login ({ updateUserState }) {
         <TextField
           required
           fullWidth
-          label="Email address"
+          label={I18n.get('form_email')}
           name="email"
           value={form.email}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
+          className={c.ltr}
         />
         <TextField
           required
           fullWidth
-          label="Password"
+          label={I18n.get('form_password')}
           type="password"
           name="password"
           value={form.password}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
+          className={c.ltr}
         />
         {loginError && (
           <Typography variant="body1" className={c.error}>
@@ -416,7 +425,7 @@ function Login ({ updateUserState }) {
           variant="body2"
           onClick={gotToVerify}
         >
-          Get new verification code.
+          {I18n.get('form_get_new_code')}
         </Link>)}
 
         <Button
@@ -429,7 +438,7 @@ function Login ({ updateUserState }) {
           size="large"
         >
           {submitting && <SyncIcon className={c.uploadingIcon}/>}
-          Log In
+          {I18n.get('login_title')}
         </Button>
       </form>
       <Link
@@ -438,7 +447,7 @@ function Login ({ updateUserState }) {
         variant="body2"
         onClick={gotToSignup}
       >
-        Not registered? Sign up here.
+        {I18n.get('form_not_signed')}
       </Link>
     </>
   )

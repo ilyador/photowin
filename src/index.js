@@ -8,22 +8,30 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { StylesProvider, ThemeProvider } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { jss } from 'react-jss'
+import { I18n } from 'aws-amplify'
+import { dictionary } from './Helpers/dictionary'
+
+I18n.putVocabularies(dictionary)
+I18n.setLanguage('he')
+
 
 const photWinBlue = '#4a6adb'
 const photWinYellow = '#fdb720'
 
 
 const theme = createMuiTheme({
+  direction: 'rtl',
+  typography: {
+    fontFamily: [
+      '"Rubik"',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif'
+    ].join(','),
+  },
   palette: {
     primary: {
-      light: '#494e51',
-      main: '#313639',
-      dark: '#000'
-    },
-    secondary: {
-      light: '#d5001c',
-      main: '#d5001c',
-      dark: '#960014'
+      main: photWinBlue,
     }
   }
 })

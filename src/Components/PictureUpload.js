@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function PictureUpload ({ uploadFileData, file }) {
+function PictureUpload ({ uploadFileData, file, index }) {
   const [fileUrl, setFileUrl] = useState(null)
   const c = useStyles()
 
@@ -78,7 +78,7 @@ function PictureUpload ({ uploadFileData, file }) {
         />
         <CardActions className={c.actions}>
           <input
-            id='upload-file'
+            id={`upload-file-${index}`}
             className={c.fileInput}
             type='file'
             accept='image/*'
@@ -86,7 +86,7 @@ function PictureUpload ({ uploadFileData, file }) {
           />
           <Fab
             component='label'
-            htmlFor='upload-file'
+            htmlFor={`upload-file-${index}`}
             color="default"
             className={c.addPicture}
           >

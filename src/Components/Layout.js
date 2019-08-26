@@ -17,6 +17,9 @@ import history from '../Helpers/history'
 
 
 const useStyles = makeStyles(theme => ({
+  ltr: {
+    direction: 'ltr'
+  },
   cardGrid: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
@@ -33,6 +36,9 @@ const useStyles = makeStyles(theme => ({
   logoutButton: {
     marginLeft: theme.spacing(4),
     fontWeight: 300
+  },
+  linkToRate: {
+    marginTop: 4
   }
 }))
 
@@ -78,15 +84,20 @@ function Layout ({ updateUserState, component: Component, match, ...rest }) {
   return (
     <>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar className={c.ltr}>
           <CameraIcon className={c.icon}/>
           <Typography variant="h6" className={c.title}>
             PhotoWin
           </Typography>
           {(match.path !== '/rate') &&
-          <Button color='inherit' component={Link} to='/rate'>
-            Rate Pictures
-          </Button>
+            <Button
+              className={c.linkToRate}
+              color='inherit'
+              component={Link}
+              to='/rate'
+            >
+              Rate Pictures
+            </Button>
           }
           <IconButton
             edge="end"
