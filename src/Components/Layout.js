@@ -48,6 +48,7 @@ function Layout ({ updateUserState, component: Component, match, ...rest }) {
 
   const handleMyPictures = () => {
     history.push('/user')
+    handleMenuClose()
   }
 
   const handleProfileMenuOpen = (event) => {

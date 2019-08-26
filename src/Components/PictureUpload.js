@@ -37,9 +37,6 @@ const useStyles = makeStyles(theme => ({
   addPicture: {
     margin: 0,
     [theme.breakpoints.up('sm')]: { marginTop: -34 }
-  },
-  label: {
-    margin: 0
   }
 }))
 
@@ -47,7 +44,6 @@ const useStyles = makeStyles(theme => ({
 function PictureUpload ({ uploadFileData, file }) {
   const [fileUrl, setFileUrl] = useState(null)
   const c = useStyles()
-  const inputEl = useRef(null)
 
 
   useEffect(() => {
@@ -72,10 +68,6 @@ function PictureUpload ({ uploadFileData, file }) {
   }
 
 
-  const onButtonClick = () => { inputEl.current.click() }
-
-
-
   return (
     <Grid item xs={4}>
       <Card>
@@ -89,20 +81,17 @@ function PictureUpload ({ uploadFileData, file }) {
             id='upload-file'
             className={c.fileInput}
             type='file'
-            accept='.jpg,.jpeg,.png'
+            accept='image/*'
             onChange={handleChange}
-            ref={inputEl}
           />
-
-          <label className={c.label} htmlFor="upload-file">
-            <Fab
-              onClick={onButtonClick}
-              color="default"
-              className={c.addPicture}
-            >
-              <AddIcon/>
-            </Fab>
-          </label>
+          <Fab
+            component='label'
+            htmlFor='upload-file'
+            color="default"
+            className={c.addPicture}
+          >
+            <AddIcon/>
+          </Fab>
         </CardActions>
       </Card>
     </Grid>

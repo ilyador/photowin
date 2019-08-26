@@ -9,9 +9,23 @@ import { StylesProvider, ThemeProvider } from '@material-ui/styles'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { jss } from 'react-jss'
 
+const photWinBlue = '#4a6adb'
+const photWinYellow = '#fdb720'
+
 
 const theme = createMuiTheme({
-  margin: 10
+  palette: {
+    primary: {
+      light: '#494e51',
+      main: '#313639',
+      dark: '#000'
+    },
+    secondary: {
+      light: '#d5001c',
+      main: '#d5001c',
+      dark: '#960014'
+    }
+  }
 })
 
 Amplify.configure(config)
