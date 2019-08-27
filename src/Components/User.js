@@ -38,7 +38,7 @@ function User ({ user }) {
   if (loading) return null
   else {
     return userSet ?
-      <Results userSet={userSet} clearSet={clearSet}/> :
+      <Results user={user} userSet={userSet} clearSet={clearSet}/> :
       <SetUpload user={user}/>
   }
 }

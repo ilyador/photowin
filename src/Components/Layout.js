@@ -1,5 +1,5 @@
 import React from 'react'
-import { Auth } from 'aws-amplify'
+import { Auth, I18n } from 'aws-amplify'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import AppBar from '@material-ui/core/AppBar'
@@ -75,8 +75,12 @@ function Layout ({ updateUserState, component: Component, match, ...rest }) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMyPictures}>My Pictures</MenuItem>
-      <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
+      <MenuItem onClick={handleMyPictures}>
+        {I18n.get('layout_my_pictures')}
+      </MenuItem>
+      <MenuItem onClick={handleLogOut}>
+        {I18n.get('login_title')}
+      </MenuItem>
     </Menu>
   )
 
@@ -96,7 +100,7 @@ function Layout ({ updateUserState, component: Component, match, ...rest }) {
               component={Link}
               to='/rate'
             >
-              Rate Pictures
+              {I18n.get('layout_rate_pictures')}
             </Button>
           }
           <IconButton

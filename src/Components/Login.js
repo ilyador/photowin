@@ -16,7 +16,7 @@ import SyncIcon from '@material-ui/icons/Sync'
 
 const useStyles = makeStyles(theme => ({
   uploadingIcon: {
-    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
     animation: 'rotating 2s linear infinite'
   },
   loginForm: {
@@ -45,6 +45,9 @@ const useStyles = makeStyles(theme => ({
     '& input': {
       direction: 'ltr'
     }
+  },
+  title: {
+    textAlign: 'center'
   }
 }))
 
@@ -172,7 +175,7 @@ function Login ({ updateUserState }) {
 
   const signUpForm = (
     <>
-      <Typography variant="h3">
+      <Typography variant="h3" className={c.title}>
         {I18n.get('signup_title')}
       </Typography>
       <form
@@ -228,7 +231,7 @@ function Login ({ updateUserState }) {
             onChange={handleChange}
             input={
               <OutlinedInput
-                labelWidth={112}
+                labelWidth={30}
                 name="gender"
                 id='gender'
               />
@@ -284,7 +287,7 @@ function Login ({ updateUserState }) {
 
   const resendCodeForm = (
     <>
-      <Typography variant="h4">
+      <Typography variant="h3" className={c.title}>
         {I18n.get('signup_confirm')}
       </Typography>
       <form
@@ -328,7 +331,7 @@ function Login ({ updateUserState }) {
 
   const confirmForm = (
     <>
-      <Typography variant="h4">
+      <Typography variant="h3" className={c.title}>
         {I18n.get('signup_confirm')}
       </Typography>
       <form
@@ -383,7 +386,7 @@ function Login ({ updateUserState }) {
 
   const loginForm = (
     <>
-      <Typography variant="h3">
+      <Typography variant="h3" className={c.title}>
         {I18n.get('login_title')}
       </Typography>
       <form

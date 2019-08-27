@@ -1,7 +1,7 @@
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import React, { useEffect, useState } from 'react'
 import { makeStyles, useTheme } from '@material-ui/core'
-import { Storage } from 'aws-amplify'
+import { I18n, Storage } from 'aws-amplify'
 import Fab from '@material-ui/core/Fab'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
@@ -12,6 +12,9 @@ import Typography from '@material-ui/core/Typography'
 
 
 const useStyles = makeStyles(theme => ({
+  pageTitle: {
+    marginBottom: theme.spacing(2)
+  },
   media: {
     height: 0,
     paddingTop: '120%'
@@ -33,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function Results ({ userSet, clearSet }) {
+function Results ({ user, userSet, clearSet }) {
   const [loading, setLoading] = useState(true)
   const [pictures, setPictures] = useState([])
   const c = useStyles()
@@ -64,8 +67,8 @@ function Results ({ userSet, clearSet }) {
     <>
       <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
-          <Typography variant="h4">
-            Your set rating
+          <Typography variant="h5" className={c.pageTitle}>
+            {I18n.get(`user_results_title_${user.gender}`)}
           </Typography>
         </Grid>
         {!loading && pictures.map((picture, index) => (
@@ -78,7 +81,9 @@ function Results ({ userSet, clearSet }) {
               />
               <CardContent>
                 <Typography variant="h6" className={c.ratingText}>
-                  <small className={c.smallText}>Rated:</small> {picture.rating}
+                  <small className={c.smallText}>
+                    {I18n.get('user_results_rating')}
+                  </small> {picture.rating}
                 </Typography>
               </CardContent>
             </Card>
@@ -91,7 +96,7 @@ function Results ({ userSet, clearSet }) {
             className={c.button}
             onClick={clearSet}
           >
-            Want to try a new set?
+            {I18n.get('user_upload_new')}
           </Fab>
         </Grid>
       </Grid>

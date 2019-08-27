@@ -74,7 +74,6 @@ function PictureUpload ({ uploadFileData, file, index }) {
         <CardMedia
           className={c.media}
           image={fileUrl}
-          title="Image title"
         />
         <CardActions className={c.actions}>
           <input

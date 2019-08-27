@@ -4,7 +4,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import {
   API,
   Storage,
-  graphqlOperation as operation
+  graphqlOperation as operation, I18n
 } from 'aws-amplify'
 import { getByAppeared } from '../graphql/queries'
 import { updatePicture, updateSet } from '../graphql/mutations'
@@ -18,6 +18,9 @@ import Typography from '@material-ui/core/Typography'
 
 
 const useStyles = makeStyles(theme => ({
+  pageTitle: {
+    marginBottom: theme.spacing(2)
+  },
   card: {
     cursor: 'pointer'
   },
@@ -113,8 +116,8 @@ function Rate ({ user }) {
     <>
       <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
-          <Typography variant="h4">
-            Choose your favorite picture
+          <Typography variant="h5" className={c.pageTitle}>
+            {I18n.get(`rate_title_${user.gender}`)}
           </Typography>
         </Grid>
         {!loading && pictures.map((picture, index) => (

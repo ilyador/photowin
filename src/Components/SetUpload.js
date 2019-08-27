@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react'
-import { API, graphqlOperation as operation, Storage } from 'aws-amplify'
+import { API, graphqlOperation as operation, Storage, I18n } from 'aws-amplify'
 import { createPicture, createSet } from '../graphql/mutations'
 import { makeStyles } from '@material-ui/core'
 import config from '../aws-exports'
@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import SyncIcon from '@material-ui/icons/Sync'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles'
 
 
 
@@ -40,6 +40,9 @@ function reducer (state, action) {
 
 
 const useStyles = makeStyles(theme => ({
+  pageTitle: {
+    marginBottom: theme.spacing(2)
+  },
   uploadingIcon: {
     marginRight: theme.spacing(1),
     animation: 'rotating 2s linear infinite'
@@ -108,7 +111,7 @@ function SetUpload ({ user }) {
 
     let input = {
       id: user.sub,
-      type:user.gender,
+      type: user.gender,
       appearedForRanking: 0
     }
 
@@ -129,8 +132,8 @@ function SetUpload ({ user }) {
     <>
       <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
-          <Typography variant="h4">
-            Upload a new picture set
+          <Typography variant="h5" className={c.pageTitle}>
+            {I18n.get(`user_upload_title_${user.gender}`)}
           </Typography>
         </Grid>
         {state.files.map((file, index) => (
@@ -149,11 +152,11 @@ function SetUpload ({ user }) {
             disabled={!uploadReady}
             onClick={createPictureSet}
           >
+            {I18n.get('user_upload_button')}
             {uploading ?
               (<SyncIcon className={c.uploadingIcon}/>) :
               (<CloudUploadIcon className={c.icon}/>)
             }
-            Upload Set
           </Fab>
         </Grid>
       </Grid>

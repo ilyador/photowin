@@ -1,4 +1,3 @@
-
 export const dictionary = {
   'he': {
     'login_title': 'כניסה',
@@ -16,5 +15,19 @@ export const dictionary = {
     'form_not_signed': 'עדיין לא רשומים? הירשמו כאן',
     'form_get_new_code': 'קבלו קוד הרשמה חדש',
     'form_check_mail_for_code': 'בידקו את המייל שלכם בשביל קוד רישום חד פעמי',
+
+    'layout_my_pictures': 'התמונות שלי',
+    'layout_logout': 'יציאה',
+    'layout_rate_pictures': 'לדירוג תמונות',
+
+    'user_upload_button': 'העלאה',
+    'user_upload_new': 'רוצה לנסות סט חדש?',
+    'user_results_rating': 'דורג:',
+    'user_upload_title_male': 'העלה את התמונות הכי טובות שלך',
+    'user_upload_title_female': 'העלי את התמונות הכי טובות שלך',
+    'user_results_title_male': 'תוצאות ההצבעה עבור התמונות שלך',
+    'user_results_title_female': 'תוצאות ההצבעה עבור התמונות שלך',
+    'rate_title_male': 'סמן את התמונה המועדפת עלייך',
+    'rate_title_female': 'סמני את התמונה המועדפת עלייך',
   }
 }
