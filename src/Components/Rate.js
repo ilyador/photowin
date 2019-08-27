@@ -19,7 +19,8 @@ import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles(theme => ({
   pageTitle: {
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
+    textAlign: 'center'
   },
   card: {
     cursor: 'pointer'

@@ -41,7 +41,8 @@ function reducer (state, action) {
 
 const useStyles = makeStyles(theme => ({
   pageTitle: {
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
+    textAlign: 'center'
   },
   uploadingIcon: {
     marginRight: theme.spacing(1),

@@ -79,7 +79,7 @@ function Layout ({ updateUserState, component: Component, match, ...rest }) {
         {I18n.get('layout_my_pictures')}
       </MenuItem>
       <MenuItem onClick={handleLogOut}>
-        {I18n.get('login_title')}
+        {I18n.get('layout_logout')}
       </MenuItem>
     </Menu>
   )

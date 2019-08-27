@@ -8,12 +8,14 @@ import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import Avatar from '@material-ui/core/Avatar'
 
 
 
 const useStyles = makeStyles(theme => ({
   pageTitle: {
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
+    textAlign: 'center'
   },
   media: {
     height: 0,
@@ -26,11 +28,13 @@ const useStyles = makeStyles(theme => ({
     margin: [theme.spacing(3), 'auto', 0],
     padding: [0, theme.spacing(6)],
   },
-  ratingText: {
-    textAlign: 'center'
+  avatar: {
+    margin: [-34, 'auto', 0],
+    color: '#fff',
+    backgroundColor: '#fdb720'
   },
-  smallText: {
-    fontWeight: 300
+  cardContent: {
+    paddingBottom: theme.spacing(2)
   }
 }))
 
@@ -49,7 +53,7 @@ function Results ({ user, userSet, clearSet }) {
   async function getResults () {
     const pics = userSet.pictures.items
 
-    pics.sort((a, b) => b.rating - a.rating)
+    pics.sort((a, b) => a.rating - b.rating)
 
     let setWithURLsPromise = pics.map(async (item, index) => {
       item.pictureURL = await Storage.get(pics[index].file.key)
@@ -79,12 +83,8 @@ function Results ({ user, userSet, clearSet }) {
                 image={picture.pictureURL}
                 title="Image title"
               />
-              <CardContent>
-                <Typography variant="h6" className={c.ratingText}>
-                  <small className={c.smallText}>
-                    {I18n.get('user_results_rating')}
-                  </small> {picture.rating}
-                </Typography>
+              <CardContent className={c.cardContent}>
+                <Avatar className={c.avatar}>{picture.rating}</Avatar>
               </CardContent>
             </Card>
           </Grid>

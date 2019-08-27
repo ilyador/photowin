@@ -38,8 +38,9 @@ const useStyles = makeStyles(theme => ({
     margin: [theme.spacing(3), 0, theme.spacing(2)]
   },
   error: {
-    color: theme.palette.secondary.main,
-    textAlign: 'center'
+    color: theme.palette.error.main,
+    textAlign: 'center',
+    direction: 'ltr'
   },
   ltr: {
     '& input': {
