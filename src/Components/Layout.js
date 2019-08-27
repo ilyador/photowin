@@ -20,6 +20,9 @@ const useStyles = makeStyles(theme => ({
   ltr: {
     direction: 'ltr'
   },
+  rtl: {
+    direction: 'rtl'
+  },
   cardGrid: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
@@ -68,6 +71,7 @@ function Layout ({ updateUserState, component: Component, match, ...rest }) {
 
   const renderMenu = (
     <Menu
+      className={c.rtl}
       anchorEl={anchorEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       keepMounted

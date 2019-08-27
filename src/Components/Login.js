@@ -12,6 +12,9 @@ import Link from '@material-ui/core/Link'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import SyncIcon from '@material-ui/icons/Sync'
+import DateFnsUtils from '@date-io/date-fns'
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -59,12 +62,12 @@ function Login ({ updateUserState }) {
   const [loginError, setLoginError] = useState(null)
   const [notVerified, setNotVerified] = useState(null)
   const [submitting, setSubmitting] = useState(false)
+  const [birthdate, setBirthdate] = useState(new Date('2000-01-01'))
   const [form, setForm] = useState({
     email: '',
     password: '',
     given_name: '',
     gender: 'none',
-    birthdate: '2000-01-01',
     authenticationCode: '',
   })
   const inputLabel = useRef(null)
@@ -87,7 +90,6 @@ function Login ({ updateUserState }) {
       password,
       email: username,
       gender,
-      birthdate
     } = form
 
     Auth.signUp({
@@ -205,17 +207,22 @@ function Login ({ updateUserState }) {
           variant="outlined"
           className={c.ltr}
         />
-        <TextField
-          required
-          fullWidth
-          label={I18n.get('form_age')}
-          type="date"
-          name="birthdate"
-          value={form.birthdate}
-          onChange={handleChange}
-          margin="normal"
-          variant="outlined"
-        />
+
+
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <DatePicker
+            required
+            fullWidth
+            label={I18n.get('form_age')}
+            margin="normal"
+            variant="outlined"
+            format="dd/MM/yyyy"
+            openTo="year"
+            value={birthdate}
+            onChange={setBirthdate}
+            className={c.ltr}
+          />
+        </MuiPickersUtilsProvider>
 
         <FormControl
           required
