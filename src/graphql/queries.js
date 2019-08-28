@@ -69,6 +69,31 @@ export const listPictures = `query ListPictures(
   }
 }
 `;
+export const getUser = `query GetUser($id: ID!) {
+  getUser(id: $id) {
+    id
+    name
+    age
+    points
+  }
+}
+`;
+export const listUsers = `query ListUsers(
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      age
+      points
+    }
+    nextToken
+  }
+}
+`;
 export const getByAppeared = `query GetByAppeared(
   $type: String
   $appearedForRanking: ModelIntKeyConditionInput

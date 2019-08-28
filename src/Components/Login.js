@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react'
-import { Auth, I18n } from 'aws-amplify'
+import { API, Auth, graphqlOperation as operation, I18n } from 'aws-amplify'
+import { createUser } from '../graphql/mutations'
 import { makeStyles } from '@material-ui/core/styles'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
@@ -142,6 +143,7 @@ function Login ({ updateUserState }) {
       await Auth.confirmSignUp(email, code)
       const user = await Auth.signIn(email, password)
       updateUserState(user.attributes)
+      setUserInDB(user.attributes.sub)
     } catch (error) {
       setSubmitting(false)
       setLoginError(error.message)
@@ -159,10 +161,27 @@ function Login ({ updateUserState }) {
       await Auth.confirmSignUp(username, authenticationCode)
       const user = await Auth.signIn(username, password)
       updateUserState(user.attributes)
+      setUserInDB(user.attributes.sub)
     } catch (error) {
       setSubmitting(false)
       setLoginError(error.message)
     }
+  }
+
+
+  function setUserInDB(id) {
+    let birthdate = new Date(form.birthdate).getFullYear()
+    let today = new Date().getFullYear()
+    let age = today - birthdate
+
+    const input = {
+      id,
+      name: form.given_name,
+      age,
+      points: 0
+    }
+
+    API.graphql(operation(createUser, { input }))
   }
 
 

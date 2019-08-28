@@ -82,3 +82,30 @@ export const onDeletePicture = `subscription OnDeletePicture {
   }
 }
 `;
+export const onCreateUser = `subscription OnCreateUser {
+  onCreateUser {
+    id
+    name
+    age
+    points
+  }
+}
+`;
+export const onUpdateUser = `subscription OnUpdateUser {
+  onUpdateUser {
+    id
+    name
+    age
+    points
+  }
+}
+`;
+export const onDeleteUser = `subscription OnDeleteUser {
+  onDeleteUser {
+    id
+    name
+    age
+    points
+  }
+}
+`;
