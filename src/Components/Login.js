@@ -16,7 +16,7 @@ import SyncIcon from '@material-ui/icons/Sync'
 
 const useStyles = makeStyles(theme => ({
   uploadingIcon: {
-    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     animation: 'rotating 2s linear infinite'
   },
   loginForm: {
@@ -270,8 +270,8 @@ function Login ({ updateUserState }) {
           color="primary"
           size="large"
         >
-          {submitting && <SyncIcon className={c.uploadingIcon}/>}
           {I18n.get('signup_title')}
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
         </Button>
       </form>
       <Link
@@ -322,8 +322,8 @@ function Login ({ updateUserState }) {
           color="primary"
           size="large"
         >
-          {submitting && <SyncIcon className={c.uploadingIcon}/>}
           {I18n.get('signup_confirm')}
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
         </Button>
       </form>
     </>
@@ -377,8 +377,8 @@ function Login ({ updateUserState }) {
           color="primary"
           size="large"
         >
-          {submitting && <SyncIcon className={c.uploadingIcon}/>}
           {I18n.get('signup_confirm')}
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
         </Button>
       </form>
     </>
@@ -441,18 +441,20 @@ function Login ({ updateUserState }) {
           color="primary"
           size="large"
         >
-          {submitting && <SyncIcon className={c.uploadingIcon}/>}
           {I18n.get('login_title')}
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
         </Button>
       </form>
-      <Link
-        className={c.link}
-        component="button"
-        variant="body2"
+      <Button
         onClick={gotToSignup}
+        fullWidth
+        className={c.button}
+        variant="contained"
+        color="secondary"
+        size="large"
       >
         {I18n.get('form_not_signed')}
-      </Link>
+      </Button>
     </>
   )
 
