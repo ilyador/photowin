@@ -1,5 +1,8 @@
 export const dictionary = {
   'he': {
+    'yes': 'כן',
+    'no': 'לא',
+
     'login_title': 'כניסה',
     'signup_title': 'הרשמה',
     'signup_confirm': 'אישור הרשמה',
@@ -22,6 +25,8 @@ export const dictionary = {
 
     'user_upload_button': 'העלאה',
     'user_upload_new': 'רוצה לנסות סט חדש?',
+    'user_upload_new_confirm_male': 'הסט הנוכחי והניקוד שלו יימחקו. האם אתה מעוניין להמישך בכל מקרה? ',
+    'user_upload_new_confirm_female': 'הסט הנוכחי והניקוד שלו יימחקו. האם את מעוניינת להמישך בכל מקרה? ',
     'user_results_rating': 'דורג:',
     'user_upload_title_male': 'העלה את התמונות הכי טובות שלך',
     'user_upload_title_female': 'העלי את התמונות הכי טובות שלך',

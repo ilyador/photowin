@@ -3,13 +3,16 @@ import React, { useEffect, useState } from 'react'
 import { makeStyles, useTheme } from '@material-ui/core'
 import { I18n, Storage } from 'aws-amplify'
 import Fab from '@material-ui/core/Fab'
+import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Avatar from '@material-ui/core/Avatar'
-
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogTitle from '@material-ui/core/DialogTitle'
 
 
 const useStyles = makeStyles(theme => ({
@@ -35,6 +38,9 @@ const useStyles = makeStyles(theme => ({
   },
   cardContent: {
     paddingBottom: theme.spacing(2)
+  },
+  deleteDialog: {
+    width: 254
   }
 }))
 
@@ -46,6 +52,8 @@ function Results ({ user, userSet, clearSet }) {
   const c = useStyles()
   const theme = useTheme()
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
+  const [open, setOpen] = React.useState(false)
+
 
   useEffect(() => { getResults() }, [])
 
@@ -67,8 +75,31 @@ function Results ({ user, userSet, clearSet }) {
   }
 
 
+  function handleClickOpen () { setOpen(true) }
+
+  function handleClose () { setOpen(false) }
+
+
+  const deleteDialog = (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle className={c.deleteDialog}>
+        {I18n.get(`user_upload_new_confirm_${user.gender}`)}
+      </DialogTitle>
+      <DialogActions>
+        <Button onClick={handleClose} color="default">
+          {I18n.get('no')}
+        </Button>
+        <Button onClick={clearSet} color="secondary" autoFocus>
+          {I18n.get('yes')}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+
+
   return (
     <>
+      {deleteDialog}
       <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
           <Typography variant="h5" className={c.pageTitle}>
@@ -94,7 +125,7 @@ function Results ({ user, userSet, clearSet }) {
             variant="extended"
             color="secondary"
             className={c.button}
-            onClick={clearSet}
+            onClick={handleClickOpen}
           >
             {I18n.get('user_upload_new')}
           </Fab>
