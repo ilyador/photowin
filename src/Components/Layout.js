@@ -11,6 +11,7 @@ import Container from '@material-ui/core/Container'
 import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
+import Badge from '@material-ui/core/Badge'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import history from '../Helpers/history'
 
@@ -43,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function Layout ({ updateUserState, component: Component, match, ...rest }) {
+function Layout ({ updateUserState, points, component: Component, match, ...rest }) {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const isMenuOpen = Boolean(anchorEl)
   const c = useStyles()
@@ -75,6 +76,9 @@ function Layout ({ updateUserState, component: Component, match, ...rest }) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+      <MenuItem onClick={handleMenuClose}>
+        {I18n.get('my_points')}: {points}
+      </MenuItem>
       <MenuItem onClick={handleMyPictures}>
         {I18n.get('layout_my_pictures')}
       </MenuItem>
@@ -94,27 +98,29 @@ function Layout ({ updateUserState, component: Component, match, ...rest }) {
             PhotoWin
           </Typography>
           {(match.path !== '/rate') &&
-            <Button
-              className={c.linkToRate}
-              color='inherit'
-              component={Link}
-              to='/rate'
-            >
-              {I18n.get('layout_rate_pictures')}
-            </Button>
+          <Button
+            className={c.linkToRate}
+            color='inherit'
+            component={Link}
+            to='/rate'
+          >
+            {I18n.get('layout_rate_pictures')}
+          </Button>
           }
           <IconButton
             edge="end"
             onClick={handleProfileMenuOpen}
             color="inherit"
           >
-            <AccountCircle />
+            <Badge className={c.margin} badgeContent={points} color="secondary">
+              <AccountCircle/>
+            </Badge>
           </IconButton>
         </Toolbar>
       </AppBar>
       {renderMenu}
       <Container className={c.cardGrid} maxWidth="md">
-        <Component {...rest} />
+        <Component points={points} {...rest} />
       </Container>
     </>
   )

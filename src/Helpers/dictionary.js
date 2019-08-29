@@ -3,6 +3,7 @@ export const dictionary = {
     'yes': 'כן',
     'no': 'לא',
 
+    'main_title': 'מערכת דירוג תמונות שתחליט מה התמונה המועדפת על המין השני',
     'login_title': 'כניסה',
     'signup_title': 'הרשמה',
     'signup_confirm': 'אישור הרשמה',
@@ -21,6 +22,7 @@ export const dictionary = {
 
     'layout_my_pictures': 'התמונות שלי',
     'layout_logout': 'יציאה',
+    'my_points': 'הניקוד שצברת',
     'layout_rate_pictures': 'לדירוג תמונות',
 
     'user_upload_button': 'העלאה',

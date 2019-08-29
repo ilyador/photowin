@@ -6,8 +6,8 @@ import {
   Storage,
   graphqlOperation as operation, I18n
 } from 'aws-amplify'
-import { getByAppeared } from '../graphql/queries'
-import { updatePicture, updateSet } from '../graphql/mutations'
+import { getByAppeared, getUser } from '../graphql/queries'
+import { updatePicture, updateSet, updateUser } from '../graphql/mutations'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardMedia from '@material-ui/core/CardMedia'
@@ -52,13 +52,14 @@ const getGender = user => {
 }
 
 
-function Rate ({ user }) {
+function Rate ({ user, points, updatePoints }) {
   const [loading, setLoading] = useState(true)
   const [picturesSetData, setPicturesSetData] = useState(null)
   const [pictures, setPictures] = useState([])
   const c = useStyles()
   const theme = useTheme()
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
+
 
   async function getPictureSet () {
     let data = await API.graphql(operation(getByAppeared, {
@@ -68,14 +69,19 @@ function Rate ({ user }) {
     }))
 
 
-    let { items } = data.data.getByAppeared
-    let itemToRateIndex = random(items.length)
+    let userSets = data.data.getByAppeared.items
+    let itemToRateIndex = random(userSets.length)
     let itemToRate = {
-      id: items[itemToRateIndex].id,
-      appearedForRanking: items[itemToRateIndex].appearedForRanking
+      id: userSets[itemToRateIndex].id,
+      appearedForRanking: userSets[itemToRateIndex].appearedForRanking
     }
 
-    let pics = items[itemToRateIndex].pictures.items
+    let displayedUser = await API.graphql(operation(getUser, {
+      id: itemToRate.id
+    }))
+
+
+    let pics = userSets[itemToRateIndex].pictures.items
     pics.splice(random(3), 1)
 
     let setWithURLsPromise = pics.map(async (item, index) => {
@@ -95,19 +101,34 @@ function Rate ({ user }) {
 
 
   const vote = (id, rating) => () => {
-    let pictureInput = { id, rating: rating + 1 }
-    let setInput = {
-      id: picturesSetData.id,
-      appearedForRanking: picturesSetData.appearedForRanking + 1
-    }
 
-    let pictureUpdate = API.graphql(operation(updatePicture, { input: pictureInput }))
-    let setUpdate = API.graphql(operation(updateSet, { input: setInput }))
+    let pictureUpdate = API.graphql(operation(updatePicture, {
+      input: {
+        id,
+        rating: rating + 1
+      }
+    }))
 
-    Promise.all([pictureUpdate, setUpdate]).then(() => {
+    let setUpdate = API.graphql(operation(updateSet, {
+      input: {
+        id: picturesSetData.id,
+        appearedForRanking: picturesSetData.appearedForRanking + 1
+      }
+    }))
+
+    let userUpdate = API.graphql(operation(updateUser, {
+      input: {
+        id: user.sub,
+        points: points + 1
+      }
+    }))
+
+
+    Promise.all([pictureUpdate, setUpdate, userUpdate]).then(() => {
       setLoading(true)
       setPicturesSetData(null)
       setPictures([])
+      updatePoints(points + 1)
       getPictureSet()
     })
   }

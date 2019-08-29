@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Router,
   Route,
@@ -6,6 +6,9 @@ import {
   Switch
 } from 'react-router-dom'
 import history from '../Helpers/history'
+import { API, Auth, graphqlOperation as operation } from 'aws-amplify'
+import { getUser } from '../graphql/queries'
+
 
 import Login from './Login'
 import User from './User'
@@ -14,18 +17,39 @@ import Rate from './Rate'
 import Layout from './Layout'
 
 
-const PrivateRoute = ({ component, user, updateUserState, ...rest }) => (
-  <Route {...rest} render={(props) => (
-    user
-      ? <Layout
-        component={component}
-        updateUserState={updateUserState}
-        user={user}
-        {...props}
-      />
-      : <Redirect to={'/login'}/>
-  )}/>
-)
+const PrivateRoute = ({ component, user, updateUserState, ...rest }) => {
+  const [points, setPoints] = useState(0)
+
+  useEffect(() => {
+    async function loadUser () {
+      try {
+        let userDb = await API.graphql(operation(getUser, {
+          id: user.sub
+        }))
+
+        setPoints(userDb.data.getUser.points)
+      } catch (error) { console.log(error) }
+    }
+
+    loadUser()
+  }, [])
+
+
+  return (
+    <Route {...rest} render={(props) => (
+      user
+        ? <Layout
+          component={component}
+          updateUserState={updateUserState}
+          user={user}
+          points={points}
+          updatePoints={setPoints}
+          {...props}
+        />
+        : <Redirect to={'/login'}/>
+    )}/>
+  )
+}
 
 const Routes = ({ user, updateUserState }) => (
   <Router history={history}>
