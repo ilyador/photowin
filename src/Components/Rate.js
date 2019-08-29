@@ -35,6 +35,16 @@ const useStyles = makeStyles(theme => ({
   },
   like: {
     marginTop: -34
+  },
+  ratedUser: {
+    textAlign: 'center',
+    marginBottom: theme.spacing(1)
+  },
+  ratedUserName: {
+    fontWeight: 700
+  },
+  ratedUserAge: {
+    fontWeight: 400
   }
 }))
 
@@ -55,6 +65,7 @@ const getGender = user => {
 function Rate ({ user, points, updatePoints }) {
   const [loading, setLoading] = useState(true)
   const [picturesSetData, setPicturesSetData] = useState(null)
+  const [ratedUser, setRatedUser] = useState(null)
   const [pictures, setPictures] = useState([])
   const c = useStyles()
   const theme = useTheme()
@@ -80,7 +91,6 @@ function Rate ({ user, points, updatePoints }) {
       id: itemToRate.id
     }))
 
-
     let pics = userSets[itemToRateIndex].pictures.items
     pics.splice(random(3), 1)
 
@@ -93,6 +103,7 @@ function Rate ({ user, points, updatePoints }) {
 
     setPictures(setWithURLs)
     setPicturesSetData(itemToRate)
+    setRatedUser(displayedUser.data.getUser)
     setLoading(false)
   }
 
@@ -136,13 +147,17 @@ function Rate ({ user, points, updatePoints }) {
 
   return (
     <>
-      <Grid container spacing={desktopDisplay ? 3 : 1}>
+      {!loading && <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
           <Typography variant="h5" className={c.pageTitle}>
             {I18n.get(`rate_title_${user.gender}`)}
           </Typography>
+          <Typography variant="h6" className={c.ratedUser}>
+            <span className={c.ratedUserName}>{ratedUser.name}</span>&nbsp;
+            <span className={c.ratedUserAge}>{ratedUser.age}</span>
+          </Typography>
         </Grid>
-        {!loading && pictures.map((picture, index) => (
+        {pictures.map((picture, index) => (
           <Grid item key={index} xs={6}>
             <Card
               className={c.card}
@@ -165,7 +180,7 @@ function Rate ({ user, points, updatePoints }) {
             </Card>
           </Grid>
         ))}
-      </Grid>
+      </Grid>}
     </>
   )
 }

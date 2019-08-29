@@ -6,7 +6,7 @@ import {
   Switch
 } from 'react-router-dom'
 import history from '../Helpers/history'
-import { API, Auth, graphqlOperation as operation } from 'aws-amplify'
+import { API, graphqlOperation as operation } from 'aws-amplify'
 import { getUser } from '../graphql/queries'
 
 
