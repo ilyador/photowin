@@ -20,9 +20,6 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
     animation: 'rotating 2s linear infinite'
   },
-  loginForm: {
-    marginTop: theme.spacing(3)
-  },
   container: {
     paddingTop: theme.spacing(4)
   },
@@ -49,6 +46,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   title: {
+    marginBottom: theme.spacing(2),
     textAlign: 'center'
   }
 }))
@@ -193,10 +191,91 @@ function Login ({ updateUserState }) {
   }
 
 
+
+  const loginForm = (
+    <>
+      <Typography variant="h3" className={c.title}>
+        {I18n.get('login_title')}
+      </Typography>
+      <Typography variant="h6" className={c.title}>
+        {I18n.get('main_title')}
+      </Typography>
+      <form
+        className={c.loginForm}
+        onSubmit={handleSignIn}>
+
+        <TextField
+          required
+          fullWidth
+          label={I18n.get('form_email')}
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          margin="normal"
+          variant="outlined"
+          className={c.ltr}
+        />
+        <TextField
+          required
+          fullWidth
+          label={I18n.get('form_password')}
+          type="password"
+          name="password"
+          value={form.password}
+          onChange={handleChange}
+          margin="normal"
+          variant="outlined"
+          className={c.ltr}
+        />
+        {loginError && (
+          <Typography variant="body1" className={c.error}>
+            {loginError}
+          </Typography>
+        )}
+
+        {notVerified && (<Link
+          className={c.link}
+          component="button"
+          variant="body2"
+          onClick={gotToVerify}
+        >
+          {I18n.get('form_get_new_code')}
+        </Link>)}
+
+        <Button
+          disabled={submitting}
+          fullWidth
+          className={c.button}
+          type="submit"
+          variant="contained"
+          color="primary"
+          size="large"
+        >
+          {I18n.get('login_title')}
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
+        </Button>
+      </form>
+      <Button
+        onClick={gotToSignup}
+        fullWidth
+        className={c.button}
+        variant="contained"
+        color="secondary"
+        size="large"
+      >
+        {I18n.get('form_not_signed')}
+      </Button>
+    </>
+  )
+
+
   const signUpForm = (
     <>
       <Typography variant="h3" className={c.title}>
         {I18n.get('signup_title')}
+      </Typography>
+      <Typography variant="h6" className={c.title}>
+        {I18n.get('main_title')}
       </Typography>
       <form
         className={c.loginForm}
@@ -403,79 +482,6 @@ function Login ({ updateUserState }) {
     </>
   )
 
-
-  const loginForm = (
-    <>
-      <Typography variant="h3" className={c.title}>
-        {I18n.get('login_title')}
-      </Typography>
-      <form
-        className={c.loginForm}
-        onSubmit={handleSignIn}>
-
-        <TextField
-          required
-          fullWidth
-          label={I18n.get('form_email')}
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          margin="normal"
-          variant="outlined"
-          className={c.ltr}
-        />
-        <TextField
-          required
-          fullWidth
-          label={I18n.get('form_password')}
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          margin="normal"
-          variant="outlined"
-          className={c.ltr}
-        />
-        {loginError && (
-          <Typography variant="body1" className={c.error}>
-            {loginError}
-          </Typography>
-        )}
-
-        {notVerified && (<Link
-          className={c.link}
-          component="button"
-          variant="body2"
-          onClick={gotToVerify}
-        >
-          {I18n.get('form_get_new_code')}
-        </Link>)}
-
-        <Button
-          disabled={submitting}
-          fullWidth
-          className={c.button}
-          type="submit"
-          variant="contained"
-          color="primary"
-          size="large"
-        >
-          {I18n.get('login_title')}
-          {submitting && <SyncIcon className={c.uploadingIcon}/>}
-        </Button>
-      </form>
-      <Button
-        onClick={gotToSignup}
-        fullWidth
-        className={c.button}
-        variant="contained"
-        color="secondary"
-        size="large"
-      >
-        {I18n.get('form_not_signed')}
-      </Button>
-    </>
-  )
 
 
   return (
