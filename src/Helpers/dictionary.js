@@ -7,6 +7,8 @@ export const dictionary = {
     'login_title': 'כניסה',
     'signup_title': 'הרשמה',
     'signup_confirm': 'אישור הרשמה',
+    'signup_next': 'לשלב הבא',
+    'signup_last': 'פרטים אחרונים והתחלנו',
     'form_name': 'שם',
     'form_email': 'כתובת אימייל',
     'form_password': 'סיסמא',

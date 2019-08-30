@@ -101,7 +101,7 @@ function Login ({ updateUserState, location }) {
       .then(() => {
         setLoginError(null)
         setSubmitting(false)
-        setSignUpStep(2)
+        setSignUpStep(3)
       })
       .catch(error => {
         setSubmitting(false)
@@ -187,11 +187,15 @@ function Login ({ updateUserState, location }) {
   }
 
 
-  const gotToSignup = () => {setSignUpStep(1)}
-  const gotToLogin = () => {setSignUpStep(0)}
-  const gotToVerify = () => {
+  const goToLogin = () => {setSignUpStep(0)}
+  const goToSignup1 = () => {setSignUpStep(1)}
+  const goToSignup2 = event => {
+    event.preventDefault()
+    setSignUpStep(2)
+  }
+  const goToVerify = () => {
     setLoginError(null)
-    setSignUpStep(3)
+    setSignUpStep(4)
   }
 
 
@@ -239,7 +243,7 @@ function Login ({ updateUserState, location }) {
           className={c.link}
           component="button"
           variant="body2"
-          onClick={gotToVerify}
+          onClick={goToVerify}
         >
           {I18n.get('form_get_new_code')}
         </Link>)}
@@ -258,7 +262,7 @@ function Login ({ updateUserState, location }) {
         </Button>
       </form>
       <Button
-        onClick={gotToSignup}
+        onClick={goToSignup1}
         fullWidth
         className={c.button}
         variant="contained"
@@ -271,7 +275,7 @@ function Login ({ updateUserState, location }) {
   )
 
 
-  const signUpForm = (
+  const signUpForm1 = (
     <>
       <Typography variant="h3" className={c.title}>
         {I18n.get('signup_title')}
@@ -279,7 +283,7 @@ function Login ({ updateUserState, location }) {
       <Typography variant="h6" className={c.title}>
         {I18n.get('main_title')}
       </Typography>
-      <form onSubmit={handleSignUp}>
+      <form onSubmit={goToSignup2}>
 
         <TextField
           required
@@ -303,6 +307,41 @@ function Login ({ updateUserState, location }) {
           variant="outlined"
           className={c.ltr}
         />
+        <Button
+          disabled={submitting}
+          fullWidth
+          className={c.button}
+          type="submit"
+          variant="contained"
+          color="primary"
+          size="large"
+        >
+          {I18n.get('signup_next')}
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
+        </Button>
+      </form>
+      <Link
+        className={c.link}
+        component="button"
+        variant="body2"
+        onClick={goToLogin}
+      >
+        {I18n.get('form_already_registered')}
+      </Link>
+    </>
+  )
+
+
+  const signUpForm2 = (
+    <>
+      <Typography variant="h3" className={c.title}>
+        {I18n.get('signup_title')}
+      </Typography>
+      <Typography variant="h6" className={c.title}>
+        {I18n.get('signup_last')}
+      </Typography>
+      <form onSubmit={handleSignUp}>
+
         <TextField
           required
           fullWidth
@@ -376,7 +415,7 @@ function Login ({ updateUserState, location }) {
         className={c.link}
         component="button"
         variant="body2"
-        onClick={gotToLogin}
+        onClick={goToLogin}
       >
         {I18n.get('form_already_registered')}
       </Link>
@@ -483,9 +522,10 @@ function Login ({ updateUserState, location }) {
   return (
     <Container maxWidth="xs" className={c.container}>
       {signUpStep === 0 && loginForm}
-      {signUpStep === 1 && signUpForm}
-      {signUpStep === 2 && confirmForm}
-      {signUpStep === 3 && resendCodeForm}
+      {signUpStep === 1 && signUpForm1}
+      {signUpStep === 2 && signUpForm2}
+      {signUpStep === 3 && confirmForm}
+      {signUpStep === 4 && resendCodeForm}
     </Container>
   )
 }
