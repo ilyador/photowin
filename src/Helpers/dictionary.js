@@ -36,5 +36,11 @@ export const dictionary = {
     'user_results_title_female': 'תוצאות ההצבעה עבור התמונות שלך',
     'rate_title_male': 'סמן את התמונה המועדפת עלייך',
     'rate_title_female': 'סמני את התמונה המועדפת עלייך',
+
+    'landing_header': 'מערכת ההצבעות של PhotoWinPro תעשה זאת עבורך!',
+    'landing_upload': 'העלו את התמונות שלכם',
+    'landing_rate': 'הצביעו עבור משתתפים אחרים',
+    'landing_win': 'קבלו דירוג של התמונות שלכם',
+    'landing_register': 'העלו תמונות',
   }
 }

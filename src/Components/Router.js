@@ -10,6 +10,7 @@ import { API, graphqlOperation as operation } from 'aws-amplify'
 import { getUser } from '../graphql/queries'
 
 
+import Landing from './Landing'
 import Login from './Login'
 import User from './User'
 import Page404 from './Page404'
@@ -31,7 +32,7 @@ const PrivateRoute = ({ component, user, updateUserState, ...rest }) => {
       } catch (error) { console.log(error) }
     }
 
-    loadUser()
+    if (user) loadUser()
   }, [])
 
 
@@ -51,6 +52,8 @@ const PrivateRoute = ({ component, user, updateUserState, ...rest }) => {
   )
 }
 
+
+
 const Routes = ({ user, updateUserState }) => (
   <Router history={history}>
     <Switch>
@@ -60,14 +63,13 @@ const Routes = ({ user, updateUserState }) => (
       />
       <Route
         path={'/login'}
-        render={() => (
-          user ? (
-            <Redirect to={'/user'}/>
-          ) : (
-            <Login updateUserState={updateUserState}/>
-          )
+        render={routeProps => (
+          user ?
+            <Redirect to={'/user'}/> :
+            <Login updateUserState={updateUserState} {...routeProps}/>
         )}
       />
+      <Route path={'/landing'} component={Landing}/>
       <PrivateRoute
         path={'/user'}
         user={user}

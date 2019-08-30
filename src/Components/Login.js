@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { API, Auth, graphqlOperation as operation, I18n } from 'aws-amplify'
 import { createUser } from '../graphql/mutations'
 import { makeStyles } from '@material-ui/core/styles'
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   button: {
-    margin: [theme.spacing(3), 0, theme.spacing(2)]
+    margin: [theme.spacing(3), 0, theme.spacing(1)]
   },
   error: {
     color: theme.palette.error.main,
@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function Login ({ updateUserState }) {
+function Login ({ updateUserState, location }) {
   const c = useStyles()
   const [signUpStep, setSignUpStep] = useState(0)
   const [loginError, setLoginError] = useState(null)
@@ -68,6 +68,10 @@ function Login ({ updateUserState }) {
   })
   const inputLabel = useRef(null)
 
+
+  useEffect(() => {
+    if (location.search === '?signup') setSignUpStep(1)
+  }, [])
 
   const handleChange = event => {
     const name = event.target.name
@@ -200,9 +204,7 @@ function Login ({ updateUserState }) {
       <Typography variant="h6" className={c.title}>
         {I18n.get('main_title')}
       </Typography>
-      <form
-        className={c.loginForm}
-        onSubmit={handleSignIn}>
+      <form onSubmit={handleSignIn}>
 
         <TextField
           required
@@ -277,9 +279,7 @@ function Login ({ updateUserState }) {
       <Typography variant="h6" className={c.title}>
         {I18n.get('main_title')}
       </Typography>
-      <form
-        className={c.loginForm}
-        onSubmit={handleSignUp}>
+      <form onSubmit={handleSignUp}>
 
         <TextField
           required
@@ -389,9 +389,7 @@ function Login ({ updateUserState }) {
       <Typography variant="h3" className={c.title}>
         {I18n.get('signup_confirm')}
       </Typography>
-      <form
-        className={c.loginForm}
-        onSubmit={handleVerification}>
+      <form onSubmit={handleVerification}>
 
         <TextField
           required
@@ -433,9 +431,7 @@ function Login ({ updateUserState }) {
       <Typography variant="h3" className={c.title}>
         {I18n.get('signup_confirm')}
       </Typography>
-      <form
-        className={c.loginForm}
-        onSubmit={handleAuthentication}>
+      <form onSubmit={handleAuthentication}>
 
         <TextField
           required
