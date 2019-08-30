@@ -95,7 +95,7 @@ function Layout ({ updateUserState, points, component: Component, match, ...rest
         <Toolbar className={c.ltr}>
           <CameraIcon className={c.icon}/>
           <Typography variant="h6" className={c.title}>
-            PhotoWin
+            ProPhotoWin
           </Typography>
           {(match.path !== '/rate') &&
           <Button
