@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { API, graphqlOperation as operation, Storage, I18n } from 'aws-amplify'
-import { createPicture, createSet } from '../graphql/mutations'
+import { createPicture, createSet, updateSet } from '../graphql/mutations'
 import { makeStyles } from '@material-ui/core'
 import config from '../aws-exports'
 import PictureUpload from './PictureUpload'
@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function SetUpload ({ user }) {
+function SetUpload ({ user, userSet }) {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [uploadReady, setUploadReady] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -111,9 +111,10 @@ function SetUpload ({ user }) {
     setUploading(true)
 
     let input = {
-      id: user.sub,
+      user: user.sub,
       type: user.gender,
-      appearedForRanking: 0
+      appearedForRanking: 0,
+      active: true
     }
 
     const pictureSet = await API.graphql(operation(createSet, { input }))

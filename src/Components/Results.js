@@ -1,7 +1,7 @@
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import React, { useEffect, useState } from 'react'
 import { makeStyles, useTheme } from '@material-ui/core'
-import { I18n, Storage } from 'aws-amplify'
+import { API, graphqlOperation as operation, I18n, Storage } from 'aws-amplify'
 import Fab from '@material-ui/core/Fab'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
@@ -13,6 +13,7 @@ import Avatar from '@material-ui/core/Avatar'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import { updateSet } from '../graphql/mutations'
 
 
 const useStyles = makeStyles(theme => ({
@@ -46,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function Results ({ user, userSet, clearSet }) {
+function Results ({ user, userSet, changeActiveSet }) {
   const [loading, setLoading] = useState(true)
   const [pictures, setPictures] = useState([])
   const c = useStyles()
@@ -76,7 +77,6 @@ function Results ({ user, userSet, clearSet }) {
 
 
   function handleClickOpen () { setOpen(true) }
-
   function handleClose () { setOpen(false) }
 
 
@@ -89,7 +89,7 @@ function Results ({ user, userSet, clearSet }) {
         <Button onClick={handleClose} color="default">
           {I18n.get('no')}
         </Button>
-        <Button onClick={clearSet} color="secondary" autoFocus>
+        <Button onClick={changeActiveSet} color="secondary" autoFocus>
           {I18n.get('yes')}
         </Button>
       </DialogActions>

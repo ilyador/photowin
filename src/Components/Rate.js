@@ -76,14 +76,15 @@ function Rate ({ user, points, updatePoints }) {
     let data = await API.graphql(operation(getByAppeared, {
       type: getGender(user),
       sortDirection: 'DESC',
-      limit: 20
+      limit: 20,
+      filter: { active: { eq: true } }
     }))
 
 
     let userSets = data.data.getByAppeared.items
     let itemToRateIndex = random(userSets.length)
     let itemToRate = {
-      id: userSets[itemToRateIndex].id,
+      id: userSets[itemToRateIndex].user,
       appearedForRanking: userSets[itemToRateIndex].appearedForRanking
     }
 

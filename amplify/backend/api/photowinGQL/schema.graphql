@@ -4,6 +4,8 @@ type Set
 {
 	id: ID!
 	type: String!
+	user: String!
+	active: Boolean!
 	appearedForRanking: Int!
 	pictures: [Picture!]! @connection
 }
