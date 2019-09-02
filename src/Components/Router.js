@@ -13,6 +13,7 @@ import { getUser } from '../graphql/queries'
 import Landing from './Landing'
 import Login from './Login'
 import User from './User'
+import OldResults from './OldResults'
 import Page404 from './Page404'
 import Rate from './Rate'
 import Layout from './Layout'
@@ -75,6 +76,12 @@ const Routes = ({ user, updateUserState }) => (
         user={user}
         updateUserState={updateUserState}
         component={User}
+      />
+      <PrivateRoute
+        path={'/old-sets'}
+        user={user}
+        updateUserState={updateUserState}
+        component={OldResults}
       />
       <PrivateRoute
         path={'/rate'}

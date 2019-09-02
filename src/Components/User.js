@@ -35,7 +35,8 @@ function User ({ user }) {
   }
 
 
-  /* Delete set compketely
+  /* Delete set completely
+
   async function clearSet () {
     const deletedSet = API.graphql(operation(deleteSet, { input: { id: userSet.id } }))
     const pictures = userSet.pictures.items

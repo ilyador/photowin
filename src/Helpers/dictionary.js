@@ -23,6 +23,7 @@ export const dictionary = {
     'form_check_mail_for_code': 'בידקו את המייל שלכם בשביל קוד רישום חד פעמי',
 
     'layout_my_pictures': 'התמונות שלי',
+    'layout_old_pictures': 'סטים ישנים',
     'layout_logout': 'יציאה',
     'my_points': 'הניקוד שצברת',
     'layout_rate_pictures': 'לדירוג תמונות',
@@ -36,6 +37,7 @@ export const dictionary = {
     'user_upload_title_female': 'העלי את התמונות הכי טובות שלך',
     'user_results_title_male': 'תוצאות ההצבעה עבור התמונות שלך',
     'user_results_title_female': 'תוצאות ההצבעה עבור התמונות שלך',
+    'user_results_old': 'הסטים הישנים שלך',
     'rate_title_male': 'סמן את התמונה המועדפת עלייך',
     'rate_title_female': 'סמני את התמונה המועדפת עלייך',
 
