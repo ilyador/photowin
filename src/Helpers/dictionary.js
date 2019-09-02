@@ -23,19 +23,21 @@ export const dictionary = {
     'form_check_mail_for_code': 'בידקו את המייל שלכם בשביל קוד רישום חד פעמי',
 
     'layout_my_pictures': 'התמונות שלי',
+    'layout_old_pictures': 'סטים ישנים',
     'layout_logout': 'יציאה',
     'my_points': 'הניקוד שצברת',
     'layout_rate_pictures': 'לדירוג תמונות',
 
     'user_upload_button': 'העלאה',
     'user_upload_new': 'רוצה לנסות סט חדש?',
-    'user_upload_new_confirm_male': 'הסט הנוכחי והניקוד שלו יימחקו. האם אתה מעוניין להמישך בכל מקרה? ',
-    'user_upload_new_confirm_female': 'הסט הנוכחי והניקוד שלו יימחקו. האם את מעוניינת להמישך בכל מקרה? ',
+    'user_upload_new_confirm_male': 'הסט הנוכחי לא יקבל דירוגים נוספים. האם אתה מעוניין להמישך בכל מקרה?',
+    'user_upload_new_confirm_female': 'הסט הנוכחי והניקוד שלו יימחקו. האם את מעוניינת להמישך בכל מקרה?',
     'user_results_rating': 'דורג:',
     'user_upload_title_male': 'העלה את התמונות הכי טובות שלך',
     'user_upload_title_female': 'העלי את התמונות הכי טובות שלך',
     'user_results_title_male': 'תוצאות ההצבעה עבור התמונות שלך',
     'user_results_title_female': 'תוצאות ההצבעה עבור התמונות שלך',
+    'user_results_old': 'הסטים הישנים שלך',
     'rate_title_male': 'סמן את התמונה המועדפת עלייך',
     'rate_title_female': 'סמני את התמונה המועדפת עלייך',
 

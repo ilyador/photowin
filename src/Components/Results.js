@@ -1,18 +1,15 @@
-import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import React, { useEffect, useState } from 'react'
-import { makeStyles, useTheme } from '@material-ui/core'
 import { I18n, Storage } from 'aws-amplify'
+import { makeStyles, useTheme } from '@material-ui/core'
+import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import Fab from '@material-ui/core/Fab'
 import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import CardMedia from '@material-ui/core/CardMedia'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import Avatar from '@material-ui/core/Avatar'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import ResultsCard from './ResultsCard'
 
 
 const useStyles = makeStyles(theme => ({
@@ -46,7 +43,7 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function Results ({ user, userSet, clearSet }) {
+function Results ({ user, userSet, changeActiveSet }) {
   const [loading, setLoading] = useState(true)
   const [pictures, setPictures] = useState([])
   const c = useStyles()
@@ -76,7 +73,6 @@ function Results ({ user, userSet, clearSet }) {
 
 
   function handleClickOpen () { setOpen(true) }
-
   function handleClose () { setOpen(false) }
 
 
@@ -89,7 +85,7 @@ function Results ({ user, userSet, clearSet }) {
         <Button onClick={handleClose} color="default">
           {I18n.get('no')}
         </Button>
-        <Button onClick={clearSet} color="secondary" autoFocus>
+        <Button onClick={changeActiveSet} color="secondary" autoFocus>
           {I18n.get('yes')}
         </Button>
       </DialogActions>
@@ -107,18 +103,7 @@ function Results ({ user, userSet, clearSet }) {
           </Typography>
         </Grid>
         {!loading && pictures.map((picture, index) => (
-          <Grid item key={index} xs={4}>
-            <Card>
-              <CardMedia
-                className={c.media}
-                image={picture.pictureURL}
-                title="Image title"
-              />
-              <CardContent className={c.cardContent}>
-                <Avatar className={c.avatar}>{picture.rating}</Avatar>
-              </CardContent>
-            </Card>
-          </Grid>
+          <ResultsCard key={index} picture={picture}/>
         ))}
         <Grid item xs={12} className={c.buttonGridItem}>
           <Fab

@@ -58,6 +58,11 @@ function Layout ({ updateUserState, points, component: Component, match, ...rest
     handleMenuClose()
   }
 
+  const handleOldPictures = () => {
+    history.push('/old-sets')
+    handleMenuClose()
+  }
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget)
   }
@@ -81,6 +86,9 @@ function Layout ({ updateUserState, points, component: Component, match, ...rest
       </MenuItem>
       <MenuItem onClick={handleMyPictures}>
         {I18n.get('layout_my_pictures')}
+      </MenuItem>
+      <MenuItem onClick={handleOldPictures}>
+        {I18n.get('layout_old_pictures')}
       </MenuItem>
       <MenuItem onClick={handleLogOut}>
         {I18n.get('layout_logout')}

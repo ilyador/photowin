@@ -62,7 +62,7 @@ const getGender = user => {
 }
 
 
-function Rate ({ user, points, updatePoints }) {
+function Rate ({ user: activeUser, points, updatePoints }) {
   const [loading, setLoading] = useState(true)
   const [picturesSetData, setPicturesSetData] = useState(null)
   const [ratedUser, setRatedUser] = useState(null)
@@ -72,23 +72,25 @@ function Rate ({ user, points, updatePoints }) {
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
 
 
+  useEffect(() => { getPictureSet() }, [])
+
+
   async function getPictureSet () {
     let data = await API.graphql(operation(getByAppeared, {
-      type: getGender(user),
+      type: getGender(activeUser),
       sortDirection: 'DESC',
-      limit: 20
+      limit: 20,
+      filter: { active: { eq: true } }
     }))
 
 
     let userSets = data.data.getByAppeared.items
     let itemToRateIndex = random(userSets.length)
-    let itemToRate = {
-      id: userSets[itemToRateIndex].id,
-      appearedForRanking: userSets[itemToRateIndex].appearedForRanking
-    }
+    let { id, user, appearedForRanking } = userSets[itemToRateIndex]
+    let itemToRate = { id, user, appearedForRanking }
 
     let displayedUser = await API.graphql(operation(getUser, {
-      id: itemToRate.id
+      id: itemToRate.user
     }))
 
     let pics = userSets[itemToRateIndex].pictures.items
@@ -108,11 +110,7 @@ function Rate ({ user, points, updatePoints }) {
   }
 
 
-  useEffect(() => { getPictureSet() }, [])
-
-
   const vote = (id, rating) => () => {
-
     let pictureUpdate = API.graphql(operation(updatePicture, {
       input: {
         id,
@@ -129,7 +127,7 @@ function Rate ({ user, points, updatePoints }) {
 
     let userUpdate = API.graphql(operation(updateUser, {
       input: {
-        id: user.sub,
+        id: activeUser.sub,
         points: points + 1
       }
     }))
@@ -150,7 +148,7 @@ function Rate ({ user, points, updatePoints }) {
       {!loading && <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
           <Typography variant="h5" className={c.pageTitle}>
-            {I18n.get(`rate_title_${user.gender}`)}
+            {I18n.get(`rate_title_${activeUser.gender}`)}
           </Typography>
           <Typography variant="h6" className={c.ratedUser}>
             <span className={c.ratedUserName}>{ratedUser.name}</span>&nbsp;

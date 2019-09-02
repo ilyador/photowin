@@ -111,9 +111,10 @@ function SetUpload ({ user }) {
     setUploading(true)
 
     let input = {
-      id: user.sub,
+      user: user.sub,
       type: user.gender,
-      appearedForRanking: 0
+      appearedForRanking: 0,
+      active: true
     }
 
     const pictureSet = await API.graphql(operation(createSet, { input }))

@@ -5,6 +5,8 @@ export const getSet = `query GetSet($id: ID!) {
   getSet(id: $id) {
     id
     type
+    user
+    active
     appearedForRanking
     pictures {
       items {
@@ -23,6 +25,9 @@ export const listSets = `query ListSets($filter: ModelSetFilterInput, $limit: In
   listSets(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      type
+      user
+      active
       appearedForRanking
       pictures {
         items {
@@ -112,6 +117,9 @@ export const getByAppeared = `query GetByAppeared(
   ) {
     items {
       id
+      type
+      user
+      active
       appearedForRanking
       pictures {
         items {
