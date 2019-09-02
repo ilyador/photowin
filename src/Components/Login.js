@@ -33,7 +33,10 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   button: {
-    margin: [theme.spacing(3), 0, theme.spacing(1)]
+    margin: [theme.spacing(2), 0, theme.spacing(1)]
+  },
+  signupLinkButton: {
+    margin: [0, 0, theme.spacing(10)]
   },
   error: {
     color: theme.palette.error.main,
@@ -208,6 +211,17 @@ function Login ({ updateUserState, location }) {
       <Typography variant="h6" className={c.title}>
         {I18n.get('main_title')}
       </Typography>
+      <Button
+        onClick={goToSignup1}
+        fullWidth
+        className={c.signupLinkButton}
+        variant="contained"
+        color="primary"
+        size="large"
+      >
+        {I18n.get('form_not_signed')}
+      </Button>
+
       <form onSubmit={handleSignIn}>
 
         <TextField
@@ -254,23 +268,13 @@ function Login ({ updateUserState, location }) {
           className={c.button}
           type="submit"
           variant="contained"
-          color="primary"
+          color="secondary"
           size="large"
         >
-          {I18n.get('login_title')}
+          {I18n.get('form_login')}
           {submitting && <SyncIcon className={c.uploadingIcon}/>}
         </Button>
       </form>
-      <Button
-        onClick={goToSignup1}
-        fullWidth
-        className={c.button}
-        variant="contained"
-        color="secondary"
-        size="large"
-      >
-        {I18n.get('form_not_signed')}
-      </Button>
     </>
   )
 
