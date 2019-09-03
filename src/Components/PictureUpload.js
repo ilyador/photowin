@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import uuid from 'uuid/v4'
+import loadImage from 'blueimp-load-image'
 import { makeStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
 import Card from '@material-ui/core/Card'
@@ -55,15 +56,25 @@ function PictureUpload ({ uploadFileData, file, index }) {
     let _file = event.target.files[0]
     if (!_file) return
 
-    let _fileName = uuid() + '.' + _file.name.split('.').pop()
-    let _fileUrl = URL.createObjectURL(_file)
+    let _fileExt = _file.name.split('.').pop()
+    let _fileName = uuid() + '.' + _fileExt
 
-    setFileUrl(_fileUrl)
+    loadImage(_file, canvas => {
+      canvas.toBlob(blob => {
+        let _fileUrl = URL.createObjectURL(blob)
+        setFileUrl(_fileUrl)
+        let file = new File([blob], _fileName)
 
-    uploadFileData({
-      file: _file,
-      fileName: _fileName,
-      fileUrl: _fileUrl
+        uploadFileData({
+          file: file,
+          fileName: _fileName,
+          fileUrl: _fileUrl
+        })
+      }, 'image/jpeg', 1)
+
+    },{
+      orientation: true,
+      maxWidth: 600
     })
   }
 

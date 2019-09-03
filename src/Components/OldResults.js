@@ -45,7 +45,6 @@ function Results ({ user }) {
       }
     }))
 
-    console.log(data)
     let oldSets = data.data.listSets.items
 
     for (let i = 0; i < oldSets.length; i++) {
