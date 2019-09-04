@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { I18n, Storage } from 'aws-amplify'
 import { makeStyles, useTheme } from '@material-ui/core'

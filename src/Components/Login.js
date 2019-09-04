@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from 'react'
 import { API, Auth, graphqlOperation as operation, I18n } from 'aws-amplify'
 import { createUser } from '../graphql/mutations'

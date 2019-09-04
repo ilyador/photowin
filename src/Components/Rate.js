@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import React, { useEffect, useState } from 'react'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
