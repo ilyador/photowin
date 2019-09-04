@@ -63,7 +63,7 @@ function PictureUpload ({ uploadFileData, file, index }) {
       canvas.toBlob(blob => {
         let _fileUrl = URL.createObjectURL(blob)
         setFileUrl(_fileUrl)
-        let file = new File([blob], _fileName)
+        let file = new File([blob], _fileName, { type: blob.type })
 
         uploadFileData({
           file: file,
@@ -72,7 +72,7 @@ function PictureUpload ({ uploadFileData, file, index }) {
         })
       }, 'image/jpeg', 1)
 
-    },{
+    }, {
       orientation: true,
       maxWidth: 600
     })

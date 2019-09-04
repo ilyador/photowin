@@ -41,6 +41,8 @@ export const dictionary = {
     'user_results_old': 'הסטים הישנים שלך',
     'rate_title_male': 'סמן את התמונה המועדפת עלייך',
     'rate_title_female': 'סמני את התמונה המועדפת עלייך',
+    'user_delete_set_male': 'מחק סט',
+    'user_delete_set_female': 'מחקי סט',
 
     'landing_header': 'מערכת ההצבעות של PhotoWinPro תעשה זאת עבורך!',
     'landing_upload': 'העלו את התמונות שלכם',

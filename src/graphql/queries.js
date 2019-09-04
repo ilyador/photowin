@@ -20,7 +20,7 @@ export const getSet = `query GetSet($id: ID!) {
     }
   }
 }
-`;
+`
 export const listSets = `query ListSets($filter: ModelSetFilterInput, $limit: Int, $nextToken: String) {
   listSets(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
@@ -31,6 +31,7 @@ export const listSets = `query ListSets($filter: ModelSetFilterInput, $limit: In
       appearedForRanking
       pictures {
         items {
+          id
           file {
             key
           }
@@ -42,7 +43,7 @@ export const listSets = `query ListSets($filter: ModelSetFilterInput, $limit: In
     nextToken
   }
 }
-`;
+`
 export const getPicture = `query GetPicture($id: ID!) {
   getPicture(id: $id) {
     id
@@ -54,7 +55,7 @@ export const getPicture = `query GetPicture($id: ID!) {
     rating
   }
 }
-`;
+`
 export const listPictures = `query ListPictures(
   $filter: ModelPictureFilterInput
   $limit: Int
@@ -73,7 +74,7 @@ export const listPictures = `query ListPictures(
     nextToken
   }
 }
-`;
+`
 export const getUser = `query GetUser($id: ID!) {
   getUser(id: $id) {
     id
@@ -82,7 +83,7 @@ export const getUser = `query GetUser($id: ID!) {
     points
   }
 }
-`;
+`
 export const listUsers = `query ListUsers(
   $filter: ModelUserFilterInput
   $limit: Int
@@ -98,7 +99,7 @@ export const listUsers = `query ListUsers(
     nextToken
   }
 }
-`;
+`
 export const getByAppeared = `query GetByAppeared(
   $type: String
   $appearedForRanking: ModelIntKeyConditionInput
@@ -135,4 +136,4 @@ export const getByAppeared = `query GetByAppeared(
     nextToken
   }
 }
-`;
+`

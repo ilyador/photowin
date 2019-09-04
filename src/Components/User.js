@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { API, graphqlOperation as operation, Storage } from 'aws-amplify'
-import { deleteSet, deletePicture, updateSet } from '../graphql/mutations'
-import { getSet, listSets } from '../graphql/queries'
+import { API, graphqlOperation as operation } from 'aws-amplify'
+import { updateSet } from '../graphql/mutations'
+import { listSets } from '../graphql/queries'
 import SetUpload from './SetUpload'
 import Results from './Results'
 
@@ -34,25 +34,6 @@ function User ({ user }) {
     })).then(() => setUserSet(null))
   }
 
-
-  /* Delete set completely
-
-  async function clearSet () {
-    const deletedSet = API.graphql(operation(deleteSet, { input: { id: userSet.id } }))
-    const pictures = userSet.pictures.items
-
-    let promises = pictures.flatMap(picture => {
-      let deletePictureDB = API.graphql(operation(deletePicture, { input: { id: picture.id } }))
-      let deletePictureStorage = Storage.remove(picture.file.key)
-
-      return [deletePictureDB, deletePictureStorage]
-    })
-    promises.push(deletedSet)
-
-    await Promise.all(promises)
-    setUserSet(null)
-  }
-  */
 
   if (loading) return null
   else {

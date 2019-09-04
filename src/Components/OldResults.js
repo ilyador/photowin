@@ -1,16 +1,20 @@
-import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import React, { useEffect, useState } from 'react'
 import { makeStyles, useTheme } from '@material-ui/core'
 import { API, graphqlOperation as operation, I18n, Storage } from 'aws-amplify'
+import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
+import { listSets } from '../graphql/queries'
+import { deleteSet, deletePicture } from '../graphql/mutations'
+import ResultsCard from './ResultsCard'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { listSets } from '../graphql/queries'
-import ResultsCard from './ResultsCard'
+import DeleteIcon from '@material-ui/icons/Delete'
+import Fab from '@material-ui/core/Fab'
 
 
 const useStyles = makeStyles(theme => ({
   pageTitle: {
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom: theme.spacing(3)
   },
   buttonGridItem: {
     display: 'flex'
@@ -19,8 +23,14 @@ const useStyles = makeStyles(theme => ({
     margin: [theme.spacing(3), 'auto', 0],
     padding: [0, theme.spacing(6)],
   },
+  deleteButton: {
+    margin: [-theme.spacing(1), 'auto', theme.spacing(8)],
+  },
   deleteDialog: {
     width: 254
+  },
+  icon: {
+    marginRight: theme.spacing(1),
   }
 }))
 
@@ -66,29 +76,50 @@ function Results ({ user }) {
   }
 
 
+  const handleDeleteSet = (set ,index) => async () => {
+    const deletedSet = API.graphql(operation(deleteSet, { input: { id: set.id } }))
+
+    let promises = set.pictures.flatMap(picture => {
+      let deletePictureDB = API.graphql(operation(deletePicture, { input: { id: picture.id } }))
+      let deletePictureStorage = Storage.remove(picture.file.key)
+
+      return [deletePictureDB, deletePictureStorage]
+    })
+    promises.push(deletedSet)
+
+    await Promise.all(promises)
+
+    let sets = [...oldSets]
+    sets.splice(index, 1)
+    setOldSets(sets)
+  }
+
+
   return (
-    <>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Typography variant="h5" className={c.pageTitle}>
-            {I18n.get('user_results_old')}
-          </Typography>
-        </Grid>
-        {!loading && oldSets.map((set, index1) => (
-          <Grid
-            container
-            item
-            xs={12}
-            spacing={desktopDisplay ? 3 : 1}
-            key={index1}
-          >
+    <div>
+      <Typography variant="h5" className={c.pageTitle}>
+        {I18n.get('user_results_old')}
+      </Typography>
+      {!loading && oldSets.map((set, index1) => (
+        <Grid
+          container spacing={desktopDisplay ? 3 : 1}
+          key={index1}
+        >
           {set.pictures.map((picture, index2) => (
             <ResultsCard key={index2} picture={picture}/>
           ))}
-          </Grid>
-        ))}
-      </Grid>
-    </>
+          <Fab
+            variant="extended"
+            color="default"
+            onClick={handleDeleteSet(set, index1)}
+            className={c.deleteButton}
+          >
+            {I18n.get(`user_delete_set_${user.gender}`)}
+            <DeleteIcon className={c.icon}/>
+          </Fab>
+        </Grid>
+      ))}
+    </div>
   )
 }
 
