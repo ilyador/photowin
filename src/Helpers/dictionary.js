@@ -23,7 +23,7 @@ export const dictionary = {
     'form_get_new_code': 'קבלו קוד הרשמה חדש',
     'form_check_mail_for_code': 'בידקו את המייל שלכם בשביל קוד רישום חד פעמי',
 
-    'layout_my_pictures': 'התמונות שלי',
+    'layout_my_pictures': 'הסט שלי',
     'layout_old_pictures': 'סטים ישנים',
     'layout_logout': 'יציאה',
     'my_points': 'הניקוד שצברת',

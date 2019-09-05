@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(4),
     fontWeight: 300
   },
-  linkToRate: {
+  link: {
     marginTop: 4
   }
 }))
@@ -105,9 +105,19 @@ function Layout ({ updateUserState, points, component: Component, match, ...rest
           <Typography variant="h6" className={c.title}>
             ProPhotoWin
           </Typography>
-          {(match.path !== '/rate') &&
+          {(match.path === '/rate') &&
           <Button
-            className={c.linkToRate}
+            className={c.link}
+            color='inherit'
+            component={Link}
+            to='/user'
+          >
+            {I18n.get('layout_my_pictures')}
+          </Button>
+          }
+          {(match.path === '/user' || match.path === '/old-sets') &&
+          <Button
+            className={c.link}
             color='inherit'
             component={Link}
             to='/rate'
