@@ -10,7 +10,6 @@ import history from '../Helpers/history'
 import { API, graphqlOperation as operation } from 'aws-amplify'
 import { getUser } from '../graphql/queries'
 
-
 import Landing from './Landing'
 import Login from './Login'
 import User from './User'
@@ -18,6 +17,7 @@ import OldResults from './OldResults'
 import Page404 from './Page404'
 import Rate from './Rate'
 import Layout from './Layout'
+import Gifts from './Gifts'
 
 
 const PrivateRoute = ({ component, user, updateUserState, ...rest }) => {
@@ -89,6 +89,12 @@ const Routes = ({ user, updateUserState }) => (
         user={user}
         updateUserState={updateUserState}
         component={Rate}
+      />
+      <PrivateRoute
+        path={'/gifts'}
+        user={user}
+        updateUserState={updateUserState}
+        component={Gifts}
       />
       <Route component={Page404}/>
     </Switch>

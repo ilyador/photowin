@@ -63,6 +63,11 @@ function Layout ({ updateUserState, points, component: Component, match, ...rest
     handleMenuClose()
   }
 
+  const handleMyGifts = () => {
+    history.push('/gifts')
+    handleMenuClose()
+  }
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget)
   }
@@ -87,6 +92,9 @@ function Layout ({ updateUserState, points, component: Component, match, ...rest
       <MenuItem onClick={handleMyPictures}>
         {I18n.get('layout_my_pictures')}
       </MenuItem>
+      <MenuItem onClick={handleMyGifts}>
+        {I18n.get('gifts_title')}
+      </MenuItem>
       <MenuItem onClick={handleOldPictures}>
         {I18n.get('layout_old_pictures')}
       </MenuItem>
@@ -105,26 +113,17 @@ function Layout ({ updateUserState, points, component: Component, match, ...rest
           <Typography variant="h6" className={c.title}>
             ProPhotoWin
           </Typography>
-          {(match.path === '/rate') &&
           <Button
             className={c.link}
             color='inherit'
             component={Link}
-            to='/user'
+            to={(match.path !== '/user') ? '/user' : '/rate'}
           >
-            {I18n.get('layout_my_pictures')}
+            {(match.path !== '/user') ?
+              I18n.get('layout_my_pictures') :
+              I18n.get('layout_rate_pictures')
+            }
           </Button>
-          }
-          {(match.path === '/user' || match.path === '/old-sets') &&
-          <Button
-            className={c.link}
-            color='inherit'
-            component={Link}
-            to='/rate'
-          >
-            {I18n.get('layout_rate_pictures')}
-          </Button>
-          }
           <IconButton
             edge="end"
             onClick={handleProfileMenuOpen}

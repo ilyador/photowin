@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import { Link } from 'react-router-dom'
 import ResultsCard from './ResultsCard'
 
 
@@ -18,24 +19,13 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(2),
     textAlign: 'center'
   },
-  media: {
-    height: 0,
-    paddingTop: '120%'
-  },
   buttonGridItem: {
-    display: 'flex'
+    display: 'flex',
+    flexDirection: 'column'
   },
   button: {
     margin: [theme.spacing(3), 'auto', 0],
     padding: [0, theme.spacing(6)],
-  },
-  avatar: {
-    margin: [-34, 'auto', 0],
-    color: '#fff',
-    backgroundColor: '#fdb720'
-  },
-  cardContent: {
-    paddingBottom: theme.spacing(2)
   },
   deleteDialog: {
     width: 254
@@ -114,6 +104,15 @@ function Results ({ user, userSet, changeActiveSet }) {
             onClick={handleClickOpen}
           >
             {I18n.get('user_upload_new')}
+          </Fab>
+          <Fab
+            variant="extended"
+            color="primary"
+            className={c.button}
+            component={Link}
+            to='/gifts'
+          >
+            {I18n.get('gifts_title')}
           </Fab>
         </Grid>
       </Grid>

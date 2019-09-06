@@ -23,7 +23,7 @@ export const dictionary = {
     'form_get_new_code': 'קבלו קוד הרשמה חדש',
     'form_check_mail_for_code': 'בידקו את המייל שלכם בשביל קוד רישום חד פעמי',
 
-    'layout_my_pictures': 'הסט שלי',
+    'layout_my_pictures': 'התמונות שלי',
     'layout_old_pictures': 'סטים ישנים',
     'layout_logout': 'יציאה',
     'my_points': 'הניקוד שצברת',
@@ -49,5 +49,13 @@ export const dictionary = {
     'landing_rate': 'הצביעו עבור משתתפים אחרים',
     'landing_win': 'קבלו דירוג של התמונות שלכם',
     'landing_register': 'העלו תמונות',
+
+    'gifts_male_0': 'סודות הצילום להכרויות און-ליין',
+    'gifts_male_1': 'דייט ב 3 מהלכים פשוטים',
+    'gifts_female_0': 'מדריך: סודות הצילום לאישה',
+    'gifts_female_1': 'הנחה של 50% על בוק צילום - היופי הפנימי',
+    'gifts_points': 'נקודות דרושות לקבלת המתנה:',
+    'gifts_title': 'בונוסים ומתנות',
+    'gifts_get': 'לקבלת המתנה!',
   }
 }
