@@ -10,9 +10,12 @@ import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia'
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
-import mensGuide1 from '../content/dates.png'
-import mensGuide2 from '../content/photo_secrets.png'
-import womensGuide1 from '../content/women_photo.jpg'
+import menGuide1 from '../content/men1.png'
+import menGuide2 from '../content/men2.png'
+import womenGuide1 from '../content/women1.jpg'
+import menPdf1 from '../content/photo-secrets.pdf'
+import menPdf2 from '../content/date-in-3-moves.pdf'
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -21,7 +24,8 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center'
   },
   cardMedia: {
-    paddingTop: '100%', // 16:9
+    paddingTop: '100%',
+    backgroundSize: '89%'
   },
   cardContent: {
     flexGrow: 1,
@@ -29,35 +33,38 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-const gifts = {
-  male: [
-    {
-      points: 50,
-      url: mensGuide1
-    },
-    {
-      points: 300,
-      url: mensGuide2
-    },
-  ],
-  female: [
-    {
-      points: 50,
-      url: womensGuide1
-    },
-    {
-      points: 200,
-      url: womensGuide1
-    }
-  ]
-}
-
-
 
 function Results ({ user, points }) {
   const c = useStyles()
   const theme = useTheme()
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
+
+
+  const gifts = {
+    male: [
+      {
+        title: I18n.get('gifts_male_1'),
+        points: 50,
+        image: menGuide1,
+        url: menPdf1
+      },
+      {
+        title: I18n.get('gifts_male_2'),
+        points: 300,
+        image: menGuide2,
+        url: menPdf2
+      },
+    ],
+    female: [
+      {
+        title: I18n.get('gifts_female_1'),
+        points: 200,
+        image: womenGuide1,
+        url: 'https://pua.ravpage.co.il/BeautyBook'
+      }
+    ]
+  }
+
 
 
   return (
@@ -72,12 +79,12 @@ function Results ({ user, points }) {
           <Card className={c.card}>
             <CardMedia
               className={c.cardMedia}
-              image={gift.url}
+              image={gift.image}
               title="Image title"
             />
             <CardContent className={c.cardContent}>
               <Typography gutterBottom variant={desktopDisplay ? 'h4' : 'h6'}>
-                {I18n.get(`gifts_${user.gender}_${index}`)}
+                {gift.title}
               </Typography>
               <Typography>
                 {I18n.get('gifts_points')}&nbsp;{gift.points}
@@ -89,6 +96,8 @@ function Results ({ user, points }) {
                 size="large"
                 color="secondary"
                 disabled={points < gift.points}
+                component={'a'}
+                href={gift.url}
               >
                 {I18n.get('gifts_get')}
               </Button>
