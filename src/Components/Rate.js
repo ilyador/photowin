@@ -80,7 +80,7 @@ function Rate ({ user: activeUser, points, updatePoints }) {
     let data = await API.graphql(operation(getByAppeared, {
       type: getGender(activeUser),
       sortDirection: 'DESC',
-      limit: 20,
+      limit: 100,
       filter: { active: { eq: true } }
     }))
 

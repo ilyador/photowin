@@ -13,6 +13,7 @@ function User ({ user }) {
 
   useEffect(() => {
     API.graphql(operation(listSets, {
+      limit: 1000,
       filter: {
         user: { eq: user.sub },
         active: { eq: true }
