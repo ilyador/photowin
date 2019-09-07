@@ -56,6 +56,6 @@ export const dictionary = {
     'gifts_female_2': 'הנחה של 50% על בוק צילום - היופי הפנימי',
     'gifts_points': 'נקודות לקבלת המתנה:',
     'gifts_title': 'בונוסים ומתנות',
-    'gifts_get': 'לקבלת המתנה!',
+    'gifts_get': 'כנס!'
   }
 }

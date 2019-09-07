@@ -10,8 +10,8 @@ import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia'
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
-import menGuide1 from '../content/men1.png'
-import menGuide2 from '../content/men2.png'
+import menGuide1 from '../content/men1.jpg'
+import menGuide2 from '../content/men2.jpg'
 import womenGuide1 from '../content/women1.jpg'
 import menPdf1 from '../content/photo-secrets.pdf'
 import menPdf2 from '../content/date-in-3-moves.pdf'
@@ -23,12 +23,31 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(2),
     textAlign: 'center'
   },
-  cardMedia: {
-    paddingTop: '100%',
-    backgroundSize: '89%'
+  card: {
+    display: 'flex',
+    height: 225
   },
-  cardContent: {
-    flexGrow: 1,
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  content: {
+    flex: '1 0 auto',
+  },
+  cover: {
+    width: 150,
+    backgroundSize: [150, 'auto'],
+    flex: [0, 0, '150px']
+  },
+  controls: {
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+  },
+  playIcon: {
+    height: 38,
+    width: 38,
   },
 }))
 
@@ -75,33 +94,37 @@ function Results ({ user, points }) {
         </Typography>
       </Grid>
       {gifts[user.gender].map((gift, index) => (
-        <Grid item key={index} xs={6}>
+        <Grid item key={index} xs={12}>
           <Card className={c.card}>
             <CardMedia
-              className={c.cardMedia}
+              className={c.cover}
               image={gift.image}
-              title="Image title"
+              title='gift'
             />
-            <CardContent className={c.cardContent}>
-              <Typography gutterBottom variant={desktopDisplay ? 'h4' : 'h6'}>
-                {gift.title}
-              </Typography>
-              <Typography>
-                {I18n.get('gifts_points')}&nbsp;{gift.points}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                fullWidth
-                size="large"
-                color="secondary"
-                disabled={points < gift.points}
-                component={'a'}
-                href={gift.url}
-              >
-                {I18n.get('gifts_get')}
-              </Button>
-            </CardActions>
+            <div className={c.details}>
+              <CardContent className={c.content}>
+                <Typography gutterBottom variant={desktopDisplay ? 'h4' : 'h6'}>
+                  {gift.title}
+                </Typography>
+                <Typography>
+                  {I18n.get('gifts_points')}&nbsp;{gift.points}
+                </Typography>
+              </CardContent>
+              <div className={c.controls}>
+                <CardActions>
+                  <Button
+                    fullWidth
+                    size="large"
+                    color="secondary"
+                    disabled={points < gift.points}
+                    component={'a'}
+                    href={gift.url}
+                  >
+                    {I18n.get('gifts_get')}
+                  </Button>
+                </CardActions>
+              </div>
+            </div>
           </Card>
         </Grid>
       ))}

@@ -136,7 +136,7 @@ function Layout ({ updateUserState, points, component: Component, match, ...rest
         </Toolbar>
       </AppBar>
       {renderMenu}
-      <Container className={c.cardGrid} maxWidth="md">
+      <Container className={c.cardGrid} maxWidth="sm">
         <Component points={points} {...rest} />
       </Container>
     </>
