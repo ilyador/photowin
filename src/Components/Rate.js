@@ -52,14 +52,12 @@ const useStyles = makeStyles(theme => ({
 
 const random = max => Math.floor(Math.random() * Math.floor(max))
 
-const getGender = user => {
+const getGender = (user) => {
   const genders = ['male', 'female']
 
-  if (user) {
-    let gender = genders.indexOf(user.gender)
-    gender = 1 - gender
-    return genders[gender]
-  } else { return genders[random(2)] }
+  let gender = genders.indexOf(user.gender)
+  gender = 1 - gender
+  return genders[gender]
 }
 
 
@@ -95,7 +93,8 @@ function Rate ({ user: activeUser, points, updatePoints }) {
     }))
 
     let pics = userSets[itemToRateIndex].pictures.items
-    pics.splice(random(3), 1)
+
+    if (pics.length > 2) pics.splice(random(3), 1)
 
     let setWithURLsPromise = pics.map(async (item, index) => {
       item.pictureURL = await Storage.get(pics[index].file.key)

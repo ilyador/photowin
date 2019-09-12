@@ -3,15 +3,15 @@ import { API, graphqlOperation as operation, Storage, I18n } from 'aws-amplify'
 import { createPicture, createSet } from '../graphql/mutations'
 import { makeStyles } from '@material-ui/core'
 import config from '../aws-exports'
-import PictureUpload from './PictureUpload'
 import history from '../Helpers/history'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { useTheme } from '@material-ui/core/styles'
+import PictureUpload from './PictureUpload'
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import SyncIcon from '@material-ui/icons/Sync'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
-import { useTheme } from '@material-ui/core/styles'
 
 
 
@@ -71,7 +71,9 @@ function SetUpload ({ user }) {
 
 
   useEffect(() => {
-    setUploadReady(state.files.every(file => file))
+    let files = state.files.reduce((sum, file) => file ? ++sum : sum, 0)
+
+    setUploadReady(files > 1)
   }, [state])
 
   const uploadFileData = fileIndex => fileData => {
@@ -121,7 +123,7 @@ function SetUpload ({ user }) {
     const setId = pictureSet.data.createSet.id
 
     let allFileUploadPromises = state.files.map(file =>
-      saveFile(file.file, file.fileName, setId)
+      file && saveFile(file.file, file.fileName, setId)
     )
 
     await Promise.all(allFileUploadPromises)
