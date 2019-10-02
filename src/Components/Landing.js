@@ -3,12 +3,13 @@ import { I18n } from 'aws-amplify'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core'
 import Container from '@material-ui/core/Container'
-import Placeholder from '@material-ui/icons/Extension'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import CameraIcon from '@material-ui/icons/PhotoCamera'
-
+import icon1 from '../content/icon1.png'
+import icon2 from '../content/icon2.png'
+import icon3 from '../content/icon3.png'
+import logo from '../content/logo.png'
 
 
 const useStyles = makeStyles(theme => ({
@@ -34,15 +35,25 @@ const useStyles = makeStyles(theme => ({
     lineHeight: 1.2,
     marginBottom: theme.spacing(4)
   },
+  gridItem: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   rightItem: {
-    direction: 'ltr'
+    extend: 'gridItem',
+    direction: 'ltr',
+    justifyContent: 'left',
   },
   centerItem: {
-    textAlign: 'center'
+    justifyContent: 'center',
+    extend: 'gridItem',
+    textAlign: 'center',
   },
-  leftItem: {},
+  leftItem: {
+    extend: 'gridItem',
+    justifyContent: 'right',
+  },
   action: {
-    paddingTop: theme.spacing(1),
     fontSize: '1.1rem',
     lineHeight: 1
   },
@@ -53,6 +64,9 @@ const useStyles = makeStyles(theme => ({
   noMarginLeft: {
     extend: 'action',
     transform: `translateX(-${theme.spacing(3)}px)`
+  },
+  stepNumber: {
+    fontWeight: 500
   },
   button: {
     marginTop: theme.spacing(6)
@@ -68,9 +82,9 @@ function Landing () {
       <Grid container spacing={3}>
         <Grid item xs={12} className={c.logo}>
           <Typography variant="h6" className={c.appName}>
-            ProPhotoWin
+            PhotoWin
           </Typography>
-          <CameraIcon className={c.icon}/>
+          <img src={logo} className={c.icon}/>
         </Grid>
         <Grid item xs={12}>
           <Typography variant='h6' className={c.title}>
@@ -80,10 +94,10 @@ function Landing () {
       </Grid>
       <Grid container spacing={3} className={c.background}>
         <Grid item xs={5} className={c.rightItem}>
-          <Placeholder/>
+          <img src={icon1} className={c.icon1}/>
         </Grid>
         <Grid item xs={2} className={c.centerItem}>
-          <Typography variant='h3'>1</Typography>
+          <Typography variant='h3' className={c.stepNumber}>1</Typography>
         </Grid>
         <Grid item xs={5} className={c.leftItem}>
           <Typography variant='h6' className={c.noMarginRight}>
@@ -96,16 +110,16 @@ function Landing () {
           </Typography>
         </Grid>
         <Grid item xs={2} className={c.centerItem}>
-          <Typography variant='h3'>2</Typography>
+          <Typography variant='h3' className={c.stepNumber}>2</Typography>
         </Grid>
         <Grid item xs={5} className={c.leftItem}>
-          <Placeholder/>
+          <img src={icon2} className={c.icon2}/>
         </Grid>
         <Grid item xs={5} className={c.rightItem}>
-          <Placeholder/>
+          <img src={icon3} className={c.icon3}/>
         </Grid>
         <Grid item xs={2} className={c.centerItem}>
-          <Typography variant='h3'>3</Typography>
+          <Typography variant='h3' className={c.stepNumber}>3</Typography>
         </Grid>
         <Grid item xs={5} className={c.leftItem}>
           <Typography variant='h6' className={c.noMarginRight}>

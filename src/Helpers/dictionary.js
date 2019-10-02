@@ -44,7 +44,7 @@ export const dictionary = {
     'user_delete_set_male': 'מחק סט',
     'user_delete_set_female': 'מחקי סט',
 
-    'landing_header': 'מערכת ההצבעות של PhotoWinPro תעשה זאת עבורך!',
+    'landing_header': 'מתקשה לזהות תמונות הכי מוצלחות עבורך?',
     'landing_upload': 'העלו את התמונות שלכם',
     'landing_rate': 'הצביעו עבור משתתפים אחרים',
     'landing_win': 'קבלו דירוג של התמונות שלכם',
