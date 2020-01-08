@@ -1,5 +1,7 @@
-import React, { useState, useRef } from 'react'
-import { Auth } from 'aws-amplify'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useRef } from 'react'
+import { API, Auth, graphqlOperation as operation, I18n } from 'aws-amplify'
+import { createUser } from '../graphql/mutations'
 import { makeStyles } from '@material-ui/core/styles'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
@@ -8,14 +10,16 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import Button from '@material-ui/core/Button'
-import Link from '@material-ui/core/Link';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link'
+import Container from '@material-ui/core/Container'
+import Typography from '@material-ui/core/Typography'
+import SyncIcon from '@material-ui/icons/Sync'
 
 
 const useStyles = makeStyles(theme => ({
-  loginForm: {
-    marginTop: theme.spacing(4)
+  uploadingIcon: {
+    marginRight: theme.spacing(1),
+    animation: 'rotating 2s linear infinite'
   },
   container: {
     paddingTop: theme.spacing(4)
@@ -30,14 +34,34 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   button: {
-    marginTop: theme.spacing(4)
+    margin: [theme.spacing(2), 0, theme.spacing(1)]
+  },
+  signupLinkButton: {
+    margin: [0, 0, theme.spacing(10)]
+  },
+  error: {
+    color: theme.palette.error.main,
+    textAlign: 'center',
+    direction: 'ltr'
+  },
+  ltr: {
+    '& input': {
+      direction: 'ltr'
+    }
+  },
+  title: {
+    marginBottom: theme.spacing(2),
+    textAlign: 'center'
   }
 }))
 
 
-function Login ({ updateUserState }) {
+function Login ({ updateUserState, location }) {
   const c = useStyles()
   const [signUpStep, setSignUpStep] = useState(0)
+  const [loginError, setLoginError] = useState(null)
+  const [notVerified, setNotVerified] = useState(null)
+  const [submitting, setSubmitting] = useState(false)
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -49,6 +73,10 @@ function Login ({ updateUserState }) {
   const inputLabel = useRef(null)
 
 
+  useEffect(() => {
+    if (location.search === '?signup') setSignUpStep(1)
+  }, [])
+
   const handleChange = event => {
     const name = event.target.name
     const value = event.target.value
@@ -58,6 +86,8 @@ function Login ({ updateUserState }) {
 
   const handleSignUp = async event => {
     event.preventDefault()
+    setLoginError(null)
+    setSubmitting(true)
 
     const {
       given_name,
@@ -67,88 +97,260 @@ function Login ({ updateUserState }) {
       birthdate
     } = form
 
-    try {
-      await Auth.signUp({
-        username,
-        password,
-        attributes: { given_name, gender, birthdate }
+    Auth.signUp({
+      username,
+      password,
+      attributes: { given_name, gender, birthdate }
+    })
+      .then(() => {
+        setLoginError(null)
+        setSubmitting(false)
+        setSignUpStep(3)
       })
-      console.log('Successfully signed up!')
-      setSignUpStep(2)
-    } catch (err) { console.log('error signing up: ', err) }
+      .catch(error => {
+        setSubmitting(false)
+        setLoginError(error.message)
+      })
   }
+
 
   const handleSignIn = async event => {
     event.preventDefault()
+    setLoginError(null)
+    setSubmitting(true)
 
     try {
-      let user = await Auth.signIn(form.email, form.password)
+      const user = await Auth.signIn(form.email, form.password)
       updateUserState(user.attributes)
     } catch (error) {
-      console.log(error.message)
+      setSubmitting(false)
+      setLoginError(error.message)
+
+      if (error.code === 'UserNotConfirmedException') {
+        setNotVerified(true)
+        Auth.resendSignUp(form.email)
+      }
     }
   }
+
+
+  const handleVerification = async event => {
+    event.preventDefault()
+    setLoginError(null)
+    setSubmitting(true)
+
+    const {
+      password,
+      email,
+      authenticationCode: code
+    } = form
+
+    try {
+      await Auth.confirmSignUp(email, code)
+      const user = await Auth.signIn(email, password)
+      updateUserState(user.attributes)
+      setUserInDB(user.attributes.sub)
+    } catch (error) {
+      setSubmitting(false)
+      setLoginError(error.message)
+    }
+  }
+
 
   const handleAuthentication = async event => {
     event.preventDefault()
+    setLoginError(null)
+    setSubmitting(true)
 
-    const { email: username, authenticationCode } = form
+    const { email: username, authenticationCode, password } = form
     try {
-      let user = await Auth.confirmSignUp(username, authenticationCode)
+      await Auth.confirmSignUp(username, authenticationCode)
+      const user = await Auth.signIn(username, password)
       updateUserState(user.attributes)
-      console.log('user successfully signed up!')
-
+      setUserInDB(user.attributes.sub)
     } catch (error) {
-      console.log('error confirming sign up: ', error)
+      setSubmitting(false)
+      setLoginError(error.message)
     }
   }
 
-  const gotToSignup = () => {setSignUpStep(1)}
-  const gotToLogin = () => {setSignUpStep(0)}
+
+  function setUserInDB(id) {
+    let birthdate = new Date(form.birthdate).getFullYear()
+    let today = new Date().getFullYear()
+    let age = today - birthdate
+
+    const input = {
+      id,
+      name: form.given_name,
+      age,
+      points: 0
+    }
+
+    API.graphql(operation(createUser, { input }))
+  }
 
 
-  const signUpForm = (
+  const goToLogin = () => {setSignUpStep(0)}
+  const goToSignup1 = () => {setSignUpStep(1)}
+  const goToSignup2 = event => {
+    event.preventDefault()
+    setSignUpStep(2)
+  }
+  const goToVerify = () => {
+    setLoginError(null)
+    setSignUpStep(4)
+  }
+
+
+
+  const loginForm = (
     <>
-      <Typography variant="h3">
-        Sign Up
+      <Typography variant="h3" className={c.title}>
+        {I18n.get('login_title')}
       </Typography>
-      <form
-        className={c.loginForm}
-        onSubmit={handleSignUp}>
+      <Typography variant="h6" className={c.title}>
+        {I18n.get('main_title')}
+      </Typography>
+      <Button
+        onClick={goToSignup1}
+        fullWidth
+        className={c.signupLinkButton}
+        variant="contained"
+        color="primary"
+        size="large"
+      >
+        {I18n.get('form_not_signed')}
+      </Button>
 
-        <Link
-          className={c.link}
-          component="button"
-          variant="body2"
-          onClick={gotToLogin}
-        >
-          Already registered? Login up here.
-        </Link>
+      <form onSubmit={handleSignIn}>
 
         <TextField
           required
           fullWidth
-          label="Email address"
+          label={I18n.get('form_email')}
           name="email"
           value={form.email}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
+          className={c.ltr}
         />
         <TextField
           required
           fullWidth
-          label="Your name"
+          label={I18n.get('form_password')}
+          type="password"
+          name="password"
+          value={form.password}
+          onChange={handleChange}
+          margin="normal"
+          variant="outlined"
+          className={c.ltr}
+        />
+        {loginError && (
+          <Typography variant="body1" className={c.error}>
+            {loginError}
+          </Typography>
+        )}
+
+        {notVerified && (<Link
+          className={c.link}
+          component="button"
+          variant="body2"
+          onClick={goToVerify}
+        >
+          {I18n.get('form_get_new_code')}
+        </Link>)}
+
+        <Button
+          disabled={submitting}
+          fullWidth
+          className={c.button}
+          type="submit"
+          variant="contained"
+          color="secondary"
+          size="large"
+        >
+          {I18n.get('form_login')}
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
+        </Button>
+      </form>
+    </>
+  )
+
+
+  const signUpForm1 = (
+    <>
+      <Typography variant="h3" className={c.title}>
+        {I18n.get('signup_title')}
+      </Typography>
+      <Typography variant="h6" className={c.title}>
+        {I18n.get('main_title')}
+      </Typography>
+      <form onSubmit={goToSignup2}>
+
+        <TextField
+          required
+          fullWidth
+          label={I18n.get('form_email')}
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          margin="normal"
+          variant="outlined"
+          className={c.ltr}
+        />
+        <TextField
+          required
+          fullWidth
+          label={I18n.get('form_name')}
           name="given_name"
           value={form.given_name}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
+          className={c.ltr}
         />
+        <Button
+          disabled={submitting}
+          fullWidth
+          className={c.button}
+          type="submit"
+          variant="contained"
+          color="primary"
+          size="large"
+        >
+          {I18n.get('signup_next')}
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
+        </Button>
+      </form>
+      <Link
+        className={c.link}
+        component="button"
+        variant="body2"
+        onClick={goToLogin}
+      >
+        {I18n.get('form_already_registered')}
+      </Link>
+    </>
+  )
+
+
+  const signUpForm2 = (
+    <>
+      <Typography variant="h3" className={c.title}>
+        {I18n.get('signup_title')}
+      </Typography>
+      <Typography variant="h6" className={c.title}>
+        {I18n.get('signup_last')}
+      </Typography>
+      <form onSubmit={handleSignUp}>
+
         <TextField
           required
           fullWidth
-          label="Birthday"
+          label={I18n.get('form_age')}
           type="date"
           name="birthdate"
           value={form.birthdate}
@@ -164,7 +366,7 @@ function Login ({ updateUserState }) {
           className={c.select}
         >
           <InputLabel ref={inputLabel} htmlFor="gender">
-            Select Gender
+            {I18n.get('form_sex')}
           </InputLabel>
           <Select
             required
@@ -172,30 +374,37 @@ function Login ({ updateUserState }) {
             onChange={handleChange}
             input={
               <OutlinedInput
-                labelWidth={112}
+                labelWidth={30}
                 name="gender"
                 id='gender'
               />
             }
           >
-            <MenuItem value={'male'}>Man</MenuItem>
-            <MenuItem value={'female'}>Woman</MenuItem>
+            <MenuItem value={'male'}>{I18n.get('form_male')}</MenuItem>
+            <MenuItem value={'female'}>{I18n.get('form_female')}</MenuItem>
           </Select>
         </FormControl>
 
         <TextField
           required
           fullWidth
-          label="Choose password"
+          label={I18n.get('form_password')}
           type="password"
           name="password"
           value={form.password}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
+          className={c.ltr}
         />
+        {loginError && (
+          <Typography variant="body1" className={c.error}>
+            {loginError}
+          </Typography>
+        )}
 
         <Button
+          disabled={submitting}
           fullWidth
           className={c.button}
           type="submit"
@@ -203,7 +412,58 @@ function Login ({ updateUserState }) {
           color="primary"
           size="large"
         >
-          Sign Up
+          {I18n.get('signup_title')}
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
+        </Button>
+      </form>
+      <Link
+        className={c.link}
+        component="button"
+        variant="body2"
+        onClick={goToLogin}
+      >
+        {I18n.get('form_already_registered')}
+      </Link>
+    </>
+  )
+
+
+  const resendCodeForm = (
+    <>
+      <Typography variant="h3" className={c.title}>
+        {I18n.get('signup_confirm')}
+      </Typography>
+      <form onSubmit={handleVerification}>
+
+        <TextField
+          required
+          fullWidth
+          label={I18n.get('form_code')}
+          name="authenticationCode"
+          value={form.authenticationCode}
+          onChange={handleChange}
+          margin="normal"
+          variant="outlined"
+          className={c.ltr}
+          helperText={I18n.get('form_check_mail_for_code')}
+        />
+        {loginError && (
+          <Typography variant="body1" className={c.error}>
+            {loginError}
+          </Typography>
+        )}
+
+        <Button
+          disabled={submitting}
+          fullWidth
+          className={c.button}
+          type="submit"
+          variant="contained"
+          color="primary"
+          size="large"
+        >
+          {I18n.get('signup_confirm')}
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
         </Button>
       </form>
     </>
@@ -212,36 +472,42 @@ function Login ({ updateUserState }) {
 
   const confirmForm = (
     <>
-      <Typography variant="h4">
-        Confirm signup
+      <Typography variant="h3" className={c.title}>
+        {I18n.get('signup_confirm')}
       </Typography>
-      <form
-        className={c.loginForm}
-        onSubmit={handleAuthentication}>
+      <form onSubmit={handleAuthentication}>
 
         <TextField
           required
           fullWidth
-          label="Email address"
+          label={I18n.get('form_email')}
           name="email"
           value={form.email}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
+          className={c.ltr}
         />
         <TextField
           required
           fullWidth
-          label="Authentication code"
+          label={I18n.get('form_code')}
           name="authenticationCode"
           value={form.authenticationCode}
           onChange={handleChange}
           margin="normal"
           variant="outlined"
-          helperText="Check your email for one-time authentication code"
+          className={c.ltr}
+          helperText={I18n.get('form_check_mail_for_code')}
         />
+        {loginError && (
+          <Typography variant="body1" className={c.error}>
+            {loginError}
+          </Typography>
+        )}
 
         <Button
+          disabled={submitting}
           fullWidth
           className={c.button}
           type="submit"
@@ -249,73 +515,22 @@ function Login ({ updateUserState }) {
           color="primary"
           size="large"
         >
-          Submit
+          {I18n.get('signup_confirm')}
+          {submitting && <SyncIcon className={c.uploadingIcon}/>}
         </Button>
       </form>
     </>
   )
 
-
-  const loginForm = (
-    <>
-      <Typography variant="h3">
-        Login
-      </Typography>
-      <form
-        className={c.loginForm}
-        onSubmit={handleSignIn}>
-
-        <TextField
-          required
-          fullWidth
-          label="Email address"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          margin="normal"
-          variant="outlined"
-        />
-        <TextField
-          required
-          fullWidth
-          label="Password"
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          margin="normal"
-          variant="outlined"
-        />
-
-        <Link
-          className={c.link}
-          component="button"
-          variant="body2"
-          onClick={gotToSignup}
-        >
-          Not registered? Sign up here.
-        </Link>
-
-        <Button
-          fullWidth
-          className={c.button}
-          type="submit"
-          variant="contained"
-          color="primary"
-          size="large"
-        >
-          Log In
-        </Button>
-      </form>
-    </>
-  )
 
 
   return (
     <Container maxWidth="xs" className={c.container}>
       {signUpStep === 0 && loginForm}
-      {signUpStep === 1 && signUpForm}
-      {signUpStep === 2 && confirmForm}
+      {signUpStep === 1 && signUpForm1}
+      {signUpStep === 2 && signUpForm2}
+      {signUpStep === 3 && confirmForm}
+      {signUpStep === 4 && resendCodeForm}
     </Container>
   )
 }

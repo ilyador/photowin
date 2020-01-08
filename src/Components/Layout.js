@@ -1,5 +1,5 @@
 import React from 'react'
-import { Auth } from 'aws-amplify'
+import { Auth, I18n } from 'aws-amplify'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import AppBar from '@material-ui/core/AppBar'
@@ -8,12 +8,22 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import CameraIcon from '@material-ui/icons/PhotoCamera'
 import Container from '@material-ui/core/Container'
+import IconButton from '@material-ui/core/IconButton'
+import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@material-ui/core/Menu'
+import Badge from '@material-ui/core/Badge'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import history from '../Helpers/history'
+
 
 
 const useStyles = makeStyles(theme => ({
+  ltr: {
+    direction: 'ltr'
+  },
   cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -27,42 +37,107 @@ const useStyles = makeStyles(theme => ({
   logoutButton: {
     marginLeft: theme.spacing(4),
     fontWeight: 300
+  },
+  link: {
+    marginTop: 4
   }
 }))
 
 
-function Layout ({ updateUserState, component: Component, ...rest }) {
+function Layout ({ updateUserState, points, component: Component, match, ...rest }) {
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const isMenuOpen = Boolean(anchorEl)
   const c = useStyles()
 
-  const handleLogOut = async () => {
-    await Auth.signOut().then(() => {updateUserState(null)})
+  const handleLogOut = () => {
+    Auth.signOut().then(() => { updateUserState(null) })
   }
+
+  const handleMyPictures = () => {
+    history.push('/user')
+    handleMenuClose()
+  }
+
+  const handleOldPictures = () => {
+    history.push('/old-sets')
+    handleMenuClose()
+  }
+
+  const handleMyGifts = () => {
+    history.push('/gifts')
+    handleMenuClose()
+  }
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
+
+
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>
+        {I18n.get('my_points')}: {points}
+      </MenuItem>
+      <MenuItem onClick={handleMyPictures}>
+        {I18n.get('layout_my_pictures')}
+      </MenuItem>
+      <MenuItem onClick={handleMyGifts}>
+        {I18n.get('gifts_title')}
+      </MenuItem>
+      <MenuItem onClick={handleOldPictures}>
+        {I18n.get('layout_old_pictures')}
+      </MenuItem>
+      <MenuItem onClick={handleLogOut}>
+        {I18n.get('layout_logout')}
+      </MenuItem>
+    </Menu>
+  )
+
 
   return (
     <>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar className={c.ltr}>
           <CameraIcon className={c.icon}/>
           <Typography variant="h6" className={c.title}>
             PhotoWin
           </Typography>
-          <Button color='inherit' component={Link} to='/rate'>
-            Rate Pictures
-          </Button>
-          <Button color='inherit' component={Link} to='/user'>
-            My Picture Set
-          </Button>
           <Button
-            color="inherit"
-            onClick={handleLogOut}
-            className={c.logoutButton}
+            className={c.link}
+            color='inherit'
+            component={Link}
+            to={(match.path !== '/user') ? '/user' : '/rate'}
           >
-            Logout
+            {(match.path !== '/user') ?
+              I18n.get('layout_my_pictures') :
+              I18n.get('layout_rate_pictures')
+            }
           </Button>
+          <IconButton
+            edge="end"
+            onClick={handleProfileMenuOpen}
+            color="inherit"
+          >
+            <Badge className={c.margin} badgeContent={points} color="secondary">
+              <AccountCircle/>
+            </Badge>
+          </IconButton>
         </Toolbar>
       </AppBar>
-      <Container className={c.cardGrid} maxWidth="md">
-        <Component {...rest} />
+      {renderMenu}
+      <Container className={c.cardGrid} maxWidth="sm">
+        <Component points={points} {...rest} />
       </Container>
     </>
   )

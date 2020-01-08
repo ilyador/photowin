@@ -1,12 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import React, { useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import {
   API,
   Storage,
-  graphqlOperation as operation
+  graphqlOperation as operation, I18n
 } from 'aws-amplify'
-import { getByAppeared } from '../graphql/queries'
-import { updatePicture, updateSet } from '../graphql/mutations'
+import { getByAppeared, getUser } from '../graphql/queries'
+import { updatePicture, updateSet, updateUser } from '../graphql/mutations'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardMedia from '@material-ui/core/CardMedia'
@@ -17,9 +19,16 @@ import Typography from '@material-ui/core/Typography'
 
 
 const useStyles = makeStyles(theme => ({
+  pageTitle: {
+    marginBottom: theme.spacing(2),
+    textAlign: 'center'
+  },
+  card: {
+    cursor: 'pointer'
+  },
   media: {
     height: 0,
-    paddingTop: '100%'
+    paddingTop: '120%'
   },
   actions: {
     justifyContent: 'center',
@@ -27,47 +36,65 @@ const useStyles = makeStyles(theme => ({
   },
   like: {
     marginTop: -34
+  },
+  ratedUser: {
+    textAlign: 'center',
+    marginBottom: theme.spacing(1)
+  },
+  ratedUserName: {
+    fontWeight: 700
+  },
+  ratedUserAge: {
+    fontWeight: 400
   }
 }))
 
 
 const random = max => Math.floor(Math.random() * Math.floor(max))
 
-const getGender = user => {
+const getGender = (user) => {
   const genders = ['male', 'female']
 
-  if (user) {
-    let gender = genders.indexOf(user.gender)
-    gender = 1 - gender
-    return genders[gender]
-  } else { return genders[random(2)] }
+  let gender = genders.indexOf(user.gender)
+  gender = 1 - gender
+  return genders[gender]
 }
 
 
-function Rate ({ user }) {
+function Rate ({ user: activeUser, points, updatePoints }) {
   const [loading, setLoading] = useState(true)
   const [picturesSetData, setPicturesSetData] = useState(null)
+  const [ratedUser, setRatedUser] = useState(null)
   const [pictures, setPictures] = useState([])
-
   const c = useStyles()
+  const theme = useTheme()
+  const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
+
+
+  useEffect(() => { getPictureSet() }, [])
+
 
   async function getPictureSet () {
     let data = await API.graphql(operation(getByAppeared, {
-      type: getGender(user),
+      type: getGender(activeUser),
       sortDirection: 'DESC',
-      limit: 20
+      limit: 100,
+      filter: { active: { eq: true } }
     }))
 
 
-    let { items } = data.data.getByAppeared
-    let itemToRateIndex = random(items.length)
-    let itemToRate = {
-      id: items[itemToRateIndex].id,
-      appearedForRanking: items[itemToRateIndex].appearedForRanking
-    }
+    let userSets = data.data.getByAppeared.items
+    let itemToRateIndex = random(userSets.length)
+    let { id, user, appearedForRanking } = userSets[itemToRateIndex]
+    let itemToRate = { id, user, appearedForRanking }
 
-    let pics = items[itemToRateIndex].pictures.items
-    pics.splice(random(3), 1)
+    let displayedUser = await API.graphql(operation(getUser, {
+      id: itemToRate.user
+    }))
+
+    let pics = userSets[itemToRateIndex].pictures.items
+
+    if (pics.length > 2) pics.splice(random(3), 1)
 
     let setWithURLsPromise = pics.map(async (item, index) => {
       item.pictureURL = await Storage.get(pics[index].file.key)
@@ -78,27 +105,39 @@ function Rate ({ user }) {
 
     setPictures(setWithURLs)
     setPicturesSetData(itemToRate)
+    setRatedUser(displayedUser.data.getUser)
     setLoading(false)
   }
 
 
-  useEffect(() => { getPictureSet() }, [])
-
-
   const vote = (id, rating) => () => {
-    let pictureInput = { id, rating: rating + 1 }
-    let setInput = {
-      id: picturesSetData.id,
-      appearedForRanking: picturesSetData.appearedForRanking + 1
-    }
+    let pictureUpdate = API.graphql(operation(updatePicture, {
+      input: {
+        id,
+        rating: rating + 1
+      }
+    }))
 
-    let pictureUpdate = API.graphql(operation(updatePicture, { input: pictureInput }))
-    let setUpdate = API.graphql(operation(updateSet, { input: setInput }))
+    let setUpdate = API.graphql(operation(updateSet, {
+      input: {
+        id: picturesSetData.id,
+        appearedForRanking: picturesSetData.appearedForRanking + 1
+      }
+    }))
 
-    Promise.all([pictureUpdate, setUpdate]).then(() => {
+    let userUpdate = API.graphql(operation(updateUser, {
+      input: {
+        id: activeUser.sub,
+        points: points + 1
+      }
+    }))
+
+
+    Promise.all([pictureUpdate, setUpdate, userUpdate]).then(() => {
       setLoading(true)
       setPicturesSetData(null)
       setPictures([])
+      updatePoints(points + 1)
       getPictureSet()
     })
   }
@@ -106,15 +145,22 @@ function Rate ({ user }) {
 
   return (
     <>
-      <Grid container spacing={4}>
+      {!loading && <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
-          <Typography variant="h4">
-            Choose your favorite picture
+          <Typography variant="h5" className={c.pageTitle}>
+            {I18n.get(`rate_title_${activeUser.gender}`)}
+          </Typography>
+          <Typography variant="h6" className={c.ratedUser}>
+            <span className={c.ratedUserName}>{ratedUser.name}</span>&nbsp;
+            <span className={c.ratedUserAge}>{ratedUser.age}</span>
           </Typography>
         </Grid>
-        {!loading && pictures.map((picture, index) => (
+        {pictures.map((picture, index) => (
           <Grid item key={index} xs={6}>
-            <Card>
+            <Card
+              className={c.card}
+              onClick={vote(picture.id, picture.rating)}
+            >
               <CardMedia
                 className={c.media}
                 image={picture.pictureURL}
@@ -132,7 +178,7 @@ function Rate ({ user }) {
             </Card>
           </Grid>
         ))}
-      </Grid>
+      </Grid>}
     </>
   )
 }

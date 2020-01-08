@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useReducer } from 'react'
-import { API, graphqlOperation as operation, Storage } from 'aws-amplify'
+import { API, graphqlOperation as operation, Storage, I18n } from 'aws-amplify'
 import { createPicture, createSet } from '../graphql/mutations'
 import { makeStyles } from '@material-ui/core'
 import config from '../aws-exports'
-import PictureUpload from './PictureUpload'
 import history from '../Helpers/history'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { useTheme } from '@material-ui/core/styles'
+import PictureUpload from './PictureUpload'
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import SyncIcon from '@material-ui/icons/Sync'
+
 
 
 const {
@@ -37,19 +40,19 @@ function reducer (state, action) {
 
 
 const useStyles = makeStyles(theme => ({
-  '@keyframes rotating': {
-    from: {transform: 'rotate(0deg)'},
-    to: {transform: 'rotate(360deg)'}
+  pageTitle: {
+    marginBottom: theme.spacing(2),
+    textAlign: 'center'
   },
   uploadingIcon: {
     marginRight: theme.spacing(1),
-    animation: '$rotating 2s linear infinite'
+    animation: 'rotating 2s linear infinite'
   },
   buttonGridItem: {
     display: 'flex'
   },
   button: {
-    margin: [theme.spacing(2), 'auto', 0],
+    margin: [theme.spacing(3), 'auto', 0],
   },
   icon: {
     marginRight: theme.spacing(1),
@@ -63,10 +66,14 @@ function SetUpload ({ user }) {
   const [uploadReady, setUploadReady] = useState(false)
   const [uploading, setUploading] = useState(false)
   const c = useStyles()
+  const theme = useTheme()
+  const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
 
 
   useEffect(() => {
-    setUploadReady(state.files.every(file => file))
+    let files = state.files.reduce((sum, file) => file ? ++sum : sum, 0)
+
+    setUploadReady(files > 1)
   }, [state])
 
   const uploadFileData = fileIndex => fileData => {
@@ -106,16 +113,17 @@ function SetUpload ({ user }) {
     setUploading(true)
 
     let input = {
-      id: user.sub,
-      type:user.gender,
-      appearedForRanking: 0
+      user: user.sub,
+      type: user.gender,
+      appearedForRanking: 0,
+      active: true
     }
 
     const pictureSet = await API.graphql(operation(createSet, { input }))
     const setId = pictureSet.data.createSet.id
 
     let allFileUploadPromises = state.files.map(file =>
-      saveFile(file.file, file.fileName, setId)
+      file && saveFile(file.file, file.fileName, setId)
     )
 
     await Promise.all(allFileUploadPromises)
@@ -125,37 +133,36 @@ function SetUpload ({ user }) {
 
 
   return (
-    <>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Typography variant="h4">
-            Upload a new picture set
-          </Typography>
-        </Grid>
-        {state.files.map((file, index) => (
-          <PictureUpload
-            key={index}
-            file={file}
-            uploadFileData={uploadFileData(index)}
-          />
-        ))}
-        <Grid item xs={12} className={c.buttonGridItem}>
-          <Fab
-            variant="extended"
-            color="secondary"
-            className={c.button}
-            disabled={!uploadReady}
-            onClick={createPictureSet}
-          >
-            {uploading ?
-              (<SyncIcon className={c.uploadingIcon}/>) :
-              (<CloudUploadIcon className={c.icon}/>)
-            }
-            Upload Set
-          </Fab>
-        </Grid>
+    <Grid container spacing={desktopDisplay ? 3 : 1}>
+      <Grid item xs={12}>
+        <Typography variant="h5" className={c.pageTitle}>
+          {I18n.get(`user_upload_title_${user.gender}`)}
+        </Typography>
       </Grid>
-    </>
+      {state.files.map((file, index) => (
+        <PictureUpload
+          index={index}
+          key={index}
+          file={file}
+          uploadFileData={uploadFileData(index)}
+        />
+      ))}
+      <Grid item xs={12} className={c.buttonGridItem}>
+        <Fab
+          variant="extended"
+          color="secondary"
+          className={c.button}
+          disabled={!uploadReady}
+          onClick={createPictureSet}
+        >
+          {I18n.get('user_upload_button')}
+          {uploading ?
+            (<SyncIcon className={c.uploadingIcon}/>) :
+            (<CloudUploadIcon className={c.icon}/>)
+          }
+        </Fab>
+      </Grid>
+    </Grid>
   )
 }
 

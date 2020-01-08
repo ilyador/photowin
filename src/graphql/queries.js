@@ -5,6 +5,8 @@ export const getSet = `query GetSet($id: ID!) {
   getSet(id: $id) {
     id
     type
+    user
+    active
     appearedForRanking
     pictures {
       items {
@@ -18,14 +20,18 @@ export const getSet = `query GetSet($id: ID!) {
     }
   }
 }
-`;
+`
 export const listSets = `query ListSets($filter: ModelSetFilterInput, $limit: Int, $nextToken: String) {
   listSets(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      type
+      user
+      active
       appearedForRanking
       pictures {
         items {
+          id
           file {
             key
           }
@@ -37,7 +43,7 @@ export const listSets = `query ListSets($filter: ModelSetFilterInput, $limit: In
     nextToken
   }
 }
-`;
+`
 export const getPicture = `query GetPicture($id: ID!) {
   getPicture(id: $id) {
     id
@@ -49,7 +55,7 @@ export const getPicture = `query GetPicture($id: ID!) {
     rating
   }
 }
-`;
+`
 export const listPictures = `query ListPictures(
   $filter: ModelPictureFilterInput
   $limit: Int
@@ -68,7 +74,32 @@ export const listPictures = `query ListPictures(
     nextToken
   }
 }
-`;
+`
+export const getUser = `query GetUser($id: ID!) {
+  getUser(id: $id) {
+    id
+    name
+    age
+    points
+  }
+}
+`
+export const listUsers = `query ListUsers(
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      age
+      points
+    }
+    nextToken
+  }
+}
+`
 export const getByAppeared = `query GetByAppeared(
   $type: String
   $appearedForRanking: ModelIntKeyConditionInput
@@ -87,6 +118,9 @@ export const getByAppeared = `query GetByAppeared(
   ) {
     items {
       id
+      type
+      user
+      active
       appearedForRanking
       pictures {
         items {
@@ -102,4 +136,4 @@ export const getByAppeared = `query GetByAppeared(
     nextToken
   }
 }
-`;
+`

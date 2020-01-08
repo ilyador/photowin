@@ -5,6 +5,8 @@ export const onCreateSet = `subscription OnCreateSet {
   onCreateSet {
     id
     type
+    user
+    active
     appearedForRanking
     pictures {
       items {
@@ -20,6 +22,8 @@ export const onUpdateSet = `subscription OnUpdateSet {
   onUpdateSet {
     id
     type
+    user
+    active
     appearedForRanking
     pictures {
       items {
@@ -35,6 +39,8 @@ export const onDeleteSet = `subscription OnDeleteSet {
   onDeleteSet {
     id
     type
+    user
+    active
     appearedForRanking
     pictures {
       items {
@@ -79,6 +85,33 @@ export const onDeletePicture = `subscription OnDeletePicture {
       region
     }
     rating
+  }
+}
+`;
+export const onCreateUser = `subscription OnCreateUser {
+  onCreateUser {
+    id
+    name
+    age
+    points
+  }
+}
+`;
+export const onUpdateUser = `subscription OnUpdateUser {
+  onUpdateUser {
+    id
+    name
+    age
+    points
+  }
+}
+`;
+export const onDeleteUser = `subscription OnDeleteUser {
+  onDeleteUser {
+    id
+    name
+    age
+    points
   }
 }
 `;

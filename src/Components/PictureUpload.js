@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import uuid from 'uuid/v4'
+import loadImage from 'blueimp-load-image'
 import { makeStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
 import Card from '@material-ui/core/Card'
@@ -26,22 +27,25 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     height: 0,
-    paddingTop: '100%'
+    paddingTop: '120%'
   },
   actions: {
     justifyContent: 'center',
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(1),
+    [theme.breakpoints.up('sm')]: { marginBottom: theme.spacing(3) }
+
   },
   addPicture: {
-    marginTop: -34
+    margin: 0,
+    [theme.breakpoints.up('sm')]: { marginTop: -34 }
   }
 }))
 
 
-function PictureUpload ({ uploadFileData, file }) {
+function PictureUpload ({ uploadFileData, file, index }) {
   const [fileUrl, setFileUrl] = useState(null)
   const c = useStyles()
-  const inputEl = React.useRef(null)
+
 
   useEffect(() => {
     if (!file) setFileUrl(null)
@@ -52,21 +56,27 @@ function PictureUpload ({ uploadFileData, file }) {
     let _file = event.target.files[0]
     if (!_file) return
 
-    let _fileName = uuid() + '.' + _file.name.split('.').pop()
-    let _fileUrl = URL.createObjectURL(_file)
+    let _fileExt = _file.name.split('.').pop()
+    let _fileName = uuid() + '.' + _fileExt
 
-    setFileUrl(_fileUrl)
+    loadImage(_file, canvas => {
+      canvas.toBlob(blob => {
+        let _fileUrl = URL.createObjectURL(blob)
+        setFileUrl(_fileUrl)
+        let file = new File([blob], _fileName, { type: blob.type })
 
-    uploadFileData({
-      file: _file,
-      fileName: _fileName,
-      fileUrl: _fileUrl
+        uploadFileData({
+          file: file,
+          fileName: _fileName,
+          fileUrl: _fileUrl
+        })
+      }, 'image/jpeg', 1)
+
+    }, {
+      orientation: true,
+      maxWidth: 600
     })
   }
-
-
-  const onButtonClick = () => { inputEl.current.click() }
-
 
 
   return (
@@ -75,27 +85,23 @@ function PictureUpload ({ uploadFileData, file }) {
         <CardMedia
           className={c.media}
           image={fileUrl}
-          title="Image title"
         />
         <CardActions className={c.actions}>
           <input
-            id='upload-file'
+            id={`upload-file-${index}`}
             className={c.fileInput}
             type='file'
-            accept='.jpg,.jpeg,.png'
+            accept='image/*'
             onChange={handleChange}
-            ref={inputEl}
           />
-
-          <label htmlFor="upload-file">
-            <Fab
-              onClick={onButtonClick}
-              color="default"
-              className={c.addPicture}
-            >
-              <AddIcon/>
-            </Fab>
-          </label>
+          <Fab
+            component='label'
+            htmlFor={`upload-file-${index}`}
+            color="default"
+            className={c.addPicture}
+          >
+            <AddIcon/>
+          </Fab>
         </CardActions>
       </Card>
     </Grid>

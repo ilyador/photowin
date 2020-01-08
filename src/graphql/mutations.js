@@ -5,6 +5,8 @@ export const createSet = `mutation CreateSet($input: CreateSetInput!) {
   createSet(input: $input) {
     id
     type
+    user
+    active
     appearedForRanking
     pictures {
       items {
@@ -20,6 +22,8 @@ export const updateSet = `mutation UpdateSet($input: UpdateSetInput!) {
   updateSet(input: $input) {
     id
     type
+    user
+    active
     appearedForRanking
     pictures {
       items {
@@ -35,6 +39,8 @@ export const deleteSet = `mutation DeleteSet($input: DeleteSetInput!) {
   deleteSet(input: $input) {
     id
     type
+    user
+    active
     appearedForRanking
     pictures {
       items {
@@ -79,6 +85,33 @@ export const deletePicture = `mutation DeletePicture($input: DeletePictureInput!
       region
     }
     rating
+  }
+}
+`;
+export const createUser = `mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    id
+    name
+    age
+    points
+  }
+}
+`;
+export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    id
+    name
+    age
+    points
+  }
+}
+`;
+export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
+  deleteUser(input: $input) {
+    id
+    name
+    age
+    points
   }
 }
 `;
