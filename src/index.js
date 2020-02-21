@@ -42,11 +42,11 @@ Amplify.configure(config)
 const Main = () => (
   <StylesProvider jss={jss}>
     <ThemeProvider theme={theme}>
-      <CssBaseline/>
-      <App/>
+      <CssBaseline />
+      <App />
     </ThemeProvider>
   </StylesProvider>
 )
 
-ReactDOM.render(<Main/>, document.getElementById('root'))
+ReactDOM.render(<Main />, document.getElementById('root'))
 serviceWorker.unregister()

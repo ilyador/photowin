@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { Auth, I18n } from 'aws-amplify'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
@@ -13,7 +14,6 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import Badge from '@material-ui/core/Badge'
 import AccountCircle from '@material-ui/icons/AccountCircle'
-import history from '../Helpers/history'
 
 
 
@@ -44,9 +44,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function Layout ({ updateUserState, points, component: Component, match, ...rest }) {
+function Layout({ updateUserState, points, component: Component, match, ...rest }) {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const isMenuOpen = Boolean(anchorEl)
+  const history = useHistory()
   const c = useStyles()
 
   const handleLogOut = () => {
@@ -109,7 +110,7 @@ function Layout ({ updateUserState, points, component: Component, match, ...rest
     <>
       <AppBar position="static">
         <Toolbar className={c.ltr}>
-          <CameraIcon className={c.icon}/>
+          <CameraIcon className={c.icon} />
           <Typography variant="h6" className={c.title}>
             PhotoWin
           </Typography>
@@ -130,7 +131,7 @@ function Layout ({ updateUserState, points, component: Component, match, ...rest
             color="inherit"
           >
             <Badge className={c.margin} badgeContent={points} color="secondary">
-              <AccountCircle/>
+              <AccountCircle />
             </Badge>
           </IconButton>
         </Toolbar>

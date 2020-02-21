@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useReducer } from 'react'
 import { API, graphqlOperation as operation, Storage, I18n } from 'aws-amplify'
+import { useHistory } from 'react-router-dom'
 import { createPicture, createSet } from '../graphql/mutations'
 import { makeStyles } from '@material-ui/core'
 import config from '../aws-exports'
-import history from '../Helpers/history'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { useTheme } from '@material-ui/core/styles'
 import PictureUpload from './PictureUpload'
@@ -25,7 +25,7 @@ const initialState = {
 }
 
 
-function reducer (state, action) {
+function reducer(state, action) {
   switch (action.type) {
     case 'SET_FILE':
       let newFiles = [...state.files]
@@ -61,13 +61,14 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function SetUpload ({ user }) {
+function SetUpload({ user }) {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [uploadReady, setUploadReady] = useState(false)
   const [uploading, setUploading] = useState(false)
   const c = useStyles()
   const theme = useTheme()
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
+  const history = useHistory()
 
 
   useEffect(() => {
@@ -108,7 +109,7 @@ function SetUpload ({ user }) {
   }
 
 
-  async function createPictureSet () {
+  async function createPictureSet() {
     setUploadReady(false)
     setUploading(true)
 
@@ -157,8 +158,8 @@ function SetUpload ({ user }) {
         >
           {I18n.get('user_upload_button')}
           {uploading ?
-            (<SyncIcon className={c.uploadingIcon}/>) :
-            (<CloudUploadIcon className={c.icon}/>)
+            (<SyncIcon className={c.uploadingIcon} />) :
+            (<CloudUploadIcon className={c.icon} />)
           }
         </Fab>
       </Grid>

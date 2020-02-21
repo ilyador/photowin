@@ -191,10 +191,17 @@ function Login ({ updateUserState, location }) {
   }
 
 
-  const goToLogin = () => {setSignUpStep(0)}
-  const goToSignup1 = () => {setSignUpStep(1)}
+  const goToLogin = () => {
+    setLoginError(null)
+    setSignUpStep(0)
+  }
+  const goToSignup1 = () => {
+    setLoginError(null)
+    setSignUpStep(1)
+  }
   const goToSignup2 = event => {
     event.preventDefault()
+    setLoginError(null)
     setSignUpStep(2)
   }
   const goToVerify = () => {

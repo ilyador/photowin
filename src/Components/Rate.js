@@ -75,38 +75,42 @@ function Rate ({ user: activeUser, points, updatePoints }) {
 
 
   async function getPictureSet () {
-    let data = await API.graphql(operation(getByAppeared, {
-      type: getGender(activeUser),
-      sortDirection: 'DESC',
-      limit: 100,
-      filter: { active: { eq: true } }
-    }))
+    try {
+      let data = await API.graphql(operation(getByAppeared, {
+        type: getGender(activeUser),
+        sortDirection: 'DESC',
+        limit: 100,
+        filter: { active: { eq: true } }
+      }))
 
 
-    let userSets = data.data.getByAppeared.items
-    let itemToRateIndex = random(userSets.length)
-    let { id, user, appearedForRanking } = userSets[itemToRateIndex]
-    let itemToRate = { id, user, appearedForRanking }
+      let userSets = data.data.getByAppeared.items
+      let itemToRateIndex = random(userSets.length)
+      let { id, user, appearedForRanking } = userSets[itemToRateIndex]
+      let itemToRate = { id, user, appearedForRanking }
 
-    let displayedUser = await API.graphql(operation(getUser, {
-      id: itemToRate.user
-    }))
+      let displayedUser = await API.graphql(operation(getUser, {
+        id: itemToRate.user
+      }))
 
-    let pics = userSets[itemToRateIndex].pictures.items
+      let pics = userSets[itemToRateIndex].pictures.items
 
-    if (pics.length > 2) pics.splice(random(3), 1)
+      if (pics.length > 2) pics.splice(random(3), 1)
 
-    let setWithURLsPromise = pics.map(async (item, index) => {
-      item.pictureURL = await Storage.get(pics[index].file.key)
-      return item
-    })
+      let setWithURLsPromise = pics.map(async (item, index) => {
+        item.pictureURL = await Storage.get(pics[index].file.key)
+        return item
+      })
 
-    let setWithURLs = await Promise.all(setWithURLsPromise)
+      let setWithURLs = await Promise.all(setWithURLsPromise)
 
-    setPictures(setWithURLs)
-    setPicturesSetData(itemToRate)
-    setRatedUser(displayedUser.data.getUser)
-    setLoading(false)
+      setPictures(setWithURLs)
+      setPicturesSetData(itemToRate)
+      setRatedUser(displayedUser.data.getUser)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 
