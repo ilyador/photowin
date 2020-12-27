@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import loadImage from 'blueimp-load-image'
 import { makeStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function PictureUpload ({ uploadFileData, file, index }) {
+export default function PictureUpload ({ uploadFileData, file, index }) {
   const [fileUrl, setFileUrl] = useState(null)
   const c = useStyles()
 
@@ -53,29 +53,40 @@ function PictureUpload ({ uploadFileData, file, index }) {
 
 
   const handleChange = event => {
-    let _file = event.target.files[0]
+    const _file = event.target.files[0]
     if (!_file) return
 
-    let _fileExt = _file.name.split('.').pop()
-    let _fileName = uuid() + '.' + _fileExt
+    const fileExt = _file.name.split('.').pop()
+    const fileName = uuid() + '.' + fileExt
 
-    loadImage(_file, canvas => {
-      canvas.toBlob(blob => {
-        let _fileUrl = URL.createObjectURL(blob)
-        setFileUrl(_fileUrl)
-        let file = new File([blob], _fileName, { type: blob.type })
-
-        uploadFileData({
-          file: file,
-          fileName: _fileName,
-          fileUrl: _fileUrl
-        })
-      }, 'image/jpeg', 1)
-
-    }, {
-      orientation: true,
-      maxWidth: 600
+    loadImage(_file, {
+      meta: true,
+      canvas: true,
+      maxWidth: 600,
+      orientation: true
     })
+      .then((data) => {
+        if (!data.imageHead) throw new Error('Could not parse image metadata')
+
+        return new Promise(resolve => {
+          data.image.toBlob(blob => {
+            data.blob = blob
+            resolve(data)
+          }, 'image/jpeg')
+        })
+      })
+      .then(data => {
+        return loadImage.replaceHead(data.blob, data.imageHead)
+      })
+      .then(blob => {
+        const _fileUrl = URL.createObjectURL(blob)
+        setFileUrl(_fileUrl)
+        const file = new File([blob], fileName, { type: blob.type })
+        uploadFileData({ file, fileName, fileUrl })
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
 
@@ -107,6 +118,3 @@ function PictureUpload ({ uploadFileData, file, index }) {
     </Grid>
   )
 }
-
-
-export default PictureUpload

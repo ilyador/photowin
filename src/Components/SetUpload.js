@@ -72,7 +72,7 @@ function SetUpload({ user }) {
 
 
   useEffect(() => {
-    let files = state.files.reduce((sum, file) => file ? ++sum : sum, 0)
+    const files = state.files.reduce((sum, file) => file ? ++sum : sum, 0)
 
     setUploadReady(files > 1)
   }, [state])
@@ -103,8 +103,8 @@ function SetUpload({ user }) {
       let gqlCall = API.graphql(operation(createPicture, { input }))
 
       Promise.all([storageCall, gqlCall])
-        .then(data => resolve(data))
-        .catch(error => reject(error))
+        .then(resolve)
+        .catch(reject)
     })
   }
 
@@ -113,7 +113,7 @@ function SetUpload({ user }) {
     setUploadReady(false)
     setUploading(true)
 
-    let input = {
+    const input = {
       user: user.sub,
       type: user.gender,
       appearedForRanking: 0,
@@ -123,7 +123,7 @@ function SetUpload({ user }) {
     const pictureSet = await API.graphql(operation(createSet, { input }))
     const setId = pictureSet.data.createSet.id
 
-    let allFileUploadPromises = state.files.map(file =>
+    const allFileUploadPromises = state.files.map(file =>
       file && saveFile(file.file, file.fileName, setId)
     )
 

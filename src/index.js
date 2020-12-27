@@ -2,21 +2,16 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './Components/App'
 import * as serviceWorker from './Helpers/serviceWorker'
-import Amplify from 'aws-amplify'
+import Amplify, { I18n } from 'aws-amplify'
 import config from './aws-exports'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { StylesProvider, ThemeProvider } from '@material-ui/styles'
+import { StylesProvider, ThemeProvider } from '@material-ui/core'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { jss } from 'react-jss'
-import { I18n } from 'aws-amplify'
 import { dictionary } from './Helpers/dictionary'
 
 I18n.putVocabularies(dictionary)
 I18n.setLanguage('he')
-
-
-const photWinBlue = '#4a6adb'
-const photWinYellow = '#fdb720'
 
 
 const theme = createMuiTheme({
@@ -31,7 +26,7 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: photWinBlue,
+      main: '#4a6adb',
     }
   }
 })

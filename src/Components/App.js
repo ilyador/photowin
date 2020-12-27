@@ -1,9 +1,9 @@
-import { makeStyles } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import { Auth } from 'aws-amplify'
+import { makeStyles } from '@material-ui/core'
+import { Auth, API, graphqlOperation as operation } from 'aws-amplify'
+import { getUser } from '../graphql/queries'
 import Routes from './Router'
 import SyncIcon from '@material-ui/icons/Sync'
-
 
 
 const useStyles = makeStyles({
@@ -22,39 +22,54 @@ const useStyles = makeStyles({
 })
 
 
-
-function App () {
+export default function App () {
   const [user, setUser] = useState(null)
   const [authenticating, setAuthenticating] = useState(true)
   const c = useStyles()
 
-
   useEffect(() => {
-    Auth.currentAuthenticatedUser()
-      .then(data => { setUser(data.attributes) })
-      .catch(error => { console.log(error) })
-      .finally(() => { setAuthenticating(false) })
+    _getUser()
+
+    async function _getUser() {
+      try {
+        const userResponse = await Auth.currentAuthenticatedUser()
+        let _user = userResponse.attributes
+
+        if (_user.sub) {
+          const query = { id: _user.sub }
+          const response = await API.graphql(operation(getUser, query))
+          _user.points = String(response.data.getUser.points)
+        }
+
+        setUser(_user)
+      }
+
+      catch (error) {
+        console.log(error)
+      }
+
+      finally {
+        setAuthenticating(false)
+      }
+    }
+
   }, [])
 
-  const updateUserState = async user => {
+  function updateUserState(user) {
     setUser(user)
   }
 
   return (
-    authenticating ? (
+    authenticating ?
       <div className={c.wrapper}>
         <div className={c.spinner}>
           <SyncIcon className={c.uploadingIcon}/>
         </div>
       </div>
-    ) : (
+    :
       <Routes
         user={user}
         updateUserState={updateUserState}
       />
-    )
   )
 }
-
-
-export default App

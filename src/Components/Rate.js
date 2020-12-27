@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import React, { useEffect, useState } from 'react'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
@@ -61,7 +60,7 @@ const getGender = (user) => {
 }
 
 
-function Rate ({ user: activeUser, points, updatePoints }) {
+function Rate ({ user: activeUser, updateUserState }) {
   const [loading, setLoading] = useState(true)
   const [picturesSetData, setPicturesSetData] = useState(null)
   const [ratedUser, setRatedUser] = useState(null)
@@ -70,13 +69,12 @@ function Rate ({ user: activeUser, points, updatePoints }) {
   const theme = useTheme()
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
 
-
   useEffect(() => { getPictureSet() }, [])
 
 
   async function getPictureSet () {
     try {
-      let data = await API.graphql(operation(getByAppeared, {
+      const data = await API.graphql(operation(getByAppeared, {
         type: getGender(activeUser),
         sortDirection: 'DESC',
         limit: 100,
@@ -84,29 +82,33 @@ function Rate ({ user: activeUser, points, updatePoints }) {
       }))
 
 
-      let userSets = data.data.getByAppeared.items
-      let itemToRateIndex = random(userSets.length)
-      let { id, user, appearedForRanking } = userSets[itemToRateIndex]
-      let itemToRate = { id, user, appearedForRanking }
+      const userSets = data.data.getByAppeared.items
+      const itemToRateIndex = random(userSets.length)
+      const { id, user, appearedForRanking } = userSets[itemToRateIndex]
+      const itemToRate = { id, user, appearedForRanking }
 
-      let displayedUser = await API.graphql(operation(getUser, {
+      const displayedUser = await API.graphql(operation(getUser, {
         id: itemToRate.user
       }))
 
-      let pics = userSets[itemToRateIndex].pictures.items
+      const userInfo = displayedUser.data.getUser
+
+      if (!userInfo) getPictureSet ()
+
+      const pics = userSets[itemToRateIndex].pictures.items
 
       if (pics.length > 2) pics.splice(random(3), 1)
 
-      let setWithURLsPromise = pics.map(async (item, index) => {
+      const setWithURLsPromise = pics.map(async (item, index) => {
         item.pictureURL = await Storage.get(pics[index].file.key)
         return item
       })
 
-      let setWithURLs = await Promise.all(setWithURLsPromise)
+      const setWithURLs = await Promise.all(setWithURLsPromise)
 
       setPictures(setWithURLs)
       setPicturesSetData(itemToRate)
-      setRatedUser(displayedUser.data.getUser)
+      setRatedUser(userInfo)
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -115,21 +117,23 @@ function Rate ({ user: activeUser, points, updatePoints }) {
 
 
   const vote = (id, rating) => () => {
-    let pictureUpdate = API.graphql(operation(updatePicture, {
+    const points = Number(activeUser.points)
+
+    const pictureUpdate = API.graphql(operation(updatePicture, {
       input: {
         id,
         rating: rating + 1
       }
     }))
 
-    let setUpdate = API.graphql(operation(updateSet, {
+    const setUpdate = API.graphql(operation(updateSet, {
       input: {
         id: picturesSetData.id,
         appearedForRanking: picturesSetData.appearedForRanking + 1
       }
     }))
 
-    let userUpdate = API.graphql(operation(updateUser, {
+    const userUpdate = API.graphql(operation(updateUser, {
       input: {
         id: activeUser.sub,
         points: points + 1
@@ -141,7 +145,7 @@ function Rate ({ user: activeUser, points, updatePoints }) {
       setLoading(true)
       setPicturesSetData(null)
       setPictures([])
-      updatePoints(points + 1)
+      updateUserState(oldUser => ({ ...oldUser, points: points + 1 }))
       getPictureSet()
     })
   }
@@ -149,7 +153,7 @@ function Rate ({ user: activeUser, points, updatePoints }) {
 
   return (
     <>
-      {!loading && <Grid container spacing={desktopDisplay ? 3 : 1}>
+      {(!loading && ratedUser) && <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
           <Typography variant="h5" className={c.pageTitle}>
             {I18n.get(`rate_title_${activeUser.gender}`)}

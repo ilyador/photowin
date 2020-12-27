@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import { API, graphqlOperation as operation } from 'aws-amplify'
 import { updateSet } from '../graphql/mutations'

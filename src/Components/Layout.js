@@ -1,5 +1,5 @@
-import React from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { cloneElement } from 'react'
+import { useLocation, useHistory } from 'react-router-dom'
 import { Auth, I18n } from 'aws-amplify'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
@@ -44,11 +44,13 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function Layout({ updateUserState, points, component: Component, match, ...rest }) {
+function Layout({ user, updateUserState, children }) {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const isMenuOpen = Boolean(anchorEl)
+  let { pathname } = useLocation()
   const history = useHistory()
   const c = useStyles()
+
 
   const handleLogOut = () => {
     Auth.signOut().then(() => { updateUserState(null) })
@@ -88,7 +90,7 @@ function Layout({ updateUserState, points, component: Component, match, ...rest 
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>
-        {I18n.get('my_points')}: {points}
+        {I18n.get('my_points')}: {user.points}
       </MenuItem>
       <MenuItem onClick={handleMyPictures}>
         {I18n.get('layout_my_pictures')}
@@ -118,9 +120,9 @@ function Layout({ updateUserState, points, component: Component, match, ...rest 
             className={c.link}
             color='inherit'
             component={Link}
-            to={(match.path !== '/user') ? '/user' : '/rate'}
+            to={(pathname !== '/user') ? '/user' : '/rate'}
           >
-            {(match.path !== '/user') ?
+            {(pathname !== '/user') ?
               I18n.get('layout_my_pictures') :
               I18n.get('layout_rate_pictures')
             }
@@ -130,7 +132,7 @@ function Layout({ updateUserState, points, component: Component, match, ...rest 
             onClick={handleProfileMenuOpen}
             color="inherit"
           >
-            <Badge className={c.margin} badgeContent={points} color="secondary">
+            <Badge className={c.margin} badgeContent={user.points} color="secondary">
               <AccountCircle />
             </Badge>
           </IconButton>
@@ -138,7 +140,7 @@ function Layout({ updateUserState, points, component: Component, match, ...rest 
       </AppBar>
       {renderMenu}
       <Container className={c.cardGrid} maxWidth="sm">
-        <Component points={points} {...rest} />
+        {cloneElement(children, { user, updateUserState })}
       </Container>
     </>
   )

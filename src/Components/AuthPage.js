@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from 'react'
 import { API, Auth, graphqlOperation as operation, I18n } from 'aws-amplify'
 import { createUser } from '../graphql/mutations'
@@ -56,7 +55,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function Login ({ updateUserState, location }) {
+function AuthPage ({ updateUserState, type }) {
   const c = useStyles()
   const [signUpStep, setSignUpStep] = useState(0)
   const [loginError, setLoginError] = useState(null)
@@ -74,7 +73,7 @@ function Login ({ updateUserState, location }) {
 
 
   useEffect(() => {
-    if (location.search === '?signup') setSignUpStep(1)
+    if (type === 'signup') setSignUpStep(1)
   }, [])
 
   const handleChange = event => {
@@ -184,7 +183,7 @@ function Login ({ updateUserState, location }) {
       id,
       name: form.given_name,
       age,
-      points: 0
+      points: "0"
     }
 
     API.graphql(operation(createUser, { input }))
@@ -543,4 +542,4 @@ function Login ({ updateUserState, location }) {
 }
 
 
-export default Login
+export default AuthPage

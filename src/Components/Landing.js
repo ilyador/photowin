@@ -84,7 +84,7 @@ function Landing () {
           <Typography variant="h6" className={c.appName}>
             PhotoWin
           </Typography>
-          <img src={logo} className={c.icon}/>
+          <img src={logo} className={c.icon} alt='PhotoWin'/>
         </Grid>
         <Grid item xs={12}>
           <Typography variant='h6' className={c.title}>
@@ -94,7 +94,7 @@ function Landing () {
       </Grid>
       <Grid container spacing={3} className={c.background}>
         <Grid item xs={5} className={c.rightItem}>
-          <img src={icon1} className={c.icon1}/>
+          <img src={icon1} alt='PhotoWin phase 1'/>
         </Grid>
         <Grid item xs={2} className={c.centerItem}>
           <Typography variant='h3' className={c.stepNumber}>1</Typography>
@@ -113,10 +113,10 @@ function Landing () {
           <Typography variant='h3' className={c.stepNumber}>2</Typography>
         </Grid>
         <Grid item xs={5} className={c.leftItem}>
-          <img src={icon2} className={c.icon2}/>
+          <img src={icon2} alt='PhotoWin phase 2'/>
         </Grid>
         <Grid item xs={5} className={c.rightItem}>
-          <img src={icon3} className={c.icon3}/>
+          <img src={icon3} alt='PhotoWin phase 3'/>
         </Grid>
         <Grid item xs={2} className={c.centerItem}>
           <Typography variant='h3' className={c.stepNumber}>3</Typography>
