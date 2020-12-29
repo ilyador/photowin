@@ -139,9 +139,9 @@ function Layout({ user, updateUserState, children }) {
         </Toolbar>
       </AppBar>
       {renderMenu}
-      <Container className={c.cardGrid} maxWidth="sm">
+      <div className={c.cardGrid}>
         {cloneElement(children, { user, updateUserState })}
-      </Container>
+      </div>
     </>
   )
 }

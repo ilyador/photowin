@@ -91,7 +91,7 @@ export default function PictureUpload ({ uploadFileData, file, index }) {
 
 
   return (
-    <Grid item xs={4}>
+    <Grid item xs={12} sm={4}>
       <Card>
         <CardMedia
           className={c.media}

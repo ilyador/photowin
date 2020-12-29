@@ -1,3 +1,4 @@
+import Container from '@material-ui/core/Container'
 import React, { useState, useEffect, useReducer } from 'react'
 import { API, graphqlOperation as operation, Storage, I18n } from 'aws-amplify'
 import { useHistory } from 'react-router-dom'
@@ -134,36 +135,38 @@ function SetUpload({ user }) {
 
 
   return (
-    <Grid container spacing={desktopDisplay ? 3 : 1}>
-      <Grid item xs={12}>
-        <Typography variant="h5" className={c.pageTitle}>
-          {I18n.get(`user_upload_title_${user.gender}`)}
-        </Typography>
+    <Container maxWidth="md">
+      <Grid container spacing={desktopDisplay ? 3 : 1}>
+        <Grid item xs={12}>
+          <Typography variant="h5" className={c.pageTitle}>
+            {I18n.get(`user_upload_title_${user.gender}`)}
+          </Typography>
+        </Grid>
+        {state.files.map((file, index) => (
+          <PictureUpload
+            index={index}
+            key={index}
+            file={file}
+            uploadFileData={uploadFileData(index)}
+          />
+        ))}
+        <Grid item xs={12} className={c.buttonGridItem}>
+          <Fab
+            variant="extended"
+            color="secondary"
+            className={c.button}
+            disabled={!uploadReady}
+            onClick={createPictureSet}
+          >
+            {I18n.get('user_upload_button')}
+            {uploading ?
+              (<SyncIcon className={c.uploadingIcon} />) :
+              (<CloudUploadIcon className={c.icon} />)
+            }
+          </Fab>
+        </Grid>
       </Grid>
-      {state.files.map((file, index) => (
-        <PictureUpload
-          index={index}
-          key={index}
-          file={file}
-          uploadFileData={uploadFileData(index)}
-        />
-      ))}
-      <Grid item xs={12} className={c.buttonGridItem}>
-        <Fab
-          variant="extended"
-          color="secondary"
-          className={c.button}
-          disabled={!uploadReady}
-          onClick={createPictureSet}
-        >
-          {I18n.get('user_upload_button')}
-          {uploading ?
-            (<SyncIcon className={c.uploadingIcon} />) :
-            (<CloudUploadIcon className={c.icon} />)
-          }
-        </Fab>
-      </Grid>
-    </Grid>
+    </Container>
   )
 }
 

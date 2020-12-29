@@ -1,3 +1,4 @@
+import Container from '@material-ui/core/Container'
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import React, { useEffect, useState } from 'react'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
@@ -152,7 +153,7 @@ function Rate ({ user: activeUser, updateUserState }) {
 
 
   return (
-    <>
+    <Container maxWidth="md">
       {(!loading && ratedUser) && <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
           <Typography variant="h5" className={c.pageTitle}>
@@ -187,7 +188,7 @@ function Rate ({ user: activeUser, updateUserState }) {
           </Grid>
         ))}
       </Grid>}
-    </>
+    </Container>
   )
 }
 

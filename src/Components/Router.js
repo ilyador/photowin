@@ -12,6 +12,7 @@ import Page404 from './Page404'
 import Rate from './Rate'
 import Layout from './Layout'
 import Gifts from './Gifts'
+import Edit from './Edit'
 
 
 const privatePages = [
@@ -24,6 +25,12 @@ const privatePages = [
   }, {
     path: '/gifts]',
     component: <Gifts/>
+  }, {
+    path: '/edit-men',
+    component: <Edit gender='men'/>
+  }, {
+    path: '/edit-women',
+    component: <Edit gender='women'/>
   }
 ]
 

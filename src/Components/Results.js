@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import Container from '@material-ui/core/Container'
 import React, { useEffect, useState } from 'react'
 import { I18n, Storage } from 'aws-amplify'
 import { makeStyles, useTheme } from '@material-ui/core'
@@ -85,7 +86,7 @@ function Results ({ user, userSet, changeActiveSet }) {
 
 
   return (
-    <>
+    <Container maxWidth="md">
       {deleteDialog}
       <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
@@ -116,7 +117,7 @@ function Results ({ user, userSet, changeActiveSet }) {
           </Fab>
         </Grid>
       </Grid>
-    </>
+    </Container>
   )
 }
 
