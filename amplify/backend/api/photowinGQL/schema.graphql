@@ -10,7 +10,7 @@ type Set
 	pictures: [Picture!]! @connection
 }
 
-type Picture {
+type Picture @model {
 	id: ID!
 	file: S3Object!
 	rating: Int
