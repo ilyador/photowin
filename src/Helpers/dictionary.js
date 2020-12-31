@@ -67,7 +67,7 @@ export const dictionary = {
     'edit_page_section_2_list_2_men': 'מתאים לגברים המעוניינים להתבלט באינסטגרם ופייסבוק ולצבור יותר עוקבים.',
     'edit_page_section_2_list_3_men': 'מתאים לגברים שמרגישים שהם לא פוטגנים.',
 
-    'edit_page_section_3_title_men': 'עם מה אני יוצא בסוף?',
+    'edit_page_section_3_title_men': 'לסיכום, מה אתה מקבל?',
     'edit_page_section_3_list_1_title_men': 'תמונות ערוכות ברמה מקצועית מוכנות לשיגור',
     'edit_page_section_3_list_1_subtitle_men': 'ריטוש קמטים או פגמנטים ברמה מקצועית כך שתראה צעיר יותר, הבלטת עיניים וקווי לסת כך שתראה גברי יותר, ואפילו לשנות במקצת את המבט שלך כך שתראה מושך יותר.',
     'edit_page_section_3_list_2_title_men': 'אנשים ובמיוחד נשים לא יפסיקו להחמיא לך',
@@ -85,7 +85,7 @@ export const dictionary = {
     'edit_page_section_2_list_2_women': 'מתאים לנשים המעוניינות למשוך לחייהן  גברים שנראים הרבה יותר טוב.',
     'edit_page_section_2_list_3_women': 'מתאים לנשים שמרגישות שבחיים הן נראות הרבה יותר טוב מאשר בתמונות. ',
 
-    'edit_page_section_3_title_women': 'עם מה אני יוצאת בסוף?',
+    'edit_page_section_3_title_women': 'לסיכום, מה את מקבלת?',
     'edit_page_section_3_list_1_title_women': 'תמונות ערוכות ברמה מקצועית מוכנות לשיגור',
     'edit_page_section_3_list_1_subtitle_women': 'ריטוש קמטים ברמה מקצועית כך שתראי צעירה יותר, הבלטת עיניים ועיבוי שיער כך שתראי נשית יותר, ואפילו לשנות במקצת את המבט שלך כך שתראי מושכת יותר.',
     'edit_page_section_3_list_2_title_women': 'אנשים ובמיוחד גברים לא יפסיקו להחמיא לך',

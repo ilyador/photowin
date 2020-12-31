@@ -85,14 +85,19 @@ const useStyles = makeStyles(theme => ({
   },
   benefitsText: {
     marginTop: theme.spacing(1),
+    fontSize: '1.05rem',
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '1.35em'
+    },
     [theme.breakpoints.up('lg')]: {
-      fontSize: '1.35em',
+      fontSize: '1.45em',
       marginTop: theme.spacing(2)
     }
   },
   benefitsListText: {
     [theme.breakpoints.down('xs')]: {
-      fontSize: '1em'
+      fontSize: '1.05rem',
+      paddingTop: 6
     },
     [theme.breakpoints.up('sm')]: {
       fontSize: '1.35em'
