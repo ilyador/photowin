@@ -103,6 +103,9 @@ const useStyles = makeStyles(theme => ({
   },
   disclaimer: {
     marginTop: theme.spacing(1)
+  },
+  bottomFeature: {
+    marginBottom: theme.spacing(6)
   }
 }))
 
@@ -237,7 +240,7 @@ export default function Edit ({ gender }) {
         <Typography variant={headerSizes.benefits} align='center' className={c.benefitsTitle}>
           {I18n.get(`edit_page_section_3_title_${gender}`)}
         </Typography>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} className={c.bottomFeature}>
           {[1, 2].map((item) => (
             <Grid key={item} item xs={12} sm={6}>
               <Paper elevation={1} className={c.benefitsItems}>
