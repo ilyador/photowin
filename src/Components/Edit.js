@@ -11,9 +11,10 @@ import Container from '@material-ui/core/Container'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import FolderIcon from '@material-ui/icons/Folder'
+import Avatar from '@material-ui/core/Avatar'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import TelegramIcon from '@material-ui/icons/Telegram'
+import markIcon from '../content/mark.png'
 
 
 const images = {}
@@ -58,12 +59,16 @@ const useStyles = makeStyles(theme => ({
   telegramIcon: {
     marginRight: theme.spacing(1)
   },
+  photoComparisonGrid: {
+    margin: theme.spacing(2, 0)
+  },
   beforeAfter: {
     fontWeight: 600
   },
   compareImage: {
     width: '100%',
-    display: 'block'
+    display: 'block',
+    borderRadius: theme.shape.borderRadius
   },
   listItems: {
     textAlign: 'right'
@@ -74,6 +79,9 @@ const useStyles = makeStyles(theme => ({
   },
   benefitsTitle: {
     marginBottom: theme.spacing(3)
+  },
+  avatarImg: {
+    height: 'auto'
   },
   benefitsText: {
     marginTop: theme.spacing(1),
@@ -99,7 +107,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-export default function ({ gender }) {
+export default function Edit ({ gender }) {
 
   const theme = useTheme()
   const breakpointUpLg = useMediaQuery(theme.breakpoints.up('lg'))
@@ -180,9 +188,14 @@ export default function ({ gender }) {
           {I18n.get(`edit_page_section_2_title_${gender}`)}
         </Typography>
         {[0, 1, 2, 3].map((item) => (
-          <Grid key={item} container spacing={breakpointDownSm ? 1 : 3}>
+          <Grid
+            container
+            spacing={breakpointDownSm ? 1 : 3}
+            className={c.photoComparisonGrid}
+            key={item}
+          >
             {['before', 'after'].map((edited) => (
-              <Grid key={edited} item xs={6}>
+              <Grid item xs={6} key={edited}>
                 {(item === 0) ? (
                   <Typography variant='h5' align='center' className={c.beforeAfter}>
                     {I18n.get(edited)}
@@ -207,9 +220,9 @@ export default function ({ gender }) {
         <List>
           {[1, 2, 3].map((item) => (
             <ListItem className={c.listItems} key={item}>
-              <ListItemIcon>
-                <FolderIcon fontSize='large'/>
-              </ListItemIcon>
+              <ListItemAvatar>
+                <Avatar classes={{img: c.avatarImg}} variant='square' alt={'item ' + item} src={markIcon} />
+              </ListItemAvatar>
               <ListItemText
                 classes={{ primary: c.benefitsListText }}
                 primary={I18n.get(`edit_page_section_2_list_${item}_${gender}`)}
