@@ -84,13 +84,13 @@ const useStyles = makeStyles(theme => ({
   },
   benefitsListText: {
     [theme.breakpoints.down('xs')]: {
-      fontSize: '1em',
+      fontSize: '1em'
     },
     [theme.breakpoints.up('sm')]: {
-      fontSize: '1.35em',
+      fontSize: '1.35em'
     },
     [theme.breakpoints.up('lg')]: {
-      fontSize: '1.65em',
+      fontSize: '1.65em'
     }
   },
   disclaimer: {
@@ -181,29 +181,23 @@ export default function ({ gender }) {
         </Typography>
         {[0, 1, 2, 3].map((item) => (
           <Grid key={item} container spacing={breakpointDownSm ? 1 : 3}>
-            {['before', 'after'].map((edited) => {
-              if (item === 0) {
-                return (
-                  <Grid item xs={6}>
-                    <Typography variant='h5' align='center' className={c.beforeAfter}>
-                      {I18n.get(edited)}
-                    </Typography>
-                  </Grid>
-                )
-              } else {
-                return (
-                  <Grid item xs={6}>
-                    <Paper elevation={1}>
-                      <img
-                        className={c.compareImage}
-                        src={images[`${gender}/${edited}/${item}`].default}
-                        alt={`compare ${gender} ${item}`}
-                      />
-                    </Paper>
-                  </Grid>
-                )
-              }
-            })}
+            {['before', 'after'].map((edited) => (
+              <Grid key={edited} item xs={6}>
+                {(item === 0) ? (
+                  <Typography variant='h5' align='center' className={c.beforeAfter}>
+                    {I18n.get(edited)}
+                  </Typography>
+                ) : (
+                  <Paper elevation={1}>
+                    <img
+                      className={c.compareImage}
+                      src={images[`${gender}/${edited}/${item}`].default}
+                      alt={`compare ${gender} ${item}`}
+                    />
+                  </Paper>
+                )}
+              </Grid>
+            ))}
           </Grid>
         ))}
       </Container>

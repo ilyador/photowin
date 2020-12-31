@@ -76,7 +76,7 @@ export const dictionary = {
     'edit_page_action_men': 'העלה 3 תמונות לערוץ הטלגרם של Photowin',
 
 
-    'edit_page_section_1_title_women': 'את מרגישה שבחיים את נראת הרבה יותר טוב מאשר בתמונות?\n',
+    'edit_page_section_1_title_women': 'מרגישה שבחיים את נראת הרבה יותר טוב מאשר בתמונות?',
     'edit_page_section_1_subtitle_1_women': 'אנחנו ניצור את התמונה המושלמת עבורך!',
     'edit_page_section_1_subtitle_2_women': 'עריכת 3 תמונות ברמה מקצועית ב 20 ש"ח בלבד',
 
@@ -93,7 +93,7 @@ export const dictionary = {
 
     'edit_page_action_women': 'העלי 3 תמונות לערוץ הטלגרם האנונימי של Photowin',
 
-    'edit_page_disclaimer': 'אנו מתחייבים שהתמונות נועדו אך רק לעריכה',
+    'edit_page_disclaimer': 'התמונות נועדו לעריכה בלבד, ולא יגיעו לשום גורם אחר!',
     'before': 'לפני',
     'after': 'אחרי',
   }
