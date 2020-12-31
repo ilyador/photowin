@@ -58,6 +58,9 @@ const useStyles = makeStyles(theme => ({
   telegramIcon: {
     marginRight: theme.spacing(1)
   },
+  beforeAfter: {
+    fontWeight: 600
+  },
   compareImage: {
     width: '100%',
     display: 'block'
@@ -176,19 +179,31 @@ export default function ({ gender }) {
         <Typography variant={headerSizes.secondary} align='center' className={c.benefitsTitle}>
           {I18n.get(`edit_page_section_2_title_${gender}`)}
         </Typography>
-        {[1, 2, 3].map((item) => (
+        {[0, 1, 2, 3].map((item) => (
           <Grid key={item} container spacing={breakpointDownSm ? 1 : 3}>
-            {['before', 'after'].map((edited) => (
-              <Grid item xs={6}>
-                <Paper elevation={1}>
-                  <img
-                    className={c.compareImage}
-                    src={images[`${gender}/${edited}/${item}`].default}
-                    alt={`compare ${gender} ${item}`}
-                  />
-                </Paper>
-              </Grid>
-            ))}
+            {['before', 'after'].map((edited) => {
+              if (item === 0) {
+                return (
+                  <Grid item xs={6}>
+                    <Typography variant='h5' align='center' className={c.beforeAfter}>
+                      {I18n.get(edited)}
+                    </Typography>
+                  </Grid>
+                )
+              } else {
+                return (
+                  <Grid item xs={6}>
+                    <Paper elevation={1}>
+                      <img
+                        className={c.compareImage}
+                        src={images[`${gender}/${edited}/${item}`].default}
+                        alt={`compare ${gender} ${item}`}
+                      />
+                    </Paper>
+                  </Grid>
+                )
+              }
+            })}
           </Grid>
         ))}
       </Container>

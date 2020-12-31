@@ -94,5 +94,7 @@ export const dictionary = {
     'edit_page_action_women': 'העלי 3 תמונות לערוץ הטלגרם האנונימי של Photowin',
 
     'edit_page_disclaimer': 'אנו מתחייבים שהתמונות נועדו אך רק לעריכה',
+    'before': 'לפני',
+    'after': 'אחרי',
   }
 }
