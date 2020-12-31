@@ -25,7 +25,7 @@ function importAll (collection, imported) {
   })
 }
 
-importAll(images, require.context('../content/photo-editing', true, /\.(png|jpe?g|JPG?G)$/))
+importAll(images, require.context('../content/compare', true, /\.(png|jpe?g)$/))
 
 
 const useStyles = makeStyles(theme => ({
