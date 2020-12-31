@@ -15,46 +15,17 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import FolderIcon from '@material-ui/icons/Folder'
 import TelegramIcon from '@material-ui/icons/Telegram'
 
-import menBefore1 from '../content/photo-editing/men/before/1.jpg'
-import menBefore2 from '../content/photo-editing/men/before/2.jpg'
-import menBefore3 from '../content/photo-editing/men/before/3.jpg'
-import menAfter1 from '../content/photo-editing/men/after/1.jpg'
-import menAfter2 from '../content/photo-editing/men/after/2.jpg'
-import menAfter3 from '../content/photo-editing/men/after/3.jpg'
-import womenBefore1 from '../content/photo-editing/women/before/1.jpg'
-import womenBefore2 from '../content/photo-editing/women/before/2.jpg'
-import womenBefore3 from '../content/photo-editing/women/before/3.jpg'
-import womenAfter1 from '../content/photo-editing/women/after/1.jpg'
-import womenAfter2 from '../content/photo-editing/women/after/2.jpg'
-import womenAfter3 from '../content/photo-editing/women/after/3.jpg'
 
+const images = {}
 
-const images = {
-  men: {
-    before: [
-      menBefore1,
-      menBefore2,
-      menBefore3,
-    ],
-    after: [
-      menAfter1,
-      menAfter2,
-      menAfter3
-    ]
-  },
-  women: {
-    before: [
-      womenBefore1,
-      womenBefore2,
-      womenBefore3,
-    ],
-    after: [
-      womenAfter1,
-      womenAfter2,
-      womenAfter3
-    ]
-  },
+function importAll (collection, imported) {
+  imported.keys().forEach(img => {
+    let key = img.substr(0, img.lastIndexOf('.')).replace('./', '')
+    collection[key] = imported(img)
+  })
 }
+
+importAll(images, require.context('../content/photo-editing', true, /\.(png|jpe?g|JPG?G)$/))
 
 
 const useStyles = makeStyles(theme => ({
@@ -205,14 +176,14 @@ export default function ({ gender }) {
         <Typography variant={headerSizes.secondary} align='center' className={c.benefitsTitle}>
           {I18n.get(`edit_page_section_2_title_${gender}`)}
         </Typography>
-        {[0, 1, 2].map((item) => (
+        {[1, 2, 3].map((item) => (
           <Grid key={item} container spacing={breakpointDownSm ? 1 : 3}>
             {['before', 'after'].map((edited) => (
-              <Grid key={edited} item xs={6}>
+              <Grid item xs={6}>
                 <Paper elevation={1}>
                   <img
                     className={c.compareImage}
-                    src={images[gender][edited][item]}
+                    src={images[`${gender}/${edited}/${item}`].default}
                     alt={`compare ${gender} ${item}`}
                   />
                 </Paper>
