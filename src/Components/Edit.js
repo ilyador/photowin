@@ -60,7 +60,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1)
   },
   photoComparisonGrid: {
-    margin: theme.spacing(2, 0)
+    marginBottom: theme.spacing(2)
   },
   beforeAfter: {
     fontWeight: 600
