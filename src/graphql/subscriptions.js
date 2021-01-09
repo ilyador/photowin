@@ -6,6 +6,7 @@ export const onCreateSet = `subscription OnCreateSet {
     id
     type
     user
+    genderToRate
     active
     appearedForRanking
     pictures {
@@ -23,6 +24,7 @@ export const onUpdateSet = `subscription OnUpdateSet {
     id
     type
     user
+    genderToRate
     active
     appearedForRanking
     pictures {
@@ -40,6 +42,7 @@ export const onDeleteSet = `subscription OnDeleteSet {
     id
     type
     user
+    genderToRate
     active
     appearedForRanking
     pictures {

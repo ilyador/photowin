@@ -1,11 +1,15 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createSet = `mutation CreateSet($input: CreateSetInput!) {
-  createSet(input: $input) {
+export const createSet = `mutation CreateSet(
+  $input: CreateSetInput!
+  $condition: ModelSetConditionInput
+) {
+  createSet(input: $input, condition: $condition) {
     id
     type
     user
+    genderToRate
     active
     appearedForRanking
     pictures {
@@ -18,11 +22,15 @@ export const createSet = `mutation CreateSet($input: CreateSetInput!) {
   }
 }
 `;
-export const updateSet = `mutation UpdateSet($input: UpdateSetInput!) {
-  updateSet(input: $input) {
+export const updateSet = `mutation UpdateSet(
+  $input: UpdateSetInput!
+  $condition: ModelSetConditionInput
+) {
+  updateSet(input: $input, condition: $condition) {
     id
     type
     user
+    genderToRate
     active
     appearedForRanking
     pictures {
@@ -35,11 +43,15 @@ export const updateSet = `mutation UpdateSet($input: UpdateSetInput!) {
   }
 }
 `;
-export const deleteSet = `mutation DeleteSet($input: DeleteSetInput!) {
-  deleteSet(input: $input) {
+export const deleteSet = `mutation DeleteSet(
+  $input: DeleteSetInput!
+  $condition: ModelSetConditionInput
+) {
+  deleteSet(input: $input, condition: $condition) {
     id
     type
     user
+    genderToRate
     active
     appearedForRanking
     pictures {
@@ -52,8 +64,11 @@ export const deleteSet = `mutation DeleteSet($input: DeleteSetInput!) {
   }
 }
 `;
-export const createPicture = `mutation CreatePicture($input: CreatePictureInput!) {
-  createPicture(input: $input) {
+export const createPicture = `mutation CreatePicture(
+  $input: CreatePictureInput!
+  $condition: ModelPictureConditionInput
+) {
+  createPicture(input: $input, condition: $condition) {
     id
     file {
       bucket
@@ -64,8 +79,11 @@ export const createPicture = `mutation CreatePicture($input: CreatePictureInput!
   }
 }
 `;
-export const updatePicture = `mutation UpdatePicture($input: UpdatePictureInput!) {
-  updatePicture(input: $input) {
+export const updatePicture = `mutation UpdatePicture(
+  $input: UpdatePictureInput!
+  $condition: ModelPictureConditionInput
+) {
+  updatePicture(input: $input, condition: $condition) {
     id
     file {
       bucket
@@ -76,8 +94,11 @@ export const updatePicture = `mutation UpdatePicture($input: UpdatePictureInput!
   }
 }
 `;
-export const deletePicture = `mutation DeletePicture($input: DeletePictureInput!) {
-  deletePicture(input: $input) {
+export const deletePicture = `mutation DeletePicture(
+  $input: DeletePictureInput!
+  $condition: ModelPictureConditionInput
+) {
+  deletePicture(input: $input, condition: $condition) {
     id
     file {
       bucket
@@ -88,8 +109,11 @@ export const deletePicture = `mutation DeletePicture($input: DeletePictureInput!
   }
 }
 `;
-export const createUser = `mutation CreateUser($input: CreateUserInput!) {
-  createUser(input: $input) {
+export const createUser = `mutation CreateUser(
+  $input: CreateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  createUser(input: $input, condition: $condition) {
     id
     name
     age
@@ -97,8 +121,11 @@ export const createUser = `mutation CreateUser($input: CreateUserInput!) {
   }
 }
 `;
-export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
-  updateUser(input: $input) {
+export const updateUser = `mutation UpdateUser(
+  $input: UpdateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  updateUser(input: $input, condition: $condition) {
     id
     name
     age
@@ -106,8 +133,11 @@ export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
   }
 }
 `;
-export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
-  deleteUser(input: $input) {
+export const deleteUser = `mutation DeleteUser(
+  $input: DeleteUserInput!
+  $condition: ModelUserConditionInput
+) {
+  deleteUser(input: $input, condition: $condition) {
     id
     name
     age

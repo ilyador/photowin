@@ -15,5 +15,23 @@
                 "photowinampdeva1cef837": {}
             }
         }
+    },
+    "pwdev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-photo-win-amp-dev-pwdev-211757-authRole",
+            "UnauthRoleArn": "arn:aws:iam::007140722602:role/amplify-photo-win-amp-dev-pwdev-211757-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::007140722602:role/amplify-photo-win-amp-dev-pwdev-211757-authRole",
+            "Region": "eu-central-1",
+            "DeploymentBucketName": "amplify-photo-win-amp-dev-pwdev-211757-deployment",
+            "UnauthRoleName": "amplify-photo-win-amp-dev-pwdev-211757-unauthRole",
+            "StackName": "amplify-photo-win-amp-dev-pwdev-211757",
+            "StackId": "arn:aws:cloudformation:eu-central-1:007140722602:stack/amplify-photo-win-amp-dev-pwdev-211757/26d9d2a0-52c0-11eb-ad18-022b8ad348f2",
+            "AmplifyAppId": "d3sx03ewm1lrxp"
+        },
+        "categories": {
+            "auth": {
+                "photowinampdeva1cef837": {}
+            }
+        }
     }
 }
