@@ -58,11 +58,10 @@ export const dictionary = {
     'gifts_title': 'בונוסים ומתנות',
     'gifts_get': 'כנס!',
 
-    'edit_page_section_1_title_men': 'מרגיש שאתה לא יוצא טוב בתמונות?',
-    'edit_page_section_1_subtitle_1_men': 'אנחנו ניצור את התמונה המושלמת עבורך!',
-    'edit_page_section_1_subtitle_2_men': 'עריכת 3 תמונות ברמה מקצועית ב 20 ש"ח בלבד ',
+    'edit_page_section_1_title_men': 'אתה נראה טוב במציאות, אבל התמונות שלך מקרינות משהו אחר? ',
+    'edit_page_section_1_subtitle_2_men': 'עריכת 3 תמונות ברמה מקצועית ב 20 ש"ח בלבד! ',
 
-    'edit_page_section_2_title_men': 'תצתרף לאלפי לקוחות שהפכו תמונות רגילות לתמונות מדהימות',
+    'edit_page_section_2_title_men': 'אתה יכול להראות בתמונות שלך הרבה יותר טוב, ואפילו מעולה',
     'edit_page_section_2_list_1_men': 'מתאים לגברים המעוניינים לשפר את התוצאות שלהם באפליקציות דייטינג.',
     'edit_page_section_2_list_2_men': 'מתאים לגברים המעוניינים להתבלט באינסטגרם ופייסבוק ולצבור יותר עוקבים.',
     'edit_page_section_2_list_3_men': 'מתאים לגברים שמרגישים שהם לא פוטגנים.',
@@ -77,10 +76,9 @@ export const dictionary = {
 
 
     'edit_page_section_1_title_women': 'מרגישה שבחיים את נראת הרבה יותר טוב מאשר בתמונות?',
-    'edit_page_section_1_subtitle_1_women': 'אנחנו ניצור את התמונה המושלמת עבורך!',
     'edit_page_section_1_subtitle_2_women': 'עריכת 3 תמונות ברמה מקצועית ב 20 ש"ח בלבד',
 
-    'edit_page_section_2_title_women': 'תצתרפי לאלפי לקוחות שהפכו תמונות רגילות לתמונות מדהימות',
+    'edit_page_section_2_title_women': 'את יכולה להראות בתמונות שלך הרבה יותר טוב, ואפילו מעולה',
     'edit_page_section_2_list_1_women': 'מתאים לנשים המעוניינות לשפר את הנראות שלהן ברשתות חברתיות.',
     'edit_page_section_2_list_2_women': 'מתאים לנשים המעוניינות למשוך לחייהן  גברים שנראים הרבה יותר טוב.',
     'edit_page_section_2_list_3_women': 'מתאים לנשים שמרגישות שבחיים הן נראות הרבה יותר טוב מאשר בתמונות. ',
@@ -93,7 +91,9 @@ export const dictionary = {
 
     'edit_page_action_women': 'העלי 3 תמונות לערוץ הטלגרם האנונימי של Photowin',
 
-    'edit_page_disclaimer': 'התמונות נועדו לעריכה בלבד, ולא יגיעו לשום גורם אחר!',
+
+    'edit_page_section_1_subtitle_1': 'אנחנו ניצור את התמונה המושלמת עבורך',
+    'edit_page_disclaimer': 'התמונות נועדו לעריכה בלבד, ולא יגיעו לשום גורם אחר',
     'before': 'לפני',
     'after': 'אחרי',
   }

@@ -182,7 +182,7 @@ export default function Edit ({ gender }) {
           {I18n.get(`edit_page_section_1_title_${gender}`)}
         </Typography>
         <Typography variant={headerSizes.subheader} align='center' color='textSecondary' paragraph>
-          {I18n.get(`edit_page_section_1_subtitle_1_${gender}`)}
+          {I18n.get(`edit_page_section_1_subtitle_1`)}
         </Typography>
         <Typography variant={headerSizes.secondary} align='center' color='textSecondary' paragraph>
           {I18n.get(`edit_page_section_1_subtitle_2_${gender}`)}
