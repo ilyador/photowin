@@ -33,10 +33,9 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     marginBottom: theme.spacing(1),
     [theme.breakpoints.up('sm')]: { marginBottom: theme.spacing(3) }
-
   },
   addPicture: {
-    margin: 0,
+    marginLeft: '0 !important',
     [theme.breakpoints.up('sm')]: { marginTop: -34 }
   }
 }))
@@ -91,7 +90,7 @@ export default function PictureUpload ({ uploadFileData, file, index }) {
 
 
   return (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={4}>
       <Card>
         <CardMedia
           className={c.media}

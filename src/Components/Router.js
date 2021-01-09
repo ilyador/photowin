@@ -23,7 +23,7 @@ const privatePages = [
     path: '/rate',
     component: <Rate/>
   }, {
-    path: '/gifts]',
+    path: '/gifts',
     component: <Gifts/>
   }, {
     path: '/edit-men',

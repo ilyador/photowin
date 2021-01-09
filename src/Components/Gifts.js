@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import Container from '@material-ui/core/Container'
 import React from 'react'
 import { I18n } from 'aws-amplify'
 import { makeStyles, useTheme } from '@material-ui/core'
@@ -87,48 +88,50 @@ function Results ({ user, points }) {
 
 
   return (
-    <Grid container spacing={desktopDisplay ? 4 : 2}>
-      <Grid item xs={12}>
-        <Typography variant="h5" className={c.pageTitle}>
-          {I18n.get('gifts_title')}
-        </Typography>
-      </Grid>
-      {gifts[user.gender].map((gift, index) => (
-        <Grid item key={index} xs={12}>
-          <Card className={c.card}>
-            <CardMedia
-              className={c.cover}
-              image={gift.image}
-              title='gift'
-            />
-            <div className={c.details}>
-              <CardContent className={c.content}>
-                <Typography gutterBottom variant={desktopDisplay ? 'h4' : 'h6'}>
-                  {gift.title}
-                </Typography>
-                <Typography>
-                  {I18n.get('gifts_points')}&nbsp;{gift.points}
-                </Typography>
-              </CardContent>
-              <div className={c.controls}>
-                <CardActions>
-                  <Button
-                    fullWidth
-                    size="large"
-                    color="secondary"
-                    disabled={points < gift.points}
-                    component={'a'}
-                    href={gift.url}
-                  >
-                    {I18n.get('gifts_get')}
-                  </Button>
-                </CardActions>
-              </div>
-            </div>
-          </Card>
+    <Container maxWidth="md">
+      <Grid container spacing={desktopDisplay ? 4 : 2}>
+        <Grid item xs={12}>
+          <Typography variant="h5" className={c.pageTitle}>
+            {I18n.get('gifts_title')}
+          </Typography>
         </Grid>
-      ))}
-    </Grid>
+        {gifts[user.gender].map((gift, index) => (
+          <Grid item key={index} xs={12} md={6}>
+            <Card className={c.card}>
+              <CardMedia
+                className={c.cover}
+                image={gift.image}
+                title='gift'
+              />
+              <div className={c.details}>
+                <CardContent className={c.content}>
+                  <Typography gutterBottom variant={desktopDisplay ? 'h4' : 'h6'}>
+                    {gift.title}
+                  </Typography>
+                  <Typography>
+                    {I18n.get('gifts_points')}&nbsp;{gift.points}
+                  </Typography>
+                </CardContent>
+                <div className={c.controls}>
+                  <CardActions>
+                    <Button
+                      fullWidth
+                      size="large"
+                      color="secondary"
+                      disabled={points < gift.points}
+                      component={'a'}
+                      href={gift.url}
+                    >
+                      {I18n.get('gifts_get')}
+                    </Button>
+                  </CardActions>
+                </div>
+              </div>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   )
 }
 
