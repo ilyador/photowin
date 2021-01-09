@@ -38,7 +38,7 @@ export default function App () {
         if (_user.sub) {
           const query = { id: _user.sub }
           const response = await API.graphql(operation(getUser, query))
-          _user.points = String(response.data.getUser.points)
+          _user.points = response.data.getUser.points
         }
 
         setUser(_user)

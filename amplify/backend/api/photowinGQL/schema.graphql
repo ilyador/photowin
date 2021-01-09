@@ -5,6 +5,7 @@ type Set
 	id: ID!
 	type: String!
 	user: String!
+	genderToRate: String!
 	active: Boolean!
 	appearedForRanking: Int!
 	pictures: [Picture!]! @connection

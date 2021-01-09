@@ -52,14 +52,6 @@ const useStyles = makeStyles(theme => ({
 
 const random = max => Math.floor(Math.random() * Math.floor(max))
 
-const getGender = (user) => {
-  const genders = ['male', 'female']
-
-  let gender = genders.indexOf(user.gender)
-  gender = 1 - gender
-  return genders[gender]
-}
-
 
 function Rate ({ user: activeUser, updateUserState }) {
   const [loading, setLoading] = useState(true)
@@ -76,7 +68,7 @@ function Rate ({ user: activeUser, updateUserState }) {
   async function getPictureSet () {
     try {
       const data = await API.graphql(operation(getByAppeared, {
-        type: getGender(activeUser),
+        type: activeUser.genderToRate,
         sortDirection: 'DESC',
         limit: 100,
         filter: { active: { eq: true } }

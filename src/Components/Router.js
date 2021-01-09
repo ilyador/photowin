@@ -26,10 +26,10 @@ const privatePages = [
     path: '/gifts',
     component: <Gifts/>
   }, {
-    path: '/edit-men',
+    path: '/edit-man',
     component: <Edit gender='men'/>
   }, {
-    path: '/edit-women',
+    path: '/edit-woman',
     component: <Edit gender='women'/>
   }
 ]

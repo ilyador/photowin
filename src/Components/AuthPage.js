@@ -68,8 +68,10 @@ function AuthPage ({ updateUserState, type }) {
     gender: 'none',
     birthdate: '2000-01-01',
     authenticationCode: '',
+    genderToRate: 'both'
   })
-  const inputLabel = useRef(null)
+  const inputLabel1 = useRef(null)
+  const inputLabel2 = useRef(null)
 
 
   useEffect(() => {
@@ -183,7 +185,7 @@ function AuthPage ({ updateUserState, type }) {
       id,
       name: form.given_name,
       age,
-      points: "0"
+      points: '0'
     }
 
     API.graphql(operation(createUser, { input }))
@@ -212,19 +214,19 @@ function AuthPage ({ updateUserState, type }) {
 
   const loginForm = (
     <>
-      <Typography variant="h3" className={c.title}>
+      <Typography variant='h3' className={c.title}>
         {I18n.get('login_title')}
       </Typography>
-      <Typography variant="h6" className={c.title}>
+      <Typography variant='h6' className={c.title}>
         {I18n.get('main_title')}
       </Typography>
       <Button
         onClick={goToSignup1}
         fullWidth
         className={c.signupLinkButton}
-        variant="contained"
-        color="primary"
-        size="large"
+        variant='contained'
+        color='primary'
+        size='large'
       >
         {I18n.get('form_not_signed')}
       </Button>
@@ -235,35 +237,35 @@ function AuthPage ({ updateUserState, type }) {
           required
           fullWidth
           label={I18n.get('form_email')}
-          name="email"
+          name='email'
           value={form.email}
           onChange={handleChange}
-          margin="normal"
-          variant="outlined"
+          margin='normal'
+          variant='outlined'
           className={c.ltr}
         />
         <TextField
           required
           fullWidth
           label={I18n.get('form_password')}
-          type="password"
-          name="password"
+          type='password'
+          name='password'
           value={form.password}
           onChange={handleChange}
-          margin="normal"
-          variant="outlined"
+          margin='normal'
+          variant='outlined'
           className={c.ltr}
         />
         {loginError && (
-          <Typography variant="body1" className={c.error}>
+          <Typography variant='body1' className={c.error}>
             {loginError}
           </Typography>
         )}
 
         {notVerified && (<Link
           className={c.link}
-          component="button"
-          variant="body2"
+          component='button'
+          variant='body2'
           onClick={goToVerify}
         >
           {I18n.get('form_get_new_code')}
@@ -273,10 +275,10 @@ function AuthPage ({ updateUserState, type }) {
           disabled={submitting}
           fullWidth
           className={c.button}
-          type="submit"
-          variant="contained"
-          color="secondary"
-          size="large"
+          type='submit'
+          variant='contained'
+          color='secondary'
+          size='large'
         >
           {I18n.get('form_login')}
           {submitting && <SyncIcon className={c.uploadingIcon}/>}
@@ -288,10 +290,10 @@ function AuthPage ({ updateUserState, type }) {
 
   const signUpForm1 = (
     <>
-      <Typography variant="h3" className={c.title}>
+      <Typography variant='h3' className={c.title}>
         {I18n.get('signup_title')}
       </Typography>
-      <Typography variant="h6" className={c.title}>
+      <Typography variant='h6' className={c.title}>
         {I18n.get('main_title')}
       </Typography>
       <form onSubmit={goToSignup2}>
@@ -300,32 +302,43 @@ function AuthPage ({ updateUserState, type }) {
           required
           fullWidth
           label={I18n.get('form_email')}
-          name="email"
+          name='email'
           value={form.email}
           onChange={handleChange}
-          margin="normal"
-          variant="outlined"
+          margin='normal'
+          variant='outlined'
           className={c.ltr}
         />
         <TextField
           required
           fullWidth
           label={I18n.get('form_name')}
-          name="given_name"
+          name='given_name'
           value={form.given_name}
           onChange={handleChange}
-          margin="normal"
-          variant="outlined"
+          margin='normal'
+          variant='outlined'
           className={c.ltr}
+        />
+        <TextField
+          required
+          fullWidth
+          label={I18n.get('form_age')}
+          type='date'
+          name='birthdate'
+          value={form.birthdate}
+          onChange={handleChange}
+          margin='normal'
+          variant='outlined'
         />
         <Button
           disabled={submitting}
           fullWidth
           className={c.button}
-          type="submit"
-          variant="contained"
-          color="primary"
-          size="large"
+          type='submit'
+          variant='contained'
+          color='primary'
+          size='large'
         >
           {I18n.get('signup_next')}
           {submitting && <SyncIcon className={c.uploadingIcon}/>}
@@ -333,8 +346,8 @@ function AuthPage ({ updateUserState, type }) {
       </form>
       <Link
         className={c.link}
-        component="button"
-        variant="body2"
+        component='button'
+        variant='body2'
         onClick={goToLogin}
       >
         {I18n.get('form_already_registered')}
@@ -345,33 +358,21 @@ function AuthPage ({ updateUserState, type }) {
 
   const signUpForm2 = (
     <>
-      <Typography variant="h3" className={c.title}>
+      <Typography variant='h3' className={c.title}>
         {I18n.get('signup_title')}
       </Typography>
-      <Typography variant="h6" className={c.title}>
+      <Typography variant='h6' className={c.title}>
         {I18n.get('signup_last')}
       </Typography>
       <form onSubmit={handleSignUp}>
 
-        <TextField
-          required
-          fullWidth
-          label={I18n.get('form_age')}
-          type="date"
-          name="birthdate"
-          value={form.birthdate}
-          onChange={handleChange}
-          margin="normal"
-          variant="outlined"
-        />
-
         <FormControl
           required
-          variant="outlined"
-          margin="normal"
+          variant='outlined'
+          margin='normal'
           className={c.select}
         >
-          <InputLabel ref={inputLabel} htmlFor="gender">
+          <InputLabel ref={inputLabel1} htmlFor='gender'>
             {I18n.get('form_sex')}
           </InputLabel>
           <Select
@@ -381,13 +382,40 @@ function AuthPage ({ updateUserState, type }) {
             input={
               <OutlinedInput
                 labelWidth={30}
-                name="gender"
+                name='gender'
                 id='gender'
               />
             }
           >
-            <MenuItem value={'male'}>{I18n.get('form_male')}</MenuItem>
-            <MenuItem value={'female'}>{I18n.get('form_female')}</MenuItem>
+            <MenuItem value={'man'}>{I18n.get('form_man')}</MenuItem>
+            <MenuItem value={'woman'}>{I18n.get('form_woman')}</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl
+          required
+          variant='outlined'
+          margin='normal'
+          className={c.select}
+        >
+          <InputLabel ref={inputLabel2} htmlFor='genderToRate'>
+            {I18n.get('form_sex_to_rate')}
+          </InputLabel>
+          <Select
+            required
+            value={form.genderToRate}
+            onChange={handleChange}
+            input={
+              <OutlinedInput
+                labelWidth={114}
+                name='genderToRate'
+                id='genderToRate'
+              />
+            }
+          >
+            <MenuItem value={'both'}>{I18n.get('form_rate_both')}</MenuItem>
+            <MenuItem value={'men'}>{I18n.get('form_rate_men')}</MenuItem>
+            <MenuItem value={'women'}>{I18n.get('form_rate_women')}</MenuItem>
           </Select>
         </FormControl>
 
@@ -395,16 +423,16 @@ function AuthPage ({ updateUserState, type }) {
           required
           fullWidth
           label={I18n.get('form_password')}
-          type="password"
-          name="password"
+          type='password'
+          name='password'
           value={form.password}
           onChange={handleChange}
-          margin="normal"
-          variant="outlined"
+          margin='normal'
+          variant='outlined'
           className={c.ltr}
         />
         {loginError && (
-          <Typography variant="body1" className={c.error}>
+          <Typography variant='body1' className={c.error}>
             {loginError}
           </Typography>
         )}
@@ -413,10 +441,10 @@ function AuthPage ({ updateUserState, type }) {
           disabled={submitting}
           fullWidth
           className={c.button}
-          type="submit"
-          variant="contained"
-          color="primary"
-          size="large"
+          type='submit'
+          variant='contained'
+          color='primary'
+          size='large'
         >
           {I18n.get('signup_title')}
           {submitting && <SyncIcon className={c.uploadingIcon}/>}
@@ -424,8 +452,8 @@ function AuthPage ({ updateUserState, type }) {
       </form>
       <Link
         className={c.link}
-        component="button"
-        variant="body2"
+        component='button'
+        variant='body2'
         onClick={goToLogin}
       >
         {I18n.get('form_already_registered')}
@@ -436,7 +464,7 @@ function AuthPage ({ updateUserState, type }) {
 
   const resendCodeForm = (
     <>
-      <Typography variant="h3" className={c.title}>
+      <Typography variant='h3' className={c.title}>
         {I18n.get('signup_confirm')}
       </Typography>
       <form onSubmit={handleVerification}>
@@ -445,16 +473,16 @@ function AuthPage ({ updateUserState, type }) {
           required
           fullWidth
           label={I18n.get('form_code')}
-          name="authenticationCode"
+          name='authenticationCode'
           value={form.authenticationCode}
           onChange={handleChange}
-          margin="normal"
-          variant="outlined"
+          margin='normal'
+          variant='outlined'
           className={c.ltr}
           helperText={I18n.get('form_check_mail_for_code')}
         />
         {loginError && (
-          <Typography variant="body1" className={c.error}>
+          <Typography variant='body1' className={c.error}>
             {loginError}
           </Typography>
         )}
@@ -463,10 +491,10 @@ function AuthPage ({ updateUserState, type }) {
           disabled={submitting}
           fullWidth
           className={c.button}
-          type="submit"
-          variant="contained"
-          color="primary"
-          size="large"
+          type='submit'
+          variant='contained'
+          color='primary'
+          size='large'
         >
           {I18n.get('signup_confirm')}
           {submitting && <SyncIcon className={c.uploadingIcon}/>}
@@ -478,7 +506,7 @@ function AuthPage ({ updateUserState, type }) {
 
   const confirmForm = (
     <>
-      <Typography variant="h3" className={c.title}>
+      <Typography variant='h3' className={c.title}>
         {I18n.get('signup_confirm')}
       </Typography>
       <form onSubmit={handleAuthentication}>
@@ -487,27 +515,27 @@ function AuthPage ({ updateUserState, type }) {
           required
           fullWidth
           label={I18n.get('form_email')}
-          name="email"
+          name='email'
           value={form.email}
           onChange={handleChange}
-          margin="normal"
-          variant="outlined"
+          margin='normal'
+          variant='outlined'
           className={c.ltr}
         />
         <TextField
           required
           fullWidth
           label={I18n.get('form_code')}
-          name="authenticationCode"
+          name='authenticationCode'
           value={form.authenticationCode}
           onChange={handleChange}
-          margin="normal"
-          variant="outlined"
+          margin='normal'
+          variant='outlined'
           className={c.ltr}
           helperText={I18n.get('form_check_mail_for_code')}
         />
         {loginError && (
-          <Typography variant="body1" className={c.error}>
+          <Typography variant='body1' className={c.error}>
             {loginError}
           </Typography>
         )}
@@ -516,10 +544,10 @@ function AuthPage ({ updateUserState, type }) {
           disabled={submitting}
           fullWidth
           className={c.button}
-          type="submit"
-          variant="contained"
-          color="primary"
-          size="large"
+          type='submit'
+          variant='contained'
+          color='primary'
+          size='large'
         >
           {I18n.get('signup_confirm')}
           {submitting && <SyncIcon className={c.uploadingIcon}/>}
@@ -531,7 +559,7 @@ function AuthPage ({ updateUserState, type }) {
 
 
   return (
-    <Container maxWidth="xs" className={c.container}>
+    <Container maxWidth='xs' className={c.container}>
       {signUpStep === 0 && loginForm}
       {signUpStep === 1 && signUpForm1}
       {signUpStep === 2 && signUpForm2}
