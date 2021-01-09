@@ -2,26 +2,26 @@
 
 const awsmobile = {
     "aws_project_region": "eu-central-1",
-    "aws_cognito_identity_pool_id": "eu-central-1:5e6cc26d-064e-409a-93da-7afe89022ce9",
+    "aws_cognito_identity_pool_id": "eu-central-1:8f3a4a49-9bf5-45c5-8129-b53b5e6fe99f",
     "aws_cognito_region": "eu-central-1",
-    "aws_user_pools_id": "eu-central-1_hpemp3loy",
-    "aws_user_pools_web_client_id": "41mvqat2hmak6sl4b11g50hhct",
+    "aws_user_pools_id": "eu-central-1_q2lHqWi70",
+    "aws_user_pools_web_client_id": "79m615ut3t4sllcgmldkk4a91k",
     "oauth": {},
     "aws_dynamodb_all_tables_region": "eu-central-1",
     "aws_dynamodb_table_schemas": [
         {
-            "tableName": "photowinpictures-dev",
+            "tableName": "photowinpictures-pwdev",
             "region": "eu-central-1"
         }
     ],
-    "aws_user_files_s3_bucket": "photo-win-amp-dev87002fd51d654f868fdd8383f1480f20-dev",
+    "aws_user_files_s3_bucket": "photo-win-amp-dev87002fd51d654f868fdd8383f1480f20-pwdev",
     "aws_user_files_s3_bucket_region": "eu-central-1",
-    "aws_appsync_graphqlEndpoint": "https://f2fzhet4y5ftdp3nprrmzyjngm.appsync-api.eu-central-1.amazonaws.com/graphql",
+    "aws_appsync_graphqlEndpoint": "https://pu2tzxtthjfxbonc2aelw3kdeu.appsync-api.eu-central-1.amazonaws.com/graphql",
     "aws_appsync_region": "eu-central-1",
     "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS",
-    "aws_content_delivery_bucket": "photo-win-hosting-dev",
+    "aws_content_delivery_bucket": "photo-win-hosting-pwdev",
     "aws_content_delivery_bucket_region": "eu-central-1",
-    "aws_content_delivery_url": "https://d12nfcraqbgmb7.cloudfront.net"
+    "aws_content_delivery_url": "https://d11f90u713z5m.cloudfront.net"
 };
 
 
