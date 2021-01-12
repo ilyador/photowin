@@ -29,6 +29,13 @@ export const listSets = `query ListSets($filter: ModelSetFilterInput, $limit: In
       active
       appearedForRanking
       pictures {
+        items {
+          id
+          file {
+            key
+          }
+          rating
+        }
         nextToken
       }
     }

@@ -1,6 +1,5 @@
-import Container from '@material-ui/core/Container'
-import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import React, { useEffect, useState } from 'react'
+import { UserContext } from '../helpers/userContext'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import {
   API,
@@ -16,6 +15,8 @@ import Grid from '@material-ui/core/Grid'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import Fab from '@material-ui/core/Fab'
 import Typography from '@material-ui/core/Typography'
+import Container from '@material-ui/core/Container'
+import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 
 
 const useStyles = makeStyles(theme => ({
@@ -52,8 +53,16 @@ const useStyles = makeStyles(theme => ({
 
 const random = max => Math.floor(Math.random() * Math.floor(max))
 
+const getGender = (user) => {
+  const genders = ['man', 'woman']
 
-function Rate ({ user: activeUser, updateUserState }) {
+  let gender = genders.indexOf(user.gender)
+  gender = 1 - gender
+  return genders[gender]
+}
+
+
+function Rate () {
   const [loading, setLoading] = useState(true)
   const [picturesSetData, setPicturesSetData] = useState(null)
   const [ratedUser, setRatedUser] = useState(null)
@@ -61,6 +70,8 @@ function Rate ({ user: activeUser, updateUserState }) {
   const c = useStyles()
   const theme = useTheme()
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
+  const { user: activeUser, updateUserState } = React.useContext(UserContext)
+
 
   useEffect(() => { getPictureSet() }, [])
 

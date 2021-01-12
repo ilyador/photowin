@@ -14,6 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import Badge from '@material-ui/core/Badge'
 import AccountCircle from '@material-ui/icons/AccountCircle'
+import { UserContext } from '../helpers/userContext'
 
 
 
@@ -44,12 +45,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function Layout({ user, updateUserState, children }) {
+function Layout({ children }) {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const isMenuOpen = Boolean(anchorEl)
   let { pathname } = useLocation()
   const history = useHistory()
   const c = useStyles()
+  const { user, updateUserState  } = React.useContext(UserContext)
+
 
 
   const handleLogOut = () => {

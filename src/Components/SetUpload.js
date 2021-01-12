@@ -1,9 +1,9 @@
-import Container from '@material-ui/core/Container'
-import React, { useState, useEffect, useReducer } from 'react'
+import React, { useState, useEffect, useReducer, useRef } from 'react'
+import { UserContext } from '../helpers/userContext'
 import { API, graphqlOperation as operation, Storage, I18n } from 'aws-amplify'
 import { useHistory } from 'react-router-dom'
 import { createPicture, createSet } from '../graphql/mutations'
-import { makeStyles } from '@material-ui/core'
+import { InputLabel, makeStyles, MenuItem, OutlinedInput, Select } from '@material-ui/core'
 import config from '../aws-exports'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { useTheme } from '@material-ui/core/styles'
@@ -11,9 +11,10 @@ import PictureUpload from './PictureUpload'
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import Container from '@material-ui/core/Container'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import SyncIcon from '@material-ui/icons/Sync'
-
+import FormControl from '@material-ui/core/FormControl'
 
 
 const {
@@ -62,14 +63,18 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function SetUpload({ user }) {
+function SetUpload() {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [uploadReady, setUploadReady] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [genderToRate, setGenderToRate] = useState(null)
+  const { user,  } = React.useContext(UserContext)
+
   const c = useStyles()
   const theme = useTheme()
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
   const history = useHistory()
+  const inputLabel = useRef(null)
 
 
   useEffect(() => {
@@ -117,6 +122,7 @@ function SetUpload({ user }) {
     const input = {
       user: user.sub,
       type: user.gender,
+      genderToRate,
       appearedForRanking: 0,
       active: true
     }
@@ -150,6 +156,35 @@ function SetUpload({ user }) {
             uploadFileData={uploadFileData(index)}
           />
         ))}
+        <Grid item xs={12} className={c.buttonGridItem}>
+          <FormControl
+            required
+            fullWidth
+            variant='outlined'
+            margin='normal'
+            className={c.select}
+          >
+            <InputLabel ref={inputLabel} htmlFor='genderToRate'>
+              {I18n.get('form_sex_to_rate')}
+            </InputLabel>
+            <Select
+              required
+              value={genderToRate}
+              onChange={event => {setGenderToRate(event.target.value)}}
+              input={
+                <OutlinedInput
+                  labelWidth={114}
+                  name='genderToRate'
+                  id='genderToRate'
+                />
+              }
+            >
+              <MenuItem value={'both'}>{I18n.get('form_rate_both')}</MenuItem>
+              <MenuItem value={'men'}>{I18n.get('form_rate_men')}</MenuItem>
+              <MenuItem value={'women'}>{I18n.get('form_rate_women')}</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
         <Grid item xs={12} className={c.buttonGridItem}>
           <Fab
             variant="extended"

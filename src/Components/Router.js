@@ -1,4 +1,5 @@
 import React from 'react'
+import { UserContext } from '../helpers/userContext'
 import {
   BrowserRouter as Router,
   Route,
@@ -35,7 +36,8 @@ const privatePages = [
 ]
 
 
-export default function Routes ({ user, updateUserState }) {
+export default function Routes () {
+  const { user } = React.useContext(UserContext)
 
   return (
     <Router>
@@ -43,7 +45,7 @@ export default function Routes ({ user, updateUserState }) {
         {privatePages.map((page, index) => (
           <Route key={index} path={page.path}>
             {user ?
-              <Layout user={user} updateUserState={updateUserState}>
+              <Layout>
                 {page.component}
               </Layout> :
               <Redirect to='/login'/>
@@ -53,13 +55,13 @@ export default function Routes ({ user, updateUserState }) {
         <Route path='/login'>
           {user ?
             <Redirect to='/user'/> :
-            <AuthPage updateUserState={updateUserState} type='login'/>
+            <AuthPage type='login'/>
           }
         </Route>
         <Route path='/signup'>
           {user ?
             <Redirect to='/user'/> :
-            <AuthPage updateUserState={updateUserState} type='signup'/>
+            <AuthPage type='signup'/>
           }
         </Route>
         <Route path='/landing'>

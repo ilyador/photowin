@@ -13,6 +13,7 @@ import Link from '@material-ui/core/Link'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import SyncIcon from '@material-ui/icons/Sync'
+import { UserContext } from '../helpers/userContext'
 
 
 const useStyles = makeStyles(theme => ({
@@ -55,7 +56,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function AuthPage ({ updateUserState, type }) {
+function AuthPage ({ type }) {
   const c = useStyles()
   const [signUpStep, setSignUpStep] = useState(0)
   const [loginError, setLoginError] = useState(null)
@@ -70,8 +71,9 @@ function AuthPage ({ updateUserState, type }) {
     authenticationCode: '',
     genderToRate: 'both'
   })
-  const inputLabel1 = useRef(null)
-  const inputLabel2 = useRef(null)
+  const inputLabel = useRef(null)
+  const { updateUserState } = React.useContext(UserContext)
+
 
 
   useEffect(() => {
@@ -320,17 +322,6 @@ function AuthPage ({ updateUserState, type }) {
           variant='outlined'
           className={c.ltr}
         />
-        <TextField
-          required
-          fullWidth
-          label={I18n.get('form_age')}
-          type='date'
-          name='birthdate'
-          value={form.birthdate}
-          onChange={handleChange}
-          margin='normal'
-          variant='outlined'
-        />
         <Button
           disabled={submitting}
           fullWidth
@@ -372,7 +363,7 @@ function AuthPage ({ updateUserState, type }) {
           margin='normal'
           className={c.select}
         >
-          <InputLabel ref={inputLabel1} htmlFor='gender'>
+          <InputLabel ref={inputLabel} htmlFor='gender'>
             {I18n.get('form_sex')}
           </InputLabel>
           <Select
@@ -392,37 +383,22 @@ function AuthPage ({ updateUserState, type }) {
           </Select>
         </FormControl>
 
-        <FormControl
+        <TextField
           required
-          variant='outlined'
+          fullWidth
+          label={I18n.get('form_age')}
+          type='date'
+          name='birthdate'
+          value={form.birthdate}
+          onChange={handleChange}
           margin='normal'
-          className={c.select}
-        >
-          <InputLabel ref={inputLabel2} htmlFor='genderToRate'>
-            {I18n.get('form_sex_to_rate')}
-          </InputLabel>
-          <Select
-            required
-            value={form.genderToRate}
-            onChange={handleChange}
-            input={
-              <OutlinedInput
-                labelWidth={114}
-                name='genderToRate'
-                id='genderToRate'
-              />
-            }
-          >
-            <MenuItem value={'both'}>{I18n.get('form_rate_both')}</MenuItem>
-            <MenuItem value={'men'}>{I18n.get('form_rate_men')}</MenuItem>
-            <MenuItem value={'women'}>{I18n.get('form_rate_women')}</MenuItem>
-          </Select>
-        </FormControl>
+          variant='outlined'
+        />
 
         <TextField
           required
           fullWidth
-          label={I18n.get('form_password')}
+          label={I18n.get('genderToRate')}
           type='password'
           name='password'
           value={form.password}

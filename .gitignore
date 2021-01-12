@@ -30,7 +30,7 @@ amplify/backend/awscloudformation
 build/
 dist/
 node_modules/
-src/Helpers/aws-exports.js
+src/helpers/aws-exports.js
 awsconfiguration.json
 
 .eslintcache

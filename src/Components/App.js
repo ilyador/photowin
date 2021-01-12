@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { UserContext } from '../helpers/userContext'
 import { makeStyles } from '@material-ui/core'
 import { Auth, API, graphqlOperation as operation } from 'aws-amplify'
-import { getUser } from '../graphql/queries'
+import { getUser, listSets } from '../graphql/queries'
 import Routes from './Router'
 import SyncIcon from '@material-ui/icons/Sync'
 
@@ -22,15 +23,17 @@ const useStyles = makeStyles({
 })
 
 
+
 export default function App () {
   const [user, setUser] = useState(null)
+  const [userSet, setUserSet] = useState(null)
   const [authenticating, setAuthenticating] = useState(true)
   const c = useStyles()
 
   useEffect(() => {
     _getUser()
 
-    async function _getUser() {
+    async function _getUser () {
       try {
         const userResponse = await Auth.currentAuthenticatedUser()
         let _user = userResponse.attributes
@@ -42,20 +45,28 @@ export default function App () {
         }
 
         setUser(_user)
-      }
 
-      catch (error) {
+        const _listSets = await API.graphql(operation(listSets, {
+          limit: 30,
+          filter: {
+            user: { eq: _user.sub },
+            active: { eq: true }
+          }
+        }))
+
+        const sets = _listSets.data.listSets.items
+        const activeSet = sets.find(item => item.active)
+        setUserSet(activeSet)
+      } catch (error) {
         console.log(error)
-      }
-
-      finally {
+      } finally {
         setAuthenticating(false)
       }
     }
 
   }, [])
 
-  function updateUserState(user) {
+  function updateUserState (user) {
     setUser(user)
   }
 
@@ -66,10 +77,9 @@ export default function App () {
           <SyncIcon className={c.uploadingIcon}/>
         </div>
       </div>
-    :
-      <Routes
-        user={user}
-        updateUserState={updateUserState}
-      />
+      :
+      <UserContext.Provider value={{ user, updateUserState, userSet, setUserSet }}>
+        <Routes/>
+      </UserContext.Provider>
   )
 }

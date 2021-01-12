@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container'
 import CardMedia from '@material-ui/core/CardMedia'
 import man from '../content/menBanner.jpg'
 import woman from '../content/womenBanner.jpg'
+import { UserContext } from '../helpers/userContext'
 
 const pictures = { man,  woman }
 
@@ -22,8 +23,10 @@ const useStyles = makeStyles({
 })
 
 
-function Results ({ user }) {
+function Results () {
   const c = useStyles()
+  const { user,  } = React.useContext(UserContext)
+
 
   return (
     <Container maxWidth="xs">
