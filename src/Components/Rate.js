@@ -70,7 +70,7 @@ function Rate () {
   const c = useStyles()
   const theme = useTheme()
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
-  const { user: activeUser, updateUserState } = React.useContext(UserContext)
+  const { user: activeUser, userSet, updateUserState } = React.useContext(UserContext)
 
 
   useEffect(() => { getPictureSet() }, [])
@@ -79,12 +79,13 @@ function Rate () {
   async function getPictureSet () {
     try {
       const data = await API.graphql(operation(getByAppeared, {
-        type: activeUser.genderToRate,
+        type: userSet?.genderToRate || getGender(userSet.gender),
         sortDirection: 'DESC',
         limit: 100,
         filter: { active: { eq: true } }
       }))
 
+      console.log(data)
 
       const userSets = data.data.getByAppeared.items
       const itemToRateIndex = random(userSets.length)
