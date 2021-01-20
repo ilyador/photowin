@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-function AuthPage ({ type }) {
+export default function AuthPage ({ type }) {
   const c = useStyles()
   const [signUpStep, setSignUpStep] = useState(0)
   const [loginError, setLoginError] = useState(null)
@@ -72,8 +72,16 @@ function AuthPage ({ type }) {
     genderToRate: 'both'
   })
   const inputLabel = useRef(null)
-  const { updateUserState } = React.useContext(UserContext)
+  const { setUser } = React.useContext(UserContext)
 
+
+  const errors = {
+    NotAuthorizedException: I18n.get('login_wrong_email'),
+    UserNotFoundException: I18n.get('login_no_user'),
+    UsernameExistsException: I18n.get('login_email_exists'),
+    InvalidParameterException: I18n.get('login_bad_password'),
+    CodeMismatchException: I18n.get('login_wrong_code'),
+  }
 
 
   useEffect(() => {
@@ -95,10 +103,12 @@ function AuthPage ({ type }) {
     const {
       given_name,
       password,
-      email: username,
+      email,
       gender,
       birthdate
     } = form
+
+    const username = email.toLowerCase()
 
     Auth.signUp({
       username,
@@ -112,7 +122,7 @@ function AuthPage ({ type }) {
       })
       .catch(error => {
         setSubmitting(false)
-        setLoginError(error.message)
+        setLoginError(errors[error.code])
       })
   }
 
@@ -121,17 +131,19 @@ function AuthPage ({ type }) {
     event.preventDefault()
     setLoginError(null)
     setSubmitting(true)
+    const username = form.email.toLowerCase()
 
     try {
-      const user = await Auth.signIn(form.email, form.password)
-      updateUserState(user.attributes)
+      const user = await Auth.signIn(username, form.password)
+      setUser(user.attributes)
     } catch (error) {
       setSubmitting(false)
-      setLoginError(error.message)
+      console.log(error)
+      setLoginError(errors[error.code])
 
       if (error.code === 'UserNotConfirmedException') {
         setNotVerified(true)
-        Auth.resendSignUp(form.email)
+        await Auth.resendSignUp(username)
       }
     }
   }
@@ -151,11 +163,11 @@ function AuthPage ({ type }) {
     try {
       await Auth.confirmSignUp(email, code)
       const user = await Auth.signIn(email, password)
-      updateUserState(user.attributes)
+      setUser(user.attributes)
       setUserInDB(user.attributes.sub)
     } catch (error) {
       setSubmitting(false)
-      setLoginError(error.message)
+      setLoginError(errors[error.code])
     }
   }
 
@@ -169,11 +181,11 @@ function AuthPage ({ type }) {
     try {
       await Auth.confirmSignUp(username, authenticationCode)
       const user = await Auth.signIn(username, password)
-      updateUserState(user.attributes)
+      setUser(user.attributes)
       setUserInDB(user.attributes.sub)
     } catch (error) {
       setSubmitting(false)
-      setLoginError(error.message)
+      setLoginError(errors[error.code])
     }
   }
 
@@ -398,7 +410,7 @@ function AuthPage ({ type }) {
         <TextField
           required
           fullWidth
-          label={I18n.get('genderToRate')}
+          label={I18n.get('form_new_password')}
           type='password'
           name='password'
           value={form.password}
@@ -544,6 +556,3 @@ function AuthPage ({ type }) {
     </Container>
   )
 }
-
-
-export default AuthPage

@@ -70,7 +70,7 @@ function Rate () {
   const c = useStyles()
   const theme = useTheme()
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
-  const { user: activeUser, userSet, updateUserState } = React.useContext(UserContext)
+  const { user: activeUser, userSet, setUser } = React.useContext(UserContext)
 
 
   useEffect(() => { getPictureSet() }, [])
@@ -84,8 +84,6 @@ function Rate () {
         limit: 100,
         filter: { active: { eq: true } }
       }))
-
-      console.log(data)
 
       const userSets = data.data.getByAppeared.items
       const itemToRateIndex = random(userSets.length)
@@ -150,7 +148,7 @@ function Rate () {
       setLoading(true)
       setPicturesSetData(null)
       setPictures([])
-      updateUserState(oldUser => ({ ...oldUser, points: points + 1 }))
+      setUser(oldUser => ({ ...oldUser, points: points + 1 }))
       getPictureSet()
     })
   }

@@ -67,7 +67,7 @@ function SetUpload() {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [uploadReady, setUploadReady] = useState(false)
   const [uploading, setUploading] = useState(false)
-  const [genderToRate, setGenderToRate] = useState(null)
+  const [genderToRate, setGenderToRate] = useState('')
   const { user,  } = React.useContext(UserContext)
 
   const c = useStyles()

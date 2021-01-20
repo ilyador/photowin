@@ -30,45 +30,55 @@ export default function App () {
   const [authenticating, setAuthenticating] = useState(true)
   const c = useStyles()
 
+  useEffect(_getUser, [])
+
   useEffect(() => {
-    _getUser()
+    user && getUserSets()
+  }, [user])
 
-    async function _getUser () {
-      try {
-        const userResponse = await Auth.currentAuthenticatedUser()
-        let _user = userResponse.attributes
-
-        if (_user.sub) {
-          const query = { id: _user.sub }
-          const response = await API.graphql(operation(getUser, query))
-          _user.points = response.data.getUser.points
+  async function getUserSets () {
+    try {
+      const _listSets = await API.graphql(operation(listSets, {
+        limit: 30,
+        filter: {
+          user: { eq: user.sub },
+          active: { eq: true }
         }
+      }))
 
-        setUser(_user)
-
-        const _listSets = await API.graphql(operation(listSets, {
-          limit: 30,
-          filter: {
-            user: { eq: _user.sub },
-            active: { eq: true }
-          }
-        }))
-
-        const sets = _listSets.data.listSets.items
-        const activeSet = sets.find(item => item.active)
-        setUserSet(activeSet)
-      } catch (error) {
-        console.log(error)
-      } finally {
-        setAuthenticating(false)
-      }
+      const sets = _listSets.data.listSets.items
+      const activeSet = sets.find(item => item.active)
+      setUserSet(activeSet)
     }
 
-  }, [])
-
-  function updateUserState (user) {
-    setUser(user)
+    catch (error) {
+      console.log(error)
+    }
   }
+
+  async function _getUser () {
+    try {
+      const userResponse = await Auth.currentAuthenticatedUser()
+      let _user = userResponse.attributes
+
+      if (_user.sub) {
+        const query = { id: _user.sub }
+        const response = await API.graphql(operation(getUser, query))
+        _user.points = response.data.getUser.points
+      }
+
+      console.log(user)
+      setUser(_user)
+
+    } catch (error) {
+      console.log(error)
+    }
+
+    finally {
+      setAuthenticating(false)
+    }
+  }
+
 
   return (
     authenticating ?
@@ -78,7 +88,7 @@ export default function App () {
         </div>
       </div>
       :
-      <UserContext.Provider value={{ user, updateUserState, userSet, setUserSet }}>
+      <UserContext.Provider value={{ user, setUser, userSet, setUserSet }}>
         <Routes/>
       </UserContext.Provider>
   )

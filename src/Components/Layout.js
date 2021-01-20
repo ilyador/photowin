@@ -8,7 +8,6 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import CameraIcon from '@material-ui/icons/PhotoCamera'
-import Container from '@material-ui/core/Container'
 import IconButton from '@material-ui/core/IconButton'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
@@ -32,6 +31,13 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
+  homeLink: {
+    display: "flex",
+    color: "white",
+    textDecoration: "none",
+    alignItems: "center",
+    width: 140
+  },
   icon: {
     marginRight: theme.spacing(2),
   },
@@ -51,12 +57,12 @@ function Layout({ children }) {
   let { pathname } = useLocation()
   const history = useHistory()
   const c = useStyles()
-  const { user, updateUserState  } = React.useContext(UserContext)
+  const { user, setUser  } = React.useContext(UserContext)
 
 
 
   const handleLogOut = () => {
-    Auth.signOut().then(() => { updateUserState(null) })
+    Auth.signOut().then(() => { setUser(null) })
   }
 
   const handleMyPictures = () => {
@@ -115,10 +121,14 @@ function Layout({ children }) {
     <>
       <AppBar position="static">
         <Toolbar className={c.ltr}>
-          <CameraIcon className={c.icon} />
-          <Typography variant="h6" className={c.title}>
-            PhotoWin
-          </Typography>
+          <div className={c.title}>
+            <Link to='/rate' className={c.homeLink}>
+              <CameraIcon className={c.icon} />
+              <Typography variant="h6">
+                PhotoWin
+              </Typography>
+            </Link>
+          </div>
           <Button
             className={c.link}
             color='inherit'
@@ -143,7 +153,7 @@ function Layout({ children }) {
       </AppBar>
       {renderMenu}
       <div className={c.cardGrid}>
-        {cloneElement(children, { user, updateUserState })}
+        {cloneElement(children, { user, setUser })}
       </div>
     </>
   )

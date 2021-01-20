@@ -18,7 +18,7 @@ export const dictionary = {
     'form_sex': 'מין',
     'form_man': 'גבר',
     'form_woman': 'אישה',
-    'form_sex_to_rate': 'מין שתרצו לדרג',
+    'form_sex_to_rate': 'מי ידרג אותך?',
     'form_rate_both': 'כולם',
     'form_rate_women': 'נשים',
     'form_rate_men': 'גברים',
@@ -27,6 +27,12 @@ export const dictionary = {
     'form_not_signed': 'משתמש חדש',
     'form_get_new_code': 'קבלו קוד הרשמה חדש',
     'form_check_mail_for_code': 'בידקו את המייל שלכם בשביל קוד רישום חד פעמי',
+
+    'login_wrong_email': 'אימייל או סיסמא לא תקינים',
+    'login_no_user': 'אימייל לא קיים במערכת',
+    'login_email_exists': 'אימייל לזהות כבר רשום במערכת',
+    'login_bad_password': 'הסיסמא חייבת להיות באורך 8 תוים לפחות ולהכיל מספרים',
+    'login_wrong_code': 'קוד האימות לא נכון',
 
     'layout_my_pictures': 'התמונות שלי',
     'layout_old_pictures': 'סטים ישנים',
