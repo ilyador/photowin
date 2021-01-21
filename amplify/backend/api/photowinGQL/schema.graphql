@@ -1,6 +1,6 @@
 type Set @model @key(
-	name: "getByAppeared",
-	fields: [ "appearedForRanking" ],
+	name: "ByAppeared",
+	fields: [ "type", "appearedForRanking" ],
 	queryField: "getByAppeared"
 ){
 	id: ID!

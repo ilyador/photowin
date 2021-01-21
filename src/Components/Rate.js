@@ -53,10 +53,14 @@ const useStyles = makeStyles(theme => ({
 
 const random = max => Math.floor(Math.random() * Math.floor(max))
 
-const getGender = (gender) => {
-  if (gender === 'man') return 'women'
-  if (gender === 'woman') return 'men'
+const getGender = (user) => {
+  const genders = ['man', 'woman']
+
+  let gender = genders.indexOf(user.gender)
+  gender = 1 - gender
+  return genders[gender]
 }
+
 
 
 function Rate () {
