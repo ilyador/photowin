@@ -27,61 +27,76 @@ const useStyles = makeStyles({
 export default function App () {
   const [user, setUser] = useState(null)
   const [userSet, setUserSet] = useState(null)
+  const [userSetRetrieved, setUserSetRetrieved] = useState(false)
   const [authenticating, setAuthenticating] = useState(true)
+  const [pageReady, setPageReady] = useState(false)
   const c = useStyles()
 
-  useEffect(_getUser, [])
 
   useEffect(() => {
-    user && getUserSets()
-  }, [user])
+    async function _getUser () {
+      try {
+        const userResponse = await Auth.currentAuthenticatedUser()
+        let _user = userResponse.attributes
 
-  async function getUserSets () {
-    try {
-      const _listSets = await API.graphql(operation(listSets, {
-        limit: 30,
-        filter: {
-          user: { eq: user.sub },
-          active: { eq: true }
+        if (_user.sub) {
+          const query = { id: _user.sub }
+          const response = await API.graphql(operation(getUser, query))
+          _user.points = response.data.getUser.points
         }
-      }))
 
-      const sets = _listSets.data.listSets.items
-      const activeSet = sets.find(item => item.active)
-      setUserSet(activeSet)
-    }
+        setUser(_user)
 
-    catch (error) {
-      console.log(error)
-    }
-  }
-
-  async function _getUser () {
-    try {
-      const userResponse = await Auth.currentAuthenticatedUser()
-      let _user = userResponse.attributes
-
-      if (_user.sub) {
-        const query = { id: _user.sub }
-        const response = await API.graphql(operation(getUser, query))
-        _user.points = response.data.getUser.points
+      } catch (error) {
+        console.log(error)
       }
 
-      console.log(user)
-      setUser(_user)
-
-    } catch (error) {
-      console.log(error)
+      finally {
+        setAuthenticating(false)
+      }
     }
 
-    finally {
-      setAuthenticating(false)
+    _getUser()
+  }, [])
+
+
+  useEffect(() => {
+    async function _getSets () {
+      try {
+        const _listSets = await API.graphql(operation(listSets, {
+          limit: 30,
+          filter: {
+            user: { eq: user.sub },
+            active: { eq: true }
+          }
+        }))
+
+        const sets = _listSets.data.listSets.items
+        const activeSet = sets.find(item => item.active)
+        setUserSet(activeSet)
+
+      } catch (error) {
+        console.log(error)
+      }
+
+      finally {
+        setUserSetRetrieved(true)
+      }
     }
-  }
+
+    user &&_getSets()
+  }, [user])
+
+
+  useEffect(() => {
+    if (userSetRetrieved && !authenticating) {
+      setPageReady(true)
+    }
+  }, [userSetRetrieved, authenticating])
 
 
   return (
-    authenticating ?
+    !pageReady ?
       <div className={c.wrapper}>
         <div className={c.spinner}>
           <SyncIcon className={c.uploadingIcon}/>

@@ -123,6 +123,12 @@ export const getByAppeared = `query GetByAppeared(
       active
       appearedForRanking
       pictures {
+        items {
+          id
+          file {
+            key
+          }
+        }
         nextToken
       }
     }

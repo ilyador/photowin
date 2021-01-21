@@ -138,7 +138,6 @@ export default function AuthPage ({ type }) {
       setUser(user.attributes)
     } catch (error) {
       setSubmitting(false)
-      console.log(error)
       setLoginError(errors[error.code])
 
       if (error.code === 'UserNotConfirmedException') {

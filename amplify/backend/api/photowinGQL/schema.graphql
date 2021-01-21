@@ -1,7 +1,8 @@
-type Set
-@model
-@key(name: "ByAppeared", fields: [ "type", "appearedForRanking" ], queryField: "getByAppeared")
-{
+type Set @model @key(
+	name: "getByAppeared",
+	fields: [ "appearedForRanking" ],
+	queryField: "getByAppeared"
+){
 	id: ID!
 	type: String!
 	user: String!
