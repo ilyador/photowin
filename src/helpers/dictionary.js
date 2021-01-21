@@ -68,6 +68,7 @@ export const dictionary = {
     'gifts_points': 'נקודות לקבלת המתנה:',
     'gifts_title': 'בונוסים ומתנות',
     'gifts_get': 'כנס!',
+    'gifts_locked': 'המתנה תהיה זמינה כאשר תצבור 50 נקודות',
 
     'edit_page_section_1_title_men': 'אתה נראה טוב במציאות, אבל התמונות שלך מקרינות משהו אחר? ',
     'edit_page_section_1_subtitle_2_men': 'עריכת 3 תמונות ברמה מקצועית ב 20 ש"ח בלבד! ',

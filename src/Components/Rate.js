@@ -88,8 +88,6 @@ function Rate () {
         filter: { active: { eq: true } }
       }))
 
-      console.log(data)
-
       const userSets = data.data.getByAppeared.items
       const itemToRateIndex = random(userSets.length)
       const { id, user, appearedForRanking } = userSets[itemToRateIndex]
