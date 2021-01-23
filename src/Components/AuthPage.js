@@ -81,6 +81,7 @@ export default function AuthPage ({ type }) {
     UsernameExistsException: I18n.get('login_email_exists'),
     InvalidParameterException: I18n.get('login_bad_password'),
     CodeMismatchException: I18n.get('login_wrong_code'),
+    InvalidPasswordException:  I18n.get('login_bad_password')
   }
 
 
@@ -159,8 +160,10 @@ export default function AuthPage ({ type }) {
       authenticationCode: code
     } = form
 
+    const username = email.toLowerCase()
+
     try {
-      await Auth.confirmSignUp(email, code)
+      await Auth.confirmSignUp(username, code)
       const user = await Auth.signIn(email, password)
       setTempUser(user.attributes)
       setUserInDB(user.attributes.sub)
