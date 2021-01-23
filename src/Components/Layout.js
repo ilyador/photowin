@@ -1,4 +1,4 @@
-import React, { cloneElement } from 'react'
+import React, { cloneElement, useEffect } from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 import { Auth, I18n } from 'aws-amplify'
 import { makeStyles } from '@material-ui/core/styles'
@@ -57,12 +57,13 @@ function Layout({ children }) {
   let { pathname } = useLocation()
   const history = useHistory()
   const c = useStyles()
-  const { user, setUser  } = React.useContext(UserContext)
-
+  const { user, setUser, setUserLoggedIn  } = React.useContext(UserContext)
 
 
   const handleLogOut = () => {
-    Auth.signOut().then(() => { setUser(null) })
+    Auth.signOut().then(() => {
+      setUserLoggedIn(false)
+    })
   }
 
   const handleMyPictures = () => {

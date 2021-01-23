@@ -37,14 +37,14 @@ const privatePages = [
 
 
 export default function Routes () {
-  const { user } = React.useContext(UserContext)
+  const { userLoggedIn } = React.useContext(UserContext)
 
   return (
     <Router>
       <Switch>
         {privatePages.map((page, index) => (
           <Route key={index} path={page.path}>
-            {user ?
+            {userLoggedIn ?
               <Layout>
                 {page.component}
               </Layout> :
@@ -53,13 +53,13 @@ export default function Routes () {
           </Route>
         ))}
         <Route path='/login'>
-          {user ?
+          {userLoggedIn ?
             <Redirect to='/user'/> :
             <AuthPage type='login'/>
           }
         </Route>
         <Route path='/signup'>
-          {user ?
+          {userLoggedIn ?
             <Redirect to='/user'/> :
             <AuthPage type='signup'/>
           }

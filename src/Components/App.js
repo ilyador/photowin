@@ -25,39 +25,47 @@ const useStyles = makeStyles({
 
 
 export default function App () {
+  const [tempUser, setTempUser] = useState(null)
   const [user, setUser] = useState(null)
   const [userSet, setUserSet] = useState(null)
-  const [userSetRetrieved, setUserSetRetrieved] = useState(false)
-  const [authenticating, setAuthenticating] = useState(true)
+  const [authState, setAuthState] = useState('loading')
+  const [userLoggedIn, setUserLoggedIn] = useState(false)
   const [pageReady, setPageReady] = useState(false)
   const c = useStyles()
 
 
   useEffect(() => {
-    async function _getUser () {
+    async function _determineAuth () {
       try {
         const userResponse = await Auth.currentAuthenticatedUser()
         let _user = userResponse.attributes
-
-        if (_user.sub) {
-          const query = { id: _user.sub }
-          const response = await API.graphql(operation(getUser, query))
-          _user.points = response.data.getUser.points
-        }
-
-        setUser(_user)
-
+        setTempUser(_user)
+        setAuthState('logged in')
       } catch (error) {
-        console.log(error)
-      }
-
-      finally {
-        setAuthenticating(false)
+        setAuthState('not logged in')
       }
     }
 
-    _getUser()
+    _determineAuth()
   }, [])
+
+
+  useEffect(() => {
+    async function _getUserData () {
+      try {
+        const query = { id: tempUser.sub }
+        const response = await API.graphql(operation(getUser, query))
+        const { points } = response.data.getUser
+
+        setUser({ ...tempUser, points })
+      } catch (error) {
+        setAuthState('user data retrieved')
+        console.log('could not retrieve user from DB', error)
+      }
+    }
+
+    tempUser && _getUserData()
+  }, [tempUser])
 
 
   useEffect(() => {
@@ -76,23 +84,34 @@ export default function App () {
         setUserSet(activeSet)
 
       } catch (error) {
-        console.log(error)
-      }
-
-      finally {
-        setUserSetRetrieved(true)
+        console.log('Could not get active set', error)
+      } finally {
+        setAuthState('user data & sets retrieved')
       }
     }
 
-    user &&_getSets()
+    user && _getSets()
   }, [user])
 
 
   useEffect(() => {
-    if (userSetRetrieved && !authenticating) {
+    if (authState === 'user data & sets retrieved') {
+      setPageReady(true)
+      setUserLoggedIn(true)
+    }
+
+    if (authState === 'not logged in') {
       setPageReady(true)
     }
-  }, [userSetRetrieved, authenticating])
+  }, [authState])
+
+
+  useEffect(() => {
+    if (!userLoggedIn && pageReady) {
+      setAuthState('not logged in')
+      setUser(null)
+    }
+  }, [userLoggedIn])
 
 
   return (
@@ -103,7 +122,17 @@ export default function App () {
         </div>
       </div>
       :
-      <UserContext.Provider value={{ user, setUser, userSet, setUserSet }}>
+      <UserContext.Provider
+        value={{
+          user,
+          setUser,
+          userSet,
+          setUserSet,
+          userLoggedIn,
+          setUserLoggedIn,
+          setTempUser
+        }}
+      >
         <Routes/>
       </UserContext.Provider>
   )

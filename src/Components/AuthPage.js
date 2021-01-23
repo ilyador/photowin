@@ -72,7 +72,7 @@ export default function AuthPage ({ type }) {
     genderToRate: 'both'
   })
   const inputLabel = useRef(null)
-  const { setUser } = React.useContext(UserContext)
+  const { setTempUser } = React.useContext(UserContext)
 
 
   const errors = {
@@ -135,7 +135,7 @@ export default function AuthPage ({ type }) {
 
     try {
       const user = await Auth.signIn(username, form.password)
-      setUser(user.attributes)
+      setTempUser(user.attributes)
     } catch (error) {
       setSubmitting(false)
       setLoginError(errors[error.code])
@@ -148,7 +148,7 @@ export default function AuthPage ({ type }) {
   }
 
 
-  const handleVerification = async event => {
+  const handleAuthentication = async event => {
     event.preventDefault()
     setLoginError(null)
     setSubmitting(true)
@@ -162,25 +162,7 @@ export default function AuthPage ({ type }) {
     try {
       await Auth.confirmSignUp(email, code)
       const user = await Auth.signIn(email, password)
-      setUser(user.attributes)
-      setUserInDB(user.attributes.sub)
-    } catch (error) {
-      setSubmitting(false)
-      setLoginError(errors[error.code])
-    }
-  }
-
-
-  const handleAuthentication = async event => {
-    event.preventDefault()
-    setLoginError(null)
-    setSubmitting(true)
-
-    const { email: username, authenticationCode, password } = form
-    try {
-      await Auth.confirmSignUp(username, authenticationCode)
-      const user = await Auth.signIn(username, password)
-      setUser(user.attributes)
+      setTempUser(user.attributes)
       setUserInDB(user.attributes.sub)
     } catch (error) {
       setSubmitting(false)
@@ -454,7 +436,7 @@ export default function AuthPage ({ type }) {
       <Typography variant='h3' className={c.title}>
         {I18n.get('signup_confirm')}
       </Typography>
-      <form onSubmit={handleVerification}>
+      <form onSubmit={handleAuthentication}>
 
         <TextField
           required
