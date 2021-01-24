@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { API, Auth, graphqlOperation as operation, I18n } from 'aws-amplify'
 import { createUser } from '../graphql/mutations'
+import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
@@ -61,6 +62,7 @@ export default function AuthPage ({ type }) {
   const [signUpStep, setSignUpStep] = useState(0)
   const [loginError, setLoginError] = useState(null)
   const [notVerified, setNotVerified] = useState(null)
+  const [newCodeRequested, setNewCodeRequested] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [form, setForm] = useState({
     email: '',
@@ -81,7 +83,9 @@ export default function AuthPage ({ type }) {
     UsernameExistsException: I18n.get('login_email_exists'),
     InvalidParameterException: I18n.get('login_bad_password'),
     CodeMismatchException: I18n.get('login_wrong_code'),
-    InvalidPasswordException:  I18n.get('login_bad_password')
+    InvalidPasswordException:  I18n.get('login_bad_password'),
+    UserNotConfirmedException: I18n.get('form_get_new_code'),
+    LimitExceededException: I18n.get('form_get_new_code_limit')
   }
 
 
@@ -143,8 +147,26 @@ export default function AuthPage ({ type }) {
 
       if (error.code === 'UserNotConfirmedException') {
         setNotVerified(true)
-        await Auth.resendSignUp(username)
       }
+    }
+  }
+
+
+  const getNewCode = async event => {
+    console.log('get new code')
+    event.preventDefault()
+    setNewCodeRequested(true)
+
+    try {
+      await Auth.resendSignUp(form.email)
+    }
+
+    catch (error) {
+      setLoginError(errors[error.code])
+    }
+
+    finally {
+      setNewCodeRequested(false)
     }
   }
 
@@ -254,23 +276,25 @@ export default function AuthPage ({ type }) {
           variant='outlined'
           className={c.ltr}
         />
-        {loginError && (
+        {(loginError && !notVerified) && (
           <Typography variant='body1' className={c.error}>
             {loginError}
           </Typography>
         )}
 
-        {notVerified && (<Link
-          className={c.link}
-          component='button'
-          variant='body2'
+        {notVerified && <Button
+          fullWidth
+          className={c.button}
+          variant='contained'
+          color='secondary'
+          size='large'
           onClick={goToVerify}
         >
-          {I18n.get('form_get_new_code')}
-        </Link>)}
+          {errors.UserNotConfirmedException}
+        </Button>}
 
         <Button
-          disabled={submitting}
+          disabled={submitting || notVerified}
           fullWidth
           className={c.button}
           type='submit'
@@ -434,7 +458,7 @@ export default function AuthPage ({ type }) {
   )
 
 
-  const resendCodeForm = (
+  const confirmForm = (
     <>
       <Typography variant='h3' className={c.title}>
         {I18n.get('signup_confirm')}
@@ -476,12 +500,12 @@ export default function AuthPage ({ type }) {
   )
 
 
-  const confirmForm = (
+  const resendCodeForm = (
     <>
       <Typography variant='h3' className={c.title}>
         {I18n.get('signup_confirm')}
       </Typography>
-      <form onSubmit={handleAuthentication}>
+      <form onSubmit={setNewCodeRequested ? getNewCode : handleAuthentication}>
 
         <TextField
           required
@@ -494,7 +518,7 @@ export default function AuthPage ({ type }) {
           variant='outlined'
           className={c.ltr}
         />
-        <TextField
+        {newCodeRequested && <TextField
           required
           fullWidth
           label={I18n.get('form_code')}
@@ -505,14 +529,14 @@ export default function AuthPage ({ type }) {
           variant='outlined'
           className={c.ltr}
           helperText={I18n.get('form_check_mail_for_code')}
-        />
+        />}
         {loginError && (
           <Typography variant='body1' className={c.error}>
             {loginError}
           </Typography>
         )}
 
-        <Button
+        {newCodeRequested ? <Button
           disabled={submitting}
           fullWidth
           className={c.button}
@@ -524,6 +548,18 @@ export default function AuthPage ({ type }) {
           {I18n.get('signup_confirm')}
           {submitting && <SyncIcon className={c.uploadingIcon}/>}
         </Button>
+        :
+        <Button
+          disabled={submitting}
+          fullWidth
+          className={c.button}
+          type='submit'
+          variant='contained'
+          color='primary'
+          size='large'
+        >
+          {I18n.get('signup_confirm_request')}
+        </Button>}
       </form>
     </>
   )

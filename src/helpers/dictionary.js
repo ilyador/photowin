@@ -7,6 +7,7 @@ export const dictionary = {
     'login_title': 'כניסה',
     'signup_title': 'הרשמה',
     'signup_confirm': 'אישור הרשמה',
+    'signup_confirm_request': 'קבלו קוד חדש',
     'signup_next': 'לשלב הבא',
     'signup_last': 'פרטים אחרונים והתחלנו',
     'form_name': 'שם',
@@ -26,6 +27,7 @@ export const dictionary = {
     'form_login': 'משתמש קיים',
     'form_not_signed': 'משתמש חדש',
     'form_get_new_code': 'קבלו קוד הרשמה חדש',
+    'form_get_new_code_limit': 'ביקשתם קוד חדש יותר מדי פעמים ברצף, תנסו שוב מאוחר יותר',
     'form_check_mail_for_code': 'בידקו את המייל שלכם בשביל קוד רישום חד פעמי',
 
     'login_wrong_email': 'אימייל או סיסמא לא תקינים',
