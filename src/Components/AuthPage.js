@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { API, Auth, graphqlOperation as operation, I18n } from 'aws-amplify'
 import { createUser } from '../graphql/mutations'
-import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import MenuItem from '@material-ui/core/MenuItem'
 import TextField from '@material-ui/core/TextField'
@@ -115,24 +114,27 @@ export default function AuthPage ({ type }) {
 
     const username = email.toLowerCase()
 
-    Auth.signUp({
-      username,
-      password,
-      attributes: { given_name, gender, birthdate }
-    })
-      .then(() => {
-        setLoginError(null)
-        setSubmitting(false)
-        setSignUpStep(3)
+    try {
+      await Auth.signUp({
+        username,
+        password,
+        attributes: { given_name, gender, birthdate }
       })
-      .catch(error => {
-        setSubmitting(false)
-        setLoginError(errors[error.code])
-      })
+
+      setLoginError(null)
+      setSubmitting(false)
+      setNewCodeRequested(true)
+      setSignUpStep(3)
+    }
+
+    catch (error) {
+      setSubmitting(false)
+      setLoginError(errors[error.code])
+    }
   }
 
 
-  const handleSignIn = async event => {
+  const handleLogin = async event => {
     event.preventDefault()
     setLoginError(null)
     setSubmitting(true)
@@ -153,8 +155,8 @@ export default function AuthPage ({ type }) {
 
 
   const getNewCode = async event => {
-    console.log('get new code')
     event.preventDefault()
+    setLoginError(null)
     setNewCodeRequested(true)
 
     try {
@@ -164,14 +166,10 @@ export default function AuthPage ({ type }) {
     catch (error) {
       setLoginError(errors[error.code])
     }
-
-    finally {
-      setNewCodeRequested(false)
-    }
   }
 
 
-  const handleAuthentication = async event => {
+  const handleCodeVerification = async event => {
     event.preventDefault()
     setLoginError(null)
     setSubmitting(true)
@@ -189,7 +187,9 @@ export default function AuthPage ({ type }) {
       const user = await Auth.signIn(email, password)
       setTempUser(user.attributes)
       setUserInDB(user.attributes.sub)
-    } catch (error) {
+    }
+
+    catch (error) {
       setSubmitting(false)
       setLoginError(errors[error.code])
     }
@@ -227,7 +227,7 @@ export default function AuthPage ({ type }) {
   }
   const goToVerify = () => {
     setLoginError(null)
-    setSignUpStep(4)
+    setSignUpStep(3)
   }
 
 
@@ -251,8 +251,7 @@ export default function AuthPage ({ type }) {
         {I18n.get('form_not_signed')}
       </Button>
 
-      <form onSubmit={handleSignIn}>
-
+      <form onSubmit={handleLogin}>
         <TextField
           required
           fullWidth
@@ -458,25 +457,25 @@ export default function AuthPage ({ type }) {
   )
 
 
-  const confirmForm = (
+  const codeConfirmForm = (
     <>
       <Typography variant='h3' className={c.title}>
         {I18n.get('signup_confirm')}
       </Typography>
-      <form onSubmit={handleAuthentication}>
-
+      <form onSubmit={newCodeRequested ? handleCodeVerification : getNewCode}>
         <TextField
           required
           fullWidth
-          label={I18n.get('form_code')}
-          name='authenticationCode'
-          value={form.authenticationCode}
+          label={newCodeRequested ? I18n.get('form_code') : I18n.get('form_email')}
+          name={newCodeRequested ?'authenticationCode' : 'email'}
+          value={newCodeRequested ? form.authenticationCode : form.email}
           onChange={handleChange}
           margin='normal'
           variant='outlined'
           className={c.ltr}
-          helperText={I18n.get('form_check_mail_for_code')}
+          helperText={newCodeRequested && I18n.get('form_check_mail_for_code')}
         />
+
         {loginError && (
           <Typography variant='body1' className={c.error}>
             {loginError}
@@ -492,74 +491,13 @@ export default function AuthPage ({ type }) {
           color='primary'
           size='large'
         >
-          {I18n.get('signup_confirm')}
-          {submitting && <SyncIcon className={c.uploadingIcon}/>}
+          {newCodeRequested ? <>
+            {I18n.get('signup_confirm')}
+            {submitting && <SyncIcon className={c.uploadingIcon}/>}
+          </> : <>
+            {I18n.get('signup_confirm_request')}
+          </>}
         </Button>
-      </form>
-    </>
-  )
-
-
-  const resendCodeForm = (
-    <>
-      <Typography variant='h3' className={c.title}>
-        {I18n.get('signup_confirm')}
-      </Typography>
-      <form onSubmit={setNewCodeRequested ? getNewCode : handleAuthentication}>
-
-        <TextField
-          required
-          fullWidth
-          label={I18n.get('form_email')}
-          name='email'
-          value={form.email}
-          onChange={handleChange}
-          margin='normal'
-          variant='outlined'
-          className={c.ltr}
-        />
-        {newCodeRequested && <TextField
-          required
-          fullWidth
-          label={I18n.get('form_code')}
-          name='authenticationCode'
-          value={form.authenticationCode}
-          onChange={handleChange}
-          margin='normal'
-          variant='outlined'
-          className={c.ltr}
-          helperText={I18n.get('form_check_mail_for_code')}
-        />}
-        {loginError && (
-          <Typography variant='body1' className={c.error}>
-            {loginError}
-          </Typography>
-        )}
-
-        {newCodeRequested ? <Button
-          disabled={submitting}
-          fullWidth
-          className={c.button}
-          type='submit'
-          variant='contained'
-          color='primary'
-          size='large'
-        >
-          {I18n.get('signup_confirm')}
-          {submitting && <SyncIcon className={c.uploadingIcon}/>}
-        </Button>
-        :
-        <Button
-          disabled={submitting}
-          fullWidth
-          className={c.button}
-          type='submit'
-          variant='contained'
-          color='primary'
-          size='large'
-        >
-          {I18n.get('signup_confirm_request')}
-        </Button>}
       </form>
     </>
   )
@@ -571,8 +509,7 @@ export default function AuthPage ({ type }) {
       {signUpStep === 0 && loginForm}
       {signUpStep === 1 && signUpForm1}
       {signUpStep === 2 && signUpForm2}
-      {signUpStep === 3 && confirmForm}
-      {signUpStep === 4 && resendCodeForm}
+      {signUpStep === 3 && codeConfirmForm}
     </Container>
   )
 }
