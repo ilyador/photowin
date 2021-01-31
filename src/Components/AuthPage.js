@@ -73,7 +73,7 @@ export default function AuthPage ({ type }) {
     genderToRate: 'both'
   })
   const inputLabel = useRef(null)
-  const { setTempUser } = React.useContext(UserContext)
+  const { setTempUser, setUser } = React.useContext(UserContext)
 
 
   const errors = {
@@ -98,6 +98,10 @@ export default function AuthPage ({ type }) {
     setForm(oldForm => ({ ...oldForm, [name]: value }))
   }
 
+  const handleChangeEmail = event => {
+    const value = event.target.value.toLowerCase()
+    setForm(oldForm => ({ ...oldForm, 'email': value }))
+  }
 
   const handleSignUp = async event => {
     event.preventDefault()
@@ -107,12 +111,10 @@ export default function AuthPage ({ type }) {
     const {
       given_name,
       password,
-      email,
+      email: username,
       gender,
       birthdate
     } = form
-
-    const username = email.toLowerCase()
 
     try {
       await Auth.signUp({
@@ -138,10 +140,14 @@ export default function AuthPage ({ type }) {
     event.preventDefault()
     setLoginError(null)
     setSubmitting(true)
-    const username = form.email.toLowerCase()
+
+    const {
+      email: username,
+      password
+    } = form
 
     try {
-      const user = await Auth.signIn(username, form.password)
+      const user = await Auth.signIn(username, password)
       setTempUser(user.attributes)
     } catch (error) {
       setSubmitting(false)
@@ -158,9 +164,10 @@ export default function AuthPage ({ type }) {
     event.preventDefault()
     setLoginError(null)
     setNewCodeRequested(true)
+    const { email: username } = form
 
     try {
-      await Auth.resendSignUp(form.email)
+      await Auth.resendSignUp(username)
     }
 
     catch (error) {
@@ -176,20 +183,24 @@ export default function AuthPage ({ type }) {
 
     const {
       password,
-      email,
+      email: username,
       authenticationCode: code
     } = form
 
-    const username = email.toLowerCase()
-
     try {
       await Auth.confirmSignUp(username, code)
-      const user = await Auth.signIn(email, password)
-      setTempUser(user.attributes)
-      setUserInDB(user.attributes.sub)
+      const _user = await Auth.signIn(username, password)
+      await setUserInDB(_user.attributes.sub)
+      const user = {
+        ..._user.attributes,
+        points: 0
+      }
+
+      setUser(user)
     }
 
     catch (error) {
+      console.log(error)
       setSubmitting(false)
       setLoginError(errors[error.code])
     }
@@ -197,18 +208,23 @@ export default function AuthPage ({ type }) {
 
 
   function setUserInDB(id) {
-    let birthdate = new Date(form.birthdate).getFullYear()
-    let today = new Date().getFullYear()
-    let age = today - birthdate
+    return new Promise((resolve, reject) => {
+      let birthdate = new Date(form.birthdate).getFullYear()
+      let today = new Date().getFullYear()
+      let age = today - birthdate
 
-    const input = {
-      id,
-      name: form.given_name,
-      age,
-      points: '0'
-    }
+      const input = {
+        id,
+        name: form.given_name,
+        age,
+        points: '0',
+        gender: form.gender
+      }
 
-    API.graphql(operation(createUser, { input }))
+      API.graphql(operation(createUser, { input }))
+        .then(resolve)
+        .catch(reject)
+    })
   }
 
 
@@ -232,6 +248,21 @@ export default function AuthPage ({ type }) {
 
 
 
+  const formFields = {
+    email: <TextField
+      required
+      fullWidth
+      label={I18n.get('form_email')}
+      name='email'
+      value={form.email}
+      onChange={handleChangeEmail}
+      margin='normal'
+      variant='outlined'
+      className={c.ltr}
+    />
+  }
+
+
   const loginForm = (
     <>
       <Typography variant='h3' className={c.title}>
@@ -252,17 +283,7 @@ export default function AuthPage ({ type }) {
       </Button>
 
       <form onSubmit={handleLogin}>
-        <TextField
-          required
-          fullWidth
-          label={I18n.get('form_email')}
-          name='email'
-          value={form.email}
-          onChange={handleChange}
-          margin='normal'
-          variant='outlined'
-          className={c.ltr}
-        />
+        {formFields.email}
         <TextField
           required
           fullWidth
@@ -319,17 +340,7 @@ export default function AuthPage ({ type }) {
       </Typography>
       <form onSubmit={goToSignup2}>
 
-        <TextField
-          required
-          fullWidth
-          label={I18n.get('form_email')}
-          name='email'
-          value={form.email}
-          onChange={handleChange}
-          margin='normal'
-          variant='outlined'
-          className={c.ltr}
-        />
+        {formFields.email}
         <TextField
           required
           fullWidth
