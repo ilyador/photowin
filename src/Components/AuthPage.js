@@ -218,7 +218,6 @@ export default function AuthPage ({ type }) {
         name: form.given_name,
         age,
         points: '0',
-        gender: form.gender
       }
 
       API.graphql(operation(createUser, { input }))
