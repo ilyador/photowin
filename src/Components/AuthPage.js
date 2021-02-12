@@ -33,11 +33,17 @@ const useStyles = makeStyles(theme => ({
   link: {
     width: '100%'
   },
+  buttons: {
+    display: 'flex'
+  },
+  spacer: {
+    flex: '0 0 20px'
+  },
   button: {
-    margin: [theme.spacing(2), 0, theme.spacing(1)]
+    margin: theme.spacing(2, 0, 1)
   },
   signupLinkButton: {
-    margin: [0, 0, theme.spacing(10)]
+    margin: theme.spacing(0, 0, 10)
   },
   error: {
     color: theme.palette.error.main,
@@ -442,18 +448,32 @@ export default function AuthPage ({ type }) {
           </Typography>
         )}
 
-        <Button
-          disabled={submitting}
-          fullWidth
-          className={c.button}
-          type='submit'
-          variant='contained'
-          color='primary'
-          size='large'
-        >
-          {I18n.get('signup_title')}
-          {submitting && <SyncIcon className={c.uploadingIcon}/>}
-        </Button>
+        <div className={c.buttons}>
+          <Button
+            fullWidth
+            disabled={submitting}
+            className={c.button}
+            type='submit'
+            variant='contained'
+            color='primary'
+            size='large'
+          >
+            {I18n.get('signup_title')}
+          </Button>
+          <div className={c.spacer}></div>
+          <Button
+            fullWidth
+            disabled={submitting}
+            className={c.button}
+            type='submit'
+            variant='contained'
+            color='default'
+            size='large'
+            onClick={() => {setSignUpStep(1)}}
+          >
+            {I18n.get('back')}
+          </Button>
+        </div>
       </form>
       <Link
         className={c.link}

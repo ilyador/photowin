@@ -125,6 +125,7 @@ export const getByAppeared = `query GetByAppeared(
       pictures {
         items {
           id
+          rating
           file {
             key
           }

@@ -14,6 +14,7 @@ import Rate from './Rate'
 import Layout from './Layout'
 import Gifts from './Gifts'
 import Edit from './Edit'
+import OldResults from './OldResults'
 
 
 const privatePages = [
@@ -23,6 +24,9 @@ const privatePages = [
   }, {
     path: '/rate',
     component: <Rate/>
+  }, {
+    path: '/old-sets',
+    component: <OldResults/>
   }, {
     path: '/gifts',
     component: <Gifts/>

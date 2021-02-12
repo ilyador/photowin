@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { makeStyles, useTheme } from '@material-ui/core'
 import { API, graphqlOperation as operation, I18n, Storage } from 'aws-amplify'
@@ -9,6 +8,7 @@ import ResultsCard from './ResultsCard'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import DeleteIcon from '@material-ui/icons/Delete'
+import Container from '@material-ui/core/Container'
 import Fab from '@material-ui/core/Fab'
 
 
@@ -22,16 +22,16 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: [theme.spacing(3), 'auto', 0],
-    padding: [0, theme.spacing(6)],
+    padding: [0, theme.spacing(6)]
   },
   deleteButton: {
-    margin: [-theme.spacing(1), 'auto', theme.spacing(8)],
+    margin: [-theme.spacing(1), 'auto', theme.spacing(8)]
   },
   deleteDialog: {
     width: 254
   },
   icon: {
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(1)
   }
 }))
 
@@ -45,39 +45,40 @@ function Results ({ user }) {
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
 
 
-  useEffect(() => { getResults() }, [])
+  useEffect(() => {
+    getResults()
 
+    async function getResults () {
+      const data = await API.graphql(operation(listSets, {
+        filter: {
+          user: { eq: user.sub },
+          active: { eq: false }
+        }
+      }))
 
-  async function getResults () {
-    const data = await API.graphql(operation(listSets, {
-      filter: {
-        user: { eq: user.sub },
-        active: { eq: false }
+      let oldSets = data.data.listSets.items
+
+      for (let i = 0; i < oldSets.length; i++) {
+        let pics = oldSets[i].pictures.items
+
+        pics.sort((a, b) => a.rating - b.rating)
+
+        let setWithURLsPromise = pics.map(async (pic, index) => {
+          pic.pictureURL = await Storage.get(pics[index].file.key)
+          return pic
+        })
+
+        oldSets[i].pictures = await Promise.all(setWithURLsPromise)
+        delete oldSets[i].pictures.items
       }
-    }))
 
-    let oldSets = data.data.listSets.items
-
-    for (let i = 0; i < oldSets.length; i++) {
-      let pics = oldSets[i].pictures.items
-
-      pics.sort((a, b) => a.rating - b.rating)
-
-      let setWithURLsPromise = pics.map(async (pic, index) => {
-        pic.pictureURL = await Storage.get(pics[index].file.key)
-        return pic
-      })
-
-      oldSets[i].pictures = await Promise.all(setWithURLsPromise)
-      delete oldSets[i].pictures.items
+      setOldSets(oldSets)
+      setLoading(false)
     }
-
-    setOldSets(oldSets)
-    setLoading(false)
-  }
+  }, [])
 
 
-  const handleDeleteSet = (set ,index) => async () => {
+  const handleDeleteSet = (set, index) => async () => {
     const deletedSet = API.graphql(operation(deleteSet, { input: { id: set.id } }))
 
     let promises = set.pictures.flatMap(picture => {
@@ -97,7 +98,7 @@ function Results ({ user }) {
 
 
   return (
-    <div>
+    <Container maxWidth="md">
       <Typography variant="h5" className={c.pageTitle}>
         {I18n.get('user_results_old')}
       </Typography>
@@ -120,7 +121,7 @@ function Results ({ user }) {
           </Fab>
         </Grid>
       ))}
-    </div>
+    </Container>
   )
 }
 

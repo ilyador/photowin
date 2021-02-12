@@ -180,8 +180,8 @@ function SetUpload() {
               }
             >
               <MenuItem value={'both'}>{I18n.get('form_rate_both')}</MenuItem>
-              <MenuItem value={'men'}>{I18n.get('form_rate_men')}</MenuItem>
-              <MenuItem value={'women'}>{I18n.get('form_rate_women')}</MenuItem>
+              <MenuItem value={'man'}>{I18n.get('form_rate_men')}</MenuItem>
+              <MenuItem value={'woman'}>{I18n.get('form_rate_women')}</MenuItem>
             </Select>
           </FormControl>
         </Grid>

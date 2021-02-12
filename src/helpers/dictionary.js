@@ -44,8 +44,8 @@ export const dictionary = {
 
     'user_upload_button': 'העלאה',
     'user_upload_new': 'רוצה לנסות סט חדש?',
-    'user_upload_new_confirm_man': 'הסט הנוכחי לא יקבל דירוגים נוספים. האם אתה מעוניין להמישך בכל מקרה?',
-    'user_upload_new_confirm_woman': 'הסט הנוכחי והניקוד שלו יימחקו. האם את מעוניינת להמישך בכל מקרה?',
+    'user_upload_new_confirm_man': 'הסט הנוכחי לא יקבל דירוגים נוספים. האם אתה מעוניין להמשיך בכל מקרה?',
+    'user_upload_new_confirm_woman': 'הסט הנוכחי והניקוד שלו יימחקו. האם את מעוניינת להמשיך בכל מקרה?',
     'user_results_rating': 'דורג:',
     'user_upload_title_man': 'העלה את התמונות הכי טובות שלך',
     'user_upload_title_woman': 'העלי את התמונות הכי טובות שלך',
@@ -110,5 +110,7 @@ export const dictionary = {
     'edit_page_disclaimer': 'התמונות נועדו לעריכה בלבד, ולא יגיעו לשום גורם אחר',
     'before': 'לפני',
     'after': 'אחרי',
+
+    'back': 'חזרה',
   }
 }
