@@ -17,15 +17,9 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
     marginBottom: theme.spacing(3)
   },
-  buttonGridItem: {
-    display: 'flex'
-  },
-  button: {
-    margin: [theme.spacing(3), 'auto', 0],
-    padding: [0, theme.spacing(6)]
-  },
-  deleteButton: {
-    margin: [-theme.spacing(1), 'auto', theme.spacing(8)]
+  deleteContainer: {
+    textAlign: 'center',
+    marginBottom: theme.spacing(8)
   },
   deleteDialog: {
     width: 254
@@ -104,21 +98,24 @@ function Results ({ user }) {
       </Typography>
       {!loading && oldSets.map((set, index1) => (
         <Grid
-          container spacing={desktopDisplay ? 3 : 1}
+          container
+          spacing={desktopDisplay ? 3 : 1}
           key={index1}
         >
           {set.pictures.map((picture, index2) => (
             <ResultsCard key={index2} picture={picture}/>
           ))}
-          <Fab
-            variant="extended"
-            color="default"
-            onClick={handleDeleteSet(set, index1)}
-            className={c.deleteButton}
-          >
-            {I18n.get(`user_delete_set_${user.gender}`)}
-            <DeleteIcon className={c.icon}/>
-          </Fab>
+          <Grid item xs={12} className={c.deleteContainer}>
+            <Fab
+              variant="extended"
+              color="default"
+              onClick={handleDeleteSet(set, index1)}
+              className={c.deleteButton}
+            >
+              {I18n.get(`user_delete_set_${user.gender}`)}
+              <DeleteIcon className={c.icon}/>
+            </Fab>
+          </Grid>
         </Grid>
       ))}
     </Container>

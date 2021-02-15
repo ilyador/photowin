@@ -68,7 +68,7 @@ function SetUpload() {
   const [uploadReady, setUploadReady] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [genderToRate, setGenderToRate] = useState('')
-  const { user,  } = React.useContext(UserContext)
+  const { user, setNewUserSet } = React.useContext(UserContext)
 
   const c = useStyles()
   const theme = useTheme()
@@ -127,16 +127,23 @@ function SetUpload() {
       active: true
     }
 
-    const pictureSet = await API.graphql(operation(createSet, { input }))
-    const setId = pictureSet.data.createSet.id
+    try {
+      const pictureSet = await API.graphql(operation(createSet, { input }))
+      const setId = pictureSet.data.createSet.id
 
-    const allFileUploadPromises = state.files.map(file =>
-      file && saveFile(file.file, file.fileName, setId)
-    )
+      const allFileUploadPromises = state.files.map(file =>
+        file && saveFile(file.file, file.fileName, setId)
+      )
 
-    await Promise.all(allFileUploadPromises)
-    dispatch({ type: 'CLEAR_FILES' })
-    history.push('/rate')
+      await Promise.all(allFileUploadPromises)
+      dispatch({ type: 'CLEAR_FILES' })
+      history.push('/rate')
+      setNewUserSet(true)
+    }
+
+    catch (error) {
+      console.log('could not upload set: ', error)
+    }
   }
 
 

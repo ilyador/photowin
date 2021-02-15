@@ -47,24 +47,31 @@ function Results () {
   const { user, userSet, setUserSet } = React.useContext(UserContext)
 
 
-  useEffect(() => { getResults() }, [])
+  useEffect(() => {
+    async function getResults () {
+      const pics = userSet.pictures.items
 
+      pics.sort((picA, picB) => picA.rating - picB.rating)
 
-  async function getResults () {
-    const pics = userSet.pictures.items
+      try {
+        let setWithURLsPromise = pics.map(async (pic, index) => {
+          pic.pictureURL = await Storage.get(pics[index].file.key)
+          return pic
+        })
 
-    pics.sort((a, b) => a.rating - b.rating)
+        let setWithURLs = await Promise.all(setWithURLsPromise)
 
-    let setWithURLsPromise = pics.map(async (item, index) => {
-      item.pictureURL = await Storage.get(pics[index].file.key)
-      return item
-    })
+        setPictures(setWithURLs)
+        setLoading(false)
+      }
 
-    let setWithURLs = await Promise.all(setWithURLsPromise)
+      catch (error) {
+        console.log('could not get set: ', error)
+      }
+    }
 
-    setPictures(setWithURLs)
-    setLoading(false)
-  }
+    getResults()
+  }, [])
 
   function changeActiveSet () {
     API.graphql(operation(updateSet, {

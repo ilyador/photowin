@@ -89,8 +89,6 @@ function Rate () {
         }
       }
 
-      console.log(genderToRate)
-
       try {
         const data = await API.graphql(operation(getByAppeared, {
           type: genderToRate,

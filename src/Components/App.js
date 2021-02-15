@@ -28,6 +28,7 @@ export default function App () {
   const [tempUser, setTempUser] = useState(null)
   const [user, setUser] = useState(null)
   const [userSet, setUserSet] = useState(null)
+  const [newUserSet, setNewUserSet] = useState(false)
   const [authState, setAuthState] = useState('loading')
   const [userLoggedIn, setUserLoggedIn] = useState(false)
   const [pageReady, setPageReady] = useState(false)
@@ -80,8 +81,8 @@ export default function App () {
         }))
 
         const sets = _listSets.data.listSets.items
-        const activeSet = sets.find(item => item.active)
-        setUserSet(activeSet)
+        setUserSet(sets[0])
+        setNewUserSet(false)
 
       } catch (error) {
         console.log('Could not get active set', error)
@@ -90,8 +91,8 @@ export default function App () {
       }
     }
 
-    user && _getSets()
-  }, [user])
+    if (user || newUserSet) _getSets()
+  }, [user, newUserSet])
 
 
   useEffect(() => {
@@ -130,7 +131,8 @@ export default function App () {
           setUserSet,
           userLoggedIn,
           setUserLoggedIn,
-          setTempUser
+          setTempUser,
+          setNewUserSet
         }}
       >
         <Routes/>
