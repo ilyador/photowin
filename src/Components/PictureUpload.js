@@ -62,7 +62,7 @@ export default function PictureUpload ({ uploadFileData, file, index }) {
       meta: true,
       canvas: true,
       maxWidth: 600,
-      orientation: true
+      orientation: 1
     })
       .then((data) => {
         if (!data.imageHead) throw new Error('Could not parse image metadata')
