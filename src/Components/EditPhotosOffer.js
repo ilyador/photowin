@@ -115,7 +115,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-export default function Edit ({ gender }) {
+export default function EditPhotosOffer ({ gender }) {
 
   const theme = useTheme()
   const breakpointUpLg = useMediaQuery(theme.breakpoints.up('lg'))

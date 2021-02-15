@@ -13,7 +13,7 @@ import Page404 from './Page404'
 import Rate from './Rate'
 import Layout from './Layout'
 import Gifts from './Gifts'
-import Edit from './Edit'
+import Edit from './EditPhotosOffer'
 import OldResults from './OldResults'
 
 
