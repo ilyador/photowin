@@ -94,7 +94,10 @@ function Rate () {
           type: genderToRate,
           sortDirection: 'DESC',
           limit: 100,
-          filter: { active: { eq: true } }
+          filter: {
+            active: { eq: true },
+            user: { ne: activeUser.sub }
+          }
         }))
 
         const userSets = data.data.getByAppeared.items
