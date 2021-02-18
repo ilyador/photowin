@@ -33,7 +33,7 @@ export const dictionary = {
     'login_wrong_email': 'אימייל או סיסמא לא תקינים',
     'login_no_user': 'אימייל לא קיים במערכת',
     'login_email_exists': 'אימייל זה כבר רשום במערכת',
-    'login_bad_password': 'הסיסמא חייבת להיות באורך 8 תוים לפחות ולהכיל מספרים',
+    'login_bad_password': 'הסיסמא חייבת להיות באורך 8 תוים לפחות, להכיל מספרים, אתיות קטנות וגדולות',
     'login_wrong_code': 'קוד האימות לא נכון',
 
     'layout_my_pictures': 'התמונות שלי',
