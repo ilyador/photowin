@@ -80,6 +80,7 @@ export const getUser = `query GetUser($id: ID!) {
     name
     age
     points
+    traps
   }
 }
 `;
@@ -94,6 +95,7 @@ export const listUsers = `query ListUsers(
       name
       age
       points
+      traps
     }
     nextToken
   }

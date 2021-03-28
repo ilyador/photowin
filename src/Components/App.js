@@ -56,9 +56,9 @@ export default function App () {
       try {
         const query = { id: tempUser.sub }
         const response = await API.graphql(operation(getUser, query))
-        const { points } = response.data.getUser
+        const { points, traps } = response.data.getUser
 
-        setUser({ ...tempUser, points })
+        setUser({ ...tempUser, points, traps })
       } catch (error) {
         setAuthState('user data retrieved')
         console.log('could not retrieve user from DB', error)

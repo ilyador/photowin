@@ -18,6 +18,8 @@ import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 
+const TRAP_RATE = 0.15
+
 
 const useStyles = makeStyles(theme => ({
   pageTitle: {
@@ -115,16 +117,23 @@ function Rate () {
 
         const pics = userSets[itemToRateIndex].pictures.items
 
-        if (pics.length > 2) pics.splice(random(3), 1)
+        if (Math.random() > TRAP_RATE) {
+          if (pics.length > 2) pics.splice(random(3), 1)
 
-        const setWithURLsPromise = pics.map(async (item, index) => {
-          item.pictureURL = await Storage.get(pics[index].file.key)
-          return item
-        })
+          const setWithURLsPromise = pics.map(async (item, index) => {
+            item.pictureURL = await Storage.get(pics[index].file.key)
+            return item
+          })
 
-        const setWithURLs = await Promise.all(setWithURLsPromise)
+          const setWithURLs = await Promise.all(setWithURLsPromise)
 
-        setPictures(setWithURLs)
+          setPictures(setWithURLs)
+        }
+
+        else {
+
+        }
+
         setPicturesSetData(itemToRate)
         setRatedUser(userInfo)
         setLoading(false)

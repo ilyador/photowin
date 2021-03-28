@@ -118,6 +118,7 @@ export const createUser = `mutation CreateUser(
     name
     age
     points
+    traps
   }
 }
 `;
@@ -130,6 +131,7 @@ export const updateUser = `mutation UpdateUser(
     name
     age
     points
+    traps
   }
 }
 `;
@@ -142,6 +144,7 @@ export const deleteUser = `mutation DeleteUser(
     name
     age
     points
+    traps
   }
 }
 `;

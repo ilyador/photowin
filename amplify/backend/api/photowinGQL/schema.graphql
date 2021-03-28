@@ -23,6 +23,7 @@ type User @model {
 	name: String!
 	age: Int!
 	points: Int!
+	traps: Int!
 }
 
 type S3Object {
