@@ -17,8 +17,9 @@ import Fab from '@material-ui/core/Fab'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
+import trapPicture from '../content/trap.jpg'
 
-const TRAP_RATE = 0.15
+const TRAP_RATE = 0.95
 
 
 const useStyles = makeStyles(theme => ({
@@ -127,11 +128,21 @@ function Rate () {
 
           const setWithURLs = await Promise.all(setWithURLsPromise)
 
+          console.log(setWithURLs)
+
           setPictures(setWithURLs)
         }
 
         else {
+          const realPicture = pics[random(pics.length)]
+          realPicture.pictureURL = await Storage.get(realPicture.file.key)
 
+          const trap = {
+            id: 'xxx',
+            pictureURL: trapPicture
+          }
+
+          setPictures([realPicture, trap])
         }
 
         setPicturesSetData(itemToRate)
@@ -144,37 +155,43 @@ function Rate () {
   }, [loading])
 
 
-  const vote = (id, rating) => () => {
-    const points = Number(activeUser.points)
+  const vote = (trap, id, rating) => () => {
+    if (!trap) {
+      const points = Number(activeUser.points)
 
-    const pictureUpdate = API.graphql(operation(updatePicture, {
-      input: {
-        id,
-        rating: rating + 1
-      }
-    }))
+      const pictureUpdate = API.graphql(operation(updatePicture, {
+        input: {
+          id,
+          rating: rating + 1
+        }
+      }))
 
-    const setUpdate = API.graphql(operation(updateSet, {
-      input: {
-        id: picturesSetData.id,
-        appearedForRanking: picturesSetData.appearedForRanking + 1
-      }
-    }))
+      const setUpdate = API.graphql(operation(updateSet, {
+        input: {
+          id: picturesSetData.id,
+          appearedForRanking: picturesSetData.appearedForRanking + 1
+        }
+      }))
 
-    const userUpdate = API.graphql(operation(updateUser, {
-      input: {
-        id: activeUser.sub,
-        points: points + 1
-      }
-    }))
+      const userUpdate = API.graphql(operation(updateUser, {
+        input: {
+          id: activeUser.sub,
+          points: points + 1
+        }
+      }))
 
 
-    Promise.all([pictureUpdate, setUpdate, userUpdate]).then(() => {
-      setLoading(true)
-      setPicturesSetData(null)
-      setPictures([])
-      setUser({ ...activeUser, points: points + 1 })
-    })
+      Promise.all([pictureUpdate, setUpdate, userUpdate]).then(() => {
+        setLoading(true)
+        setPicturesSetData(null)
+        setPictures([])
+        setUser({ ...activeUser, points: points + 1 })
+      })
+    }
+
+    else { //trap
+
+    }
   }
 
 
@@ -194,7 +211,7 @@ function Rate () {
           <Grid item key={index} xs={6}>
             <Card
               className={c.card}
-              onClick={vote(picture.id, picture.rating)}
+              onClick={vote(picture.trap, picture.id, picture.rating)}
             >
               <CardMedia
                 className={c.media}
@@ -205,7 +222,7 @@ function Rate () {
                 <Fab
                   color="secondary"
                   className={c.like}
-                  onClick={vote(picture.id, picture.rating)}
+                  onClick={vote(picture.trap, picture.id, picture.rating)}
                 >
                   <FavoriteIcon/>
                 </Fab>
