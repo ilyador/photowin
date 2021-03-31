@@ -1,3 +1,8 @@
+import { DialogContent, DialogContentText } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import React, { useEffect, useState } from 'react'
 import { UserContext } from '../helpers/userContext'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
@@ -19,7 +24,7 @@ import Container from '@material-ui/core/Container'
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import trapPicture from '../content/trap.jpg'
 
-const TRAP_RATE = 0.95
+const TRAP_RATE = 0.5
 
 
 const useStyles = makeStyles(theme => ({
@@ -71,6 +76,8 @@ function Rate () {
   const [picturesSetData, setPicturesSetData] = useState(null)
   const [ratedUser, setRatedUser] = useState(null)
   const [pictures, setPictures] = useState([])
+  const [trapMessage, setTrapMessage] = useState(false)
+
   const c = useStyles()
   const theme = useTheme()
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
@@ -128,8 +135,6 @@ function Rate () {
 
           const setWithURLs = await Promise.all(setWithURLsPromise)
 
-          console.log(setWithURLs)
-
           setPictures(setWithURLs)
         }
 
@@ -139,7 +144,8 @@ function Rate () {
 
           const trap = {
             id: 'xxx',
-            pictureURL: trapPicture
+            pictureURL: trapPicture,
+            trap: true
           }
 
           setPictures([realPicture, trap])
@@ -155,48 +161,83 @@ function Rate () {
   }, [loading])
 
 
-  const vote = (trap, id, rating) => () => {
-    if (!trap) {
-      const points = Number(activeUser.points)
+  const vote = (trap, id, rating) => async () => {
+    try {
+      if (activeUser.traps < 2) {
+        if (!trap) {
+          const points = Number(activeUser.points)
+          setUser({ ...activeUser, points: points + 1 })
 
-      const pictureUpdate = API.graphql(operation(updatePicture, {
-        input: {
-          id,
-          rating: rating + 1
+          const pictureUpdate = API.graphql(operation(updatePicture, {
+            input: {
+              id,
+              rating: rating + 1
+            }
+          }))
+
+          const setUpdate = API.graphql(operation(updateSet, {
+            input: {
+              id: picturesSetData.id,
+              appearedForRanking: picturesSetData.appearedForRanking + 1
+            }
+          }))
+
+          const userUpdate = API.graphql(operation(updateUser, {
+            input: {
+              id: activeUser.sub,
+              points: points + 1
+            }
+          }))
+
+          await Promise.all([pictureUpdate, setUpdate, userUpdate])
+
+        } else {
+          const traps = Number(activeUser.traps)
+          setUser({ ...activeUser, traps: traps + 1 })
+          setTrapMessage(true)
+
+          await API.graphql(operation(updateUser, {
+            input: {
+              id: activeUser.sub,
+              traps: traps + 1
+            }
+          }))
         }
-      }))
+      }
 
-      const setUpdate = API.graphql(operation(updateSet, {
-        input: {
-          id: picturesSetData.id,
-          appearedForRanking: picturesSetData.appearedForRanking + 1
-        }
-      }))
-
-      const userUpdate = API.graphql(operation(updateUser, {
-        input: {
-          id: activeUser.sub,
-          points: points + 1
-        }
-      }))
-
-
-      Promise.all([pictureUpdate, setUpdate, userUpdate]).then(() => {
-        setLoading(true)
-        setPicturesSetData(null)
-        setPictures([])
-        setUser({ ...activeUser, points: points + 1 })
-      })
+      setLoading(true)
+      setPicturesSetData(null)
+      setPictures([])
     }
 
-    else { //trap
-
+    catch (error) {
+      console.log(error)
     }
   }
 
 
+  const trapDialog = (
+    <Dialog open={trapMessage} onClose={() => {setTrapMessage(false)}}>
+      <DialogTitle className={c.deleteDialog}>
+        {I18n.get(`trap_title_${activeUser.traps}`)}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          {I18n.get(`trap_body_${activeUser.gender}`)}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => {setTrapMessage(false)}} color="secondary" autoFocus>
+          OK
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+
+
   return (
     <Container maxWidth="md">
+      {trapDialog}
       {(!loading && ratedUser) && <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
           <Typography variant="h5" className={c.pageTitle}>
