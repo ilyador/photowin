@@ -96,6 +96,14 @@ export default function App () {
 
 
   useEffect(() => {
+    if (!userLoggedIn && pageReady) {
+      setAuthState('not logged in')
+      setUser(null)
+    }
+  }, [userLoggedIn])
+
+
+  useEffect(() => {
     if (authState === 'user data & sets retrieved') {
       setPageReady(true)
       setUserLoggedIn(true)
@@ -105,14 +113,6 @@ export default function App () {
       setPageReady(true)
     }
   }, [authState])
-
-
-  useEffect(() => {
-    if (!userLoggedIn && pageReady) {
-      setAuthState('not logged in')
-      setUser(null)
-    }
-  }, [userLoggedIn])
 
 
   return (

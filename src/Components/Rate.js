@@ -163,7 +163,7 @@ function Rate () {
 
   const vote = (trap, id, rating) => async () => {
     try {
-      if (activeUser.traps < 2) {
+      if (activeUser.traps < 3) {
         if (!trap) {
           const points = Number(activeUser.points)
           setUser({ ...activeUser, points: points + 1 })
@@ -194,7 +194,8 @@ function Rate () {
         } else {
           const traps = Number(activeUser.traps)
           setUser({ ...activeUser, traps: traps + 1 })
-          setTrapMessage(true)
+
+          if (activeUser.traps < 2) setTrapMessage(true)
 
           await API.graphql(operation(updateUser, {
             input: {
