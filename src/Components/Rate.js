@@ -24,7 +24,7 @@ import Container from '@material-ui/core/Container'
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
 import trapPicture from '../content/trap.jpg'
 
-const TRAP_RATE = 0.5
+const TRAP_RATE = 0.15
 
 
 const useStyles = makeStyles(theme => ({
