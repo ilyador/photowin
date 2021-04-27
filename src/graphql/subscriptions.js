@@ -97,6 +97,7 @@ export const onCreateUser = `subscription OnCreateUser {
     name
     age
     points
+    traps
   }
 }
 `;
@@ -106,6 +107,7 @@ export const onUpdateUser = `subscription OnUpdateUser {
     name
     age
     points
+    traps
   }
 }
 `;
@@ -115,6 +117,7 @@ export const onDeleteUser = `subscription OnDeleteUser {
     name
     age
     points
+    traps
   }
 }
 `;

@@ -1,3 +1,8 @@
+import { DialogContent, DialogContentText } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import React, { useEffect, useState } from 'react'
 import { UserContext } from '../helpers/userContext'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
@@ -17,6 +22,9 @@ import Fab from '@material-ui/core/Fab'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import useMediaQuery from '@material-ui/core/useMediaQuery/useMediaQuery'
+import trapPicture from '../content/trap.jpg'
+
+const TRAP_RATE = 0.5
 
 
 const useStyles = makeStyles(theme => ({
@@ -68,6 +76,8 @@ function Rate () {
   const [picturesSetData, setPicturesSetData] = useState(null)
   const [ratedUser, setRatedUser] = useState(null)
   const [pictures, setPictures] = useState([])
+  const [trapMessage, setTrapMessage] = useState(false)
+
   const c = useStyles()
   const theme = useTheme()
   const desktopDisplay = useMediaQuery(theme.breakpoints.up('sm'))
@@ -115,16 +125,32 @@ function Rate () {
 
         const pics = userSets[itemToRateIndex].pictures.items
 
-        if (pics.length > 2) pics.splice(random(3), 1)
+        if (Math.random() > TRAP_RATE) {
+          if (pics.length > 2) pics.splice(random(3), 1)
 
-        const setWithURLsPromise = pics.map(async (item, index) => {
-          item.pictureURL = await Storage.get(pics[index].file.key)
-          return item
-        })
+          const setWithURLsPromise = pics.map(async (item, index) => {
+            item.pictureURL = await Storage.get(pics[index].file.key)
+            return item
+          })
 
-        const setWithURLs = await Promise.all(setWithURLsPromise)
+          const setWithURLs = await Promise.all(setWithURLsPromise)
 
-        setPictures(setWithURLs)
+          setPictures(setWithURLs)
+        }
+
+        else {
+          const realPicture = pics[random(pics.length)]
+          realPicture.pictureURL = await Storage.get(realPicture.file.key)
+
+          const trap = {
+            id: 'xxx',
+            pictureURL: trapPicture,
+            trap: true
+          }
+
+          setPictures([realPicture, trap])
+        }
+
         setPicturesSetData(itemToRate)
         setRatedUser(userInfo)
         setLoading(false)
@@ -135,42 +161,84 @@ function Rate () {
   }, [loading])
 
 
-  const vote = (id, rating) => () => {
-    const points = Number(activeUser.points)
+  const vote = (trap, id, rating) => async () => {
+    try {
+      if (activeUser.traps < 3) {
+        if (!trap) {
+          const points = Number(activeUser.points)
+          setUser({ ...activeUser, points: points + 1 })
 
-    const pictureUpdate = API.graphql(operation(updatePicture, {
-      input: {
-        id,
-        rating: rating + 1
+          const pictureUpdate = API.graphql(operation(updatePicture, {
+            input: {
+              id,
+              rating: rating + 1
+            }
+          }))
+
+          const setUpdate = API.graphql(operation(updateSet, {
+            input: {
+              id: picturesSetData.id,
+              appearedForRanking: picturesSetData.appearedForRanking + 1
+            }
+          }))
+
+          const userUpdate = API.graphql(operation(updateUser, {
+            input: {
+              id: activeUser.sub,
+              points: points + 1
+            }
+          }))
+
+          await Promise.all([pictureUpdate, setUpdate, userUpdate])
+
+        } else {
+          const traps = Number(activeUser.traps)
+          setUser({ ...activeUser, traps: traps + 1 })
+
+          if (activeUser.traps < 2) setTrapMessage(true)
+
+          await API.graphql(operation(updateUser, {
+            input: {
+              id: activeUser.sub,
+              traps: traps + 1
+            }
+          }))
+        }
       }
-    }))
 
-    const setUpdate = API.graphql(operation(updateSet, {
-      input: {
-        id: picturesSetData.id,
-        appearedForRanking: picturesSetData.appearedForRanking + 1
-      }
-    }))
-
-    const userUpdate = API.graphql(operation(updateUser, {
-      input: {
-        id: activeUser.sub,
-        points: points + 1
-      }
-    }))
-
-
-    Promise.all([pictureUpdate, setUpdate, userUpdate]).then(() => {
       setLoading(true)
       setPicturesSetData(null)
       setPictures([])
-      setUser({ ...activeUser, points: points + 1 })
-    })
+    }
+
+    catch (error) {
+      console.log(error)
+    }
   }
+
+
+  const trapDialog = (
+    <Dialog open={trapMessage} onClose={() => {setTrapMessage(false)}}>
+      <DialogTitle className={c.deleteDialog}>
+        {I18n.get(`trap_title_${activeUser.traps}`)}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          {I18n.get(`trap_body_${activeUser.gender}`)}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => {setTrapMessage(false)}} color="secondary" autoFocus>
+          OK
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
 
 
   return (
     <Container maxWidth="md">
+      {trapDialog}
       {(!loading && ratedUser) && <Grid container spacing={desktopDisplay ? 3 : 1}>
         <Grid item xs={12}>
           <Typography variant="h5" className={c.pageTitle}>
@@ -185,7 +253,7 @@ function Rate () {
           <Grid item key={index} xs={6}>
             <Card
               className={c.card}
-              onClick={vote(picture.id, picture.rating)}
+              onClick={vote(picture.trap, picture.id, picture.rating)}
             >
               <CardMedia
                 className={c.media}
@@ -196,7 +264,7 @@ function Rate () {
                 <Fab
                   color="secondary"
                   className={c.like}
-                  onClick={vote(picture.id, picture.rating)}
+                  onClick={vote(picture.trap, picture.id, picture.rating)}
                 >
                   <FavoriteIcon/>
                 </Fab>

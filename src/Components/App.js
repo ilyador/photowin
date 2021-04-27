@@ -56,9 +56,9 @@ export default function App () {
       try {
         const query = { id: tempUser.sub }
         const response = await API.graphql(operation(getUser, query))
-        const { points } = response.data.getUser
+        const { points, traps } = response.data.getUser
 
-        setUser({ ...tempUser, points })
+        setUser({ ...tempUser, points, traps })
       } catch (error) {
         setAuthState('user data retrieved')
         console.log('could not retrieve user from DB', error)
@@ -96,6 +96,14 @@ export default function App () {
 
 
   useEffect(() => {
+    if (!userLoggedIn && pageReady) {
+      setAuthState('not logged in')
+      setUser(null)
+    }
+  }, [userLoggedIn])
+
+
+  useEffect(() => {
     if (authState === 'user data & sets retrieved') {
       setPageReady(true)
       setUserLoggedIn(true)
@@ -105,14 +113,6 @@ export default function App () {
       setPageReady(true)
     }
   }, [authState])
-
-
-  useEffect(() => {
-    if (!userLoggedIn && pageReady) {
-      setAuthState('not logged in')
-      setUser(null)
-    }
-  }, [userLoggedIn])
 
 
   return (
