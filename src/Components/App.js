@@ -73,7 +73,6 @@ export default function App () {
     async function _getSets () {
       try {
         const _listSets = await API.graphql(operation(listSets, {
-          limit: 30,
           filter: {
             user: { eq: user.sub },
             active: { eq: true }
