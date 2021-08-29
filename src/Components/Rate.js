@@ -103,7 +103,6 @@ function Rate () {
         const data = await API.graphql(operation(getByAppeared, {
           type: genderToRate,
           sortDirection: 'DESC',
-          limit: 100,
           filter: {
             active: { eq: true },
             user: { ne: activeUser.sub }
