@@ -1,7 +1,6 @@
 import React from 'react'
 import { I18n } from 'aws-amplify'
 import { UserContext } from '../helpers/userContext'
-import { Link } from 'react-router-dom'
 import { CardActionArea, makeStyles } from '@material-ui/core'
 import Card from '@material-ui/core/Card'
 import Container from '@material-ui/core/Container'
@@ -40,6 +39,12 @@ const useStyles = makeStyles({
 })
 
 
+const links = {
+  man: 'MEN',
+  woman: 'WOMEN'
+}
+
+
 function Results () {
   const c = useStyles()
   const { user } = React.useContext(UserContext)
@@ -49,7 +54,7 @@ function Results () {
     <Container maxWidth="xs">
       <Card>
         <CardActionArea>
-          {(user.points < 50) &&
+          {(user.points < 49) &&
           <div className={c.block}>
             <LockIcon fontSize="large"/>
             <Typography variant="h4" className={c.lockedText}>
@@ -58,8 +63,8 @@ function Results () {
           </div>
           }
           <CardMedia
-            component={Link}
-            to={`edit-${user.gender}`}
+            component='a'
+            href={`https://pua.ravpage.co.il/PHOTOWIN_edit${links[user.gender]}`}
             className={c.media}
             image={pictures[user.gender]}
             title="Contemplative Reptile"
