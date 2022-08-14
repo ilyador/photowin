@@ -1,3 +1,5 @@
+# PhotoWin - have your dating apps photos rated
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
